@@ -20,60 +20,72 @@ add_action( 'init', function() { (new WPZOOM_Blocks())->init(); } );
 
 /**
  * Class WPZOOM_Blocks
- * 
+ *
  * Main container class of the WPZOOM Blocks WordPress plugin.
- * 
+ *
  * @since 1.0.0
  */
 class WPZOOM_Blocks {
 	/**
 	 * The path to this plugin's root directory.
-	 * 
+	 *
+	 * @var string
+	 * @access public
 	 * @since 1.0.0
 	 */
 	public $plugin_dir_path;
 
 	/**
 	 * The URL to this plugin's root directory.
-	 * 
+	 *
+	 * @var string
+	 * @access public
 	 * @since 1.0.0
 	 */
 	public $plugin_dir_url;
 
 	/**
 	 * The path to this plugin's "main" directory.
-	 * 
+	 *
+	 * @var string
+	 * @access public
 	 * @since 1.0.0
 	 */
 	public $main_dir_path;
 
 	/**
 	 * The URL to this plugin's "main" directory.
-	 * 
+	 *
+	 * @var string
+	 * @access public
 	 * @since 1.0.0
 	 */
 	public $main_dir_url;
 
 	/**
 	 * The path to this plugin's "blocks" directory.
-	 * 
+	 *
+	 * @var string
+	 * @access public
 	 * @since 1.0.0
 	 */
 	public $blocks_dir_path;
 
 	/**
 	 * The URL to this plugin's "blocks" directory.
-	 * 
+	 *
+	 * @var string
+	 * @access public
 	 * @since 1.0.0
 	 */
 	public $blocks_dir_url;
 
 	/**
 	 * Basic class initialization.
-	 * 
-	 * @since 1.0.0
 	 *
+	 * @access public
 	 * @return void
+	 * @since 1.0.0
 	 */
 	public function __construct() {
 		// Assign the values for the plugin dir/url
@@ -91,10 +103,10 @@ class WPZOOM_Blocks {
 
 	/**
 	 * Initializes the plugin and sets up needed hooks and features.
-	 * 
-	 * @since 1.0.0
 	 *
+	 * @access public
 	 * @return void
+	 * @since 1.0.0
 	 */
 	public function init() {
 		// Load the correct translation files for the plugin
@@ -113,12 +125,11 @@ class WPZOOM_Blocks {
 
 	/**
 	 * Loads in all the needed assets for the plugin.
-	 * 
-	 * @since 1.0.0
 	 *
+	 * @access public
 	 * @return void
+	 * @since 1.0.0
 	 */
-	//public function enqueue_block_editor_assets() {
 	public function load_assets() {
 		// Set a fallback for files with no version/dependency info
 		$no_asset = array( 'dependencies' => array( 'wp-blocks', 'wp-data', 'wp-element', 'wp-i18n', 'wp-polyfill' ), 'version' => '-1' );
@@ -127,6 +138,9 @@ class WPZOOM_Blocks {
 		foreach ( array_merge( array( $this->main_dir_path ), glob( $this->blocks_dir_path . '*', GLOB_ONLYDIR | GLOB_NOSORT ) ) as $path ) {
 			// Get the slug for the directory in the current iteration
 			$slug = 0 === substr_compare( $path, 'build/', -strlen( 'build/' ) ) ? 'main' : str_replace( $this->blocks_dir_path, '', $path );
+
+			// Get a version of the slug with dashes replaced by underscores
+			$slug_ = str_replace( '-', '_', $slug );
 
 			// Consistent slashing
 			$path = trailingslashit( $path );
@@ -141,48 +155,71 @@ class WPZOOM_Blocks {
 
 					// Register the script/style so it can be enqueued later
 					$func = 'js' == $ext ? 'wp_register_script' : 'wp_register_style';
-					$url = trailingslashit( 'main' == $slug ? $this->main_dir_url : $this->blocks_dir_url . $slug ) . "$name.$ext";
-					$func( "wpzoom-blocks-$ext-$name-$slug", $url, $asset[ 'dependencies' ], $asset[ 'version' ] );
+					$url = trailingslashit( 'main' == $slug_ ? $this->main_dir_url : $this->blocks_dir_url . $slug ) . "$name.$ext";
+					$func( "wpzoom-blocks-$ext-$name-$slug_", $url, $asset[ 'dependencies' ], $asset[ 'version' ] );
 
 					// If the file in the current iteration is a script...
 					if ( 'js' == $ext && function_exists( 'wp_set_script_translations' ) ) {
 						// Setup the translations for it
-						wp_set_script_translations( "wpzoom-blocks-js-$name-$slug", 'wpzoom-blocks', plugin_dir_path( __FILE__ ) . 'languages' );
+						wp_set_script_translations( "wpzoom-blocks-js-$name-$slug_", 'wpzoom-blocks', plugin_dir_path( __FILE__ ) . 'languages' );
 					}
 				}
 			}
 
 			// If the file in the current iteration is in a block...
-			if ( 'main' != $slug ) {
-				// Register the block with Gutenberg
-				register_block_type( "wpzoom-blocks/$slug", array(
-					'editor_script' => "wpzoom-blocks-js-index-$slug",
-					'editor_style' => "wpzoom-blocks-css-editor-$slug",
-					'script' => "wpzoom-blocks-js-script-$slug",
-					'style' => "wpzoom-blocks-css-style-$slug"
-				) );
+			if ( 'main' != $slug_ ) {
+				// Include the index.php file if the block has one
+				if ( file_exists( $path . 'index.php' ) ) {
+					require_once( $path . 'index.php' );
+				}
+
+				// Construct the arguments array
+				$args = array(
+					'editor_script' => "wpzoom-blocks-js-index-$slug_",
+					'editor_style' => "wpzoom-blocks-css-editor-$slug_",
+					'script' => "wpzoom-blocks-js-script-$slug_",
+					'style' => "wpzoom-blocks-css-style-$slug_"
+				);
+
+				// Construct the class name to use below
+				$class_name = 'WPZOOM_Blocks_' . ucwords( $slug_, '_' );
+
+				// Add attributes if they have been declared
+				if ( defined( "$class_name::ATTRIBUTES" ) ) {
+					$args[ 'attributes' ] = constant( "$class_name::ATTRIBUTES" );
+				}
+
+				// Add a render callback if one is specified
+				if ( class_exists( $class_name ) && method_exists( $class_name, 'render' ) ) {
+					$args[ 'render_callback' ] = array( $class_name, 'render' );
+				}
+
+				// Register the block with Gutenberg using the given arguments
+				register_block_type( "wpzoom-blocks/$slug", $args );
 			}
 		}
 	}
 
 	/**
 	 * Adds the WPZOOM category to the Gutenberg block categories, if not already present.
-	 * 
-	 * @since 1.0.0
 	 *
-	 * @return void
+	 * @access public
+	 * @param array   $categories Array containing all registered Gutenberg block categories.
+	 * @param WP_Post $post       A WP_Post object representing the post being loaded.
+	 * @return array
+	 * @since 1.0.0
 	 */
 	public function filter_block_categories( $categories, $post ) {
 		// Get a list of all the block category slugs
 		$category_slugs = wp_list_pluck( $categories, 'slug' );
 
 		// Return the list of categories with our custom category included
-		return in_array( 'wpzoom', $category_slugs, true ) ? $categories : array_merge(
+		return in_array( 'wpzoom-blocks', $category_slugs, true ) ? $categories : array_merge(
 			$categories,
 			array(
 				array(
-					'slug' => 'wpzoom',
-					'title' => __( 'WPZOOM', 'wpzoom-blocks' ),
+					'slug' => 'wpzoom-blocks',
+					'title' => __( 'WPZOOM - Blocks', 'wpzoom-blocks' ),
 					'icon' => 'wordpress'
 				)
 			)
