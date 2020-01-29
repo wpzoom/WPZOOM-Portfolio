@@ -42,15 +42,19 @@ class WPZOOM_Blocks_Posts {
 		],
 		'showThumbnail' => [
 			'type' => 'boolean',
-			'default' => false
+			'default' => true
+		],
+		'thumbnailSize' => [
+			'type' => 'string',
+			'default' => 'thumbnail'
 		],
 		'showDate' => [
 			'type' => 'boolean',
-			'default' => false
+			'default' => true
 		],
 		'showExcerpt' => [
 			'type' => 'boolean',
-			'default' => false
+			'default' => true
 		],
 		'excerptLength' => [
 			'type' => 'number',
