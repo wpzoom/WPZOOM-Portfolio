@@ -16,7 +16,7 @@
 defined( 'ABSPATH' ) || exit;
 
 // Hook the plugin into WordPress
-add_action( 'init', function() { (new WPZOOM_Blocks())->init(); } );
+add_action( 'init', function() { new WPZOOM_Blocks(); } );
 
 /**
  * Class WPZOOM_Blocks
@@ -27,98 +27,99 @@ add_action( 'init', function() { (new WPZOOM_Blocks())->init(); } );
  */
 class WPZOOM_Blocks {
 	/**
+	 * The version of this plugin.
+	 *
+	 * @var    string
+	 * @access public
+	 * @since  1.0.0
+	 */
+	public const VERSION = '1.0.0';
+
+	/**
 	 * The path to this plugin's root directory.
 	 *
-	 * @var string
+	 * @var    string
 	 * @access public
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 */
 	public $plugin_dir_path;
 
 	/**
 	 * The URL to this plugin's root directory.
 	 *
-	 * @var string
+	 * @var    string
 	 * @access public
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 */
 	public $plugin_dir_url;
 
 	/**
 	 * The path to this plugin's "main" directory.
 	 *
-	 * @var string
+	 * @var    string
 	 * @access public
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 */
 	public $main_dir_path;
 
 	/**
 	 * The URL to this plugin's "main" directory.
 	 *
-	 * @var string
+	 * @var    string
 	 * @access public
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 */
 	public $main_dir_url;
 
 	/**
 	 * The path to this plugin's "blocks" directory.
 	 *
-	 * @var string
+	 * @var    string
 	 * @access public
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 */
 	public $blocks_dir_path;
 
 	/**
 	 * The URL to this plugin's "blocks" directory.
 	 *
-	 * @var string
+	 * @var    string
 	 * @access public
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 */
 	public $blocks_dir_url;
-
-	/**
-	 * Basic class initialization.
-	 *
-	 * @access public
-	 * @return void
-	 * @since 1.0.0
-	 */
-	public function __construct() {
-		// Assign the values for the plugin dir/url
-		$this->plugin_dir_path = plugin_dir_path( __FILE__ );
-		$this->plugin_dir_url = plugin_dir_url( __FILE__ );
-
-		// Assign the values for the main dir/url
-		$this->main_dir_path = trailingslashit( $this->plugin_dir_path . 'build' );
-		$this->main_dir_url = trailingslashit( $this->plugin_dir_url . 'build' );
-
-		// Assign the values for the blocks dir/url
-		$this->blocks_dir_path = trailingslashit( $this->main_dir_path . 'blocks' );
-		$this->blocks_dir_url = trailingslashit( $this->main_dir_url . 'blocks' );
-	}
 
 	/**
 	 * Initializes the plugin and sets up needed hooks and features.
 	 *
 	 * @access public
 	 * @return void
-	 * @since 1.0.0
+	 * @since  1.0.0
+	 * @see    WPZOOM_Blocks::load_assets()
 	 */
-	public function init() {
-		// Load the correct translation files for the plugin
-		load_plugin_textdomain( 'wpzoom-blocks', false, basename( __DIR__ ) . '/languages' );
+	public function __construct() {
+		// Assign the values for the plugins 'root' dir/url
+		$this->plugin_dir_path = plugin_dir_path( __FILE__ );
+		$this->plugin_dir_url = plugin_dir_url( __FILE__ );
 
-		// Filter the Gutenberg block categories to add the custom plugin one
+		// Assign the values for the plugins 'main' dir/url
+		$this->main_dir_path = trailingslashit( $this->plugin_dir_path . 'build' );
+		$this->main_dir_url = trailingslashit( $this->plugin_dir_url . 'build' );
+
+		// Assign the values for the plugins 'blocks' dir/url
+		$this->blocks_dir_path = trailingslashit( $this->main_dir_path . 'blocks' );
+		$this->blocks_dir_url = trailingslashit( $this->main_dir_url . 'blocks' );
+
+		// Load the correct translation files for the plugin
+		load_plugin_textdomain( 'wpzoom-blocks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+
+		// Filter the Gutenberg block categories to add our custom 'WPZOOM Blocks' category if needed
 		add_filter( 'block_categories', array( $this, 'filter_block_categories' ), 10, 2 );
 
 		// Load in all needed assets for the plugin
 		$this->load_assets();
 
-		// Enqueue the main scripts and styles in the Gutenberg editor
+		// Enqueue the main/root scripts and styles in the Gutenberg editor
 		add_action( 'enqueue_block_editor_assets', function() { wp_enqueue_script( 'wpzoom-blocks-js-index-main' ); wp_enqueue_style( 'wpzoom-blocks-css-editor-main' ); } );
 		add_action( 'enqueue_block_assets', function() { wp_enqueue_script( 'wpzoom-blocks-js-script-main' ); wp_enqueue_style( 'wpzoom-blocks-css-style-main' ); } );
 	}
@@ -128,7 +129,8 @@ class WPZOOM_Blocks {
 	 *
 	 * @access public
 	 * @return void
-	 * @since 1.0.0
+	 * @since  1.0.0
+	 * @see    register_block_type()
 	 */
 	public function load_assets() {
 		// Set a fallback for files with no version/dependency info
@@ -151,7 +153,7 @@ class WPZOOM_Blocks {
 				if ( file_exists( "$path$name.$ext" ) ) {
 					// Get the version/dependency info
 					$asset_file = "$path$name.asset.php";
-					$asset = file_exists( $asset_file ) ? include( $asset_file ) : $no_asset;
+					$asset = file_exists( $asset_file ) ? require_once( $asset_file ) : $no_asset;
 
 					// Register the script/style so it can be enqueued later
 					$func = 'js' == $ext ? 'wp_register_script' : 'wp_register_style';
@@ -184,14 +186,20 @@ class WPZOOM_Blocks {
 				// Construct the class name to use below
 				$class_name = 'WPZOOM_Blocks_' . ucwords( $slug_, '_' );
 
-				// Add attributes if they have been declared
-				if ( defined( "$class_name::ATTRIBUTES" ) ) {
-					$args[ 'attributes' ] = constant( "$class_name::ATTRIBUTES" );
-				}
+				// If a class with the given name exists...
+				if ( class_exists( $class_name ) ) {
+					// Instantiate the class
+					$class = new $class_name();
 
-				// Add a render callback if one is specified
-				if ( class_exists( $class_name ) && method_exists( $class_name, 'render' ) ) {
-					$args[ 'render_callback' ] = array( $class_name, 'render' );
+					// Add attributes if they have been declared in the class
+					if ( property_exists( $class, 'attributes' ) ) {
+						$args[ 'attributes' ] = $class->attributes;
+					}
+
+					// Add a render callback if one is specified in the class
+					if ( method_exists( $class, 'render' ) ) {
+						$args[ 'render_callback' ] = array( $class, 'render' );
+					}
 				}
 
 				// Register the block with Gutenberg using the given arguments
@@ -204,10 +212,10 @@ class WPZOOM_Blocks {
 	 * Adds the WPZOOM category to the Gutenberg block categories, if not already present.
 	 *
 	 * @access public
-	 * @param array   $categories Array containing all registered Gutenberg block categories.
-	 * @param WP_Post $post       A WP_Post object representing the post being loaded.
+	 * @param  array   $categories Array containing all registered Gutenberg block categories.
+	 * @param  WP_Post $post       A WP_Post object representing the post being loaded.
 	 * @return array
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 */
 	public function filter_block_categories( $categories, $post ) {
 		// Get a list of all the block category slugs

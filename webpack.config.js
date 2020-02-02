@@ -4,6 +4,7 @@ const path = require( 'path' );
 const postcssPresetEnv = require( 'postcss-preset-env' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const IgnoreEmitPlugin = require( 'ignore-emit-webpack-plugin' );
+const CopyPlugin = require( 'copy-webpack-plugin' );
 const production = process.env.NODE_ENV === 'production';
 
 const entryObject = glob.sync( './src/{,blocks/*/}{{index,script}.js,{style,editor}.scss}' ).reduce( ( acc, item ) => {
@@ -60,6 +61,7 @@ module.exports = {
 	plugins: [
 		...defaultConfig.plugins,
 		new MiniCssExtractPlugin( { filename: '[name].css' } ),
-		new IgnoreEmitPlugin( [ 'editor.js', 'style.js' ] )
+		new IgnoreEmitPlugin( [ 'editor.js', 'style.js' ] ),
+		new CopyPlugin( [ { from: 'src/**/*.php', to: 'build/', transformPath( t, a ) { return t.replace( /build\\src\\/, '' ); } } ] )
 	]
 };
