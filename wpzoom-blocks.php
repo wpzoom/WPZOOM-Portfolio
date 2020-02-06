@@ -1,15 +1,21 @@
 <?php
 /**
- * Plugin Name: WPZOOM Blocks
- * Plugin URI: https://wpzoom.com/plugins/gutenberg-blocks/
- * Description: Custom Gutenberg blocks designed by WPZOOM.
- * Author: WPZOOM
- * Author URI: https://wpzoom.com
- * Version: 1.0.0
- * License: GPL2+
- * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
+ * WPZOOM Blocks - Custom Gutenberg blocks designed by WPZOOM.
  *
- * @package WPZOOM_Blocks
+ * @package   WPZOOM_Blocks
+ * @author    WPZOOM
+ * @copyright 2020 WPZOOM
+ * @license   GPL-2.0-or-later
+ *
+ * @wordpress-plugin
+ * Plugin Name: WPZOOM Blocks
+ * Plugin URI:  https://wpzoom.com/plugins/gutenberg-blocks/
+ * Description: Custom Gutenberg blocks designed by WPZOOM.
+ * Author:      WPZOOM
+ * Author URI:  https://wpzoom.com
+ * Version:     1.0.0
+ * License:     GPL2+
+ * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
 // Exit if accessed directly
@@ -158,7 +164,8 @@ class WPZOOM_Blocks {
 					// Register the script/style so it can be enqueued later
 					$func = 'js' == $ext ? 'wp_register_script' : 'wp_register_style';
 					$url = trailingslashit( 'main' == $slug_ ? $this->main_dir_url : $this->blocks_dir_url . $slug ) . "$name.$ext";
-					$func( "wpzoom-blocks-$ext-$name-$slug_", $url, $asset[ 'dependencies' ], $asset[ 'version' ] );
+					$depends = 'js' == $ext ? $asset[ 'dependencies' ] : array();
+					$func( "wpzoom-blocks-$ext-$name-$slug_", $url, $depends, $asset[ 'version' ] );
 
 					// If the file in the current iteration is a script...
 					if ( 'js' == $ext && function_exists( 'wp_set_script_translations' ) ) {

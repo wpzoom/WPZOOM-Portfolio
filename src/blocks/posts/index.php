@@ -2,7 +2,10 @@
 /**
  * WPZOOM Blocks - Custom Gutenberg blocks designed by WPZOOM.
  *
- * @package WPZOOM_Blocks
+ * @package   WPZOOM_Blocks
+ * @author    WPZOOM
+ * @copyright 2020 WPZOOM
+ * @license   GPL-2.0-or-later
  */
 
 // Exit if accessed directly
@@ -24,13 +27,21 @@ class WPZOOM_Blocks_Posts {
 	 * @since  1.0.0
 	 */
 	public $attributes = [
-		'categories' => [
+		'align' => [
 			'type' => 'string',
 			'default' => ''
 		],
 		'amount' => [
 			'type' => 'number',
 			'default' => 5
+		],
+		'categories' => [
+			'type' => 'string',
+			'default' => ''
+		],
+		'excerptLength' => [
+			'type' => 'number',
+			'default' => 150
 		],
 		'order' => [
 			'type' => 'string',
@@ -40,13 +51,13 @@ class WPZOOM_Blocks_Posts {
 			'type' => 'string',
 			'default' => 'date'
 		],
-		'showThumbnail' => [
+		'showAuthor' => [
 			'type' => 'boolean',
 			'default' => true
 		],
-		'thumbnailSize' => [
-			'type' => 'string',
-			'default' => 'thumbnail'
+		'showCommentCount' => [
+			'type' => 'boolean',
+			'default' => true
 		],
 		'showDate' => [
 			'type' => 'boolean',
@@ -56,13 +67,17 @@ class WPZOOM_Blocks_Posts {
 			'type' => 'boolean',
 			'default' => true
 		],
-		'excerptLength' => [
-			'type' => 'number',
-			'default' => 150
-		],
 		'showReadMoreButton' => [
 			'type' => 'boolean',
 			'default' => true
+		],
+		'showThumbnail' => [
+			'type' => 'boolean',
+			'default' => true
+		],
+		'thumbnailSize' => [
+			'type' => 'string',
+			'default' => 'thumbnail'
 		]
 	];
 
@@ -76,6 +91,9 @@ class WPZOOM_Blocks_Posts {
 	public function __construct() {
 		// Hook into the REST API in order to add some custom things
 		add_action( 'rest_api_init', array( $this, 'rest_featured_media' ) );
+
+		// Add some extra needed styles on the frontend
+		add_action( 'wp_enqueue_scripts', function() { wp_enqueue_style( 'dashicons' ); } );
 	}
 
 	/**
@@ -91,6 +109,9 @@ class WPZOOM_Blocks_Posts {
 		// Specify the output and class variables to be used below
 		$output = '';
 		$class = 'wpzoom-blocks_posts-block';
+
+		// Might need to align the block
+		$align = isset( $attr[ 'align' ] ) ? ' align' . $attr[ 'align' ] : '';
 
 		// Fetch recent posts using the specified attributes
 		$query = new WP_Query( array(
@@ -110,24 +131,18 @@ class WPZOOM_Blocks_Posts {
 				$title = get_the_title( $post );
 				$title_attr = the_title_attribute( array( 'post' => $post, 'echo' => false ) );
 				$thumbnail = get_the_post_thumbnail( $post, $attr[ 'thumbnailSize' ] );
-				$date = apply_filters( 'the_date', get_the_date( '', $post ), '', '', '' );
-				$datetime = esc_attr( get_the_date( 'c', $post ) );
-				$content = trim( $post->post_content );
-				$excerpt = force_balance_tags( html_entity_decode( wp_trim_words( htmlentities( $content ), $attr[ 'excerptLength' ], '' ) ) );
-				$readmore = __( 'Read More', 'wpzoom-blocks' );
-				$readmore_title = __( 'Continue reading this post...', 'wpzoom-blocks' );
 
 				// Open the list item for this post
 				$output .= '<li class="' . $class . '_post ' . $class . '_post-' . $id . '">';
 
-				// Add a wrapper div around the entire post (including the thumbnail)
-				$output .= '<div class="' . $class . '_post-wrap">';
+				// Add a wrapper article around the entire post (including the thumbnail)
+				$output .= '<article class="' . $class . '_post-wrap">';
 
 				// If the thumbnail should be shown...
-				if ( $attr[ 'showThumbnail' ] ) {
+				if ( $attr[ 'showThumbnail' ] && ! empty( $thumbnail ) ) {
 					// Add it to the output
 					$output .= '<div class="' . $class . '_post-thumbnail">
-						<a href="' . $permalink . '" title="' . $title_attr . '">' . $thumbnail . '</a>
+						<a href="' . $permalink . '" title="' . $title_attr . '" rel="bookmark">' . $thumbnail . '</a>
 					</div>';
 				}
 
@@ -135,23 +150,82 @@ class WPZOOM_Blocks_Posts {
 				$output .= '<div class="' . $class . '_post-details">';
 
 				// Add the post title to the output
-				$output .= '<h3 class="' . $class . '_post-title"><a href="' . $permalink . '" title="' . $title_attr . '">' . $title . '</a></h3>';
+				$output .= '<h3 class="' . $class . '_post-title">
+					<a href="' . $permalink . '" title="' . $title_attr . '" rel="bookmark">' . $title . '</a>
+				</h3>';
+
+				// Add a wrapper div around just the post meta if needed
+				if ( $attr[ 'showAuthor' ] || $attr[ 'showDate' ] || $attr[ 'showCommentCount' ] ) {
+					$output .= '<div class="' . $class . '_post-meta">';
+				}
+
+				// If the author should be shown...
+				if ( $attr[ 'showAuthor' ] ) {
+					// Get the author details
+					$author_name = get_the_author_meta( 'display_name', $post->post_author );
+					$author_url = esc_url( get_author_posts_url( $post->post_author ) );
+					$author_title = esc_attr( sprintf( __( 'Posts by %s' ), $author_name ) );
+
+					// Add the author to the output
+					$output .= '<cite class="' . $class . '_post-author">
+						<a href="' . $author_url . '" title="' . $author_title . '" rel="author">' . $author_name . '</a>
+					</cite>';
+				}
 
 				// If the date should be shown...
 				if ( $attr[ 'showDate' ] ) {
-					// Add it to the output
-					$output .= '<time datetime="' . $datetime . '" class="' . $class . '_post-date">' . $date . '</time>';
+					// Get the properly formatted date
+					$date = apply_filters( 'the_date', get_the_date( '', $post ), '', '', '' );
+					$datetime = esc_attr( get_the_date( 'c', $post ) );
+					$date_url = esc_url( get_day_link( get_the_time( 'Y', $post ), get_the_time( 'm', $post ), get_the_time( 'd', $post ) ) );
+					$date_title = esc_attr( sprintf( __( 'Posted on %s', 'wpzoom-blocks' ), $date ) );
+
+					// Add the date to the output
+					$output .= '<time datetime="' . $datetime . '" class="' . $class . '_post-date">
+						<a href="' . $date_url . '" title="' . $date_title . '">' . $date . '</a>
+					</time>';
+				}
+
+				// If the comment count should be shown...
+				if ( $attr[ 'showCommentCount' ] ) {
+					// Get the comment count details
+					$number = get_comments_number( $post );
+					$zero = __( 'No Comments', 'wpzoom-blocks' );
+					$one = __( '1 Comment', 'wpzoom-blocks' );
+					$more = sprintf( _n( '%s Comment', '%s Comments', $number, 'wpzoom-blocks' ), number_format_i18n( $number ) );
+					$comments = 0 == $number ? $zero : ( 1 == $number ? $one : $more );
+					$comments_url = esc_url( get_comments_link( $post ) );
+					$comments_title = esc_attr( sprintf( __( '%s on this post', 'wpzoom-blocks' ), $comments ) );
+
+					// Add the comment count to the output
+					$output .= '<span class="' . $class . '_post-comment-count">
+						<a href="' . $comments_url . '" title="' . $comments_title . '">' . $comments . '</a>
+					</span>';
+				}
+
+				// Close the post meta wrapper div if needed
+				if ( $attr[ 'showAuthor' ] || $attr[ 'showDate' ] || $attr[ 'showCommentCount' ] ) {
+					$output .= '</div>';
 				}
 
 				// If the excerpt should be shown...
 				if ( $attr[ 'showExcerpt' ] ) {
-					// Add it to the output
+					// Get the excerpt
+					$raw_cont = get_the_content( '', false, $post );
+					$cont = str_replace( ']]>', ']]&gt;', apply_filters( 'the_content', excerpt_remove_blocks( strip_shortcodes( $raw_cont ) ) ) );
+					$excerpt = force_balance_tags( html_entity_decode( wp_trim_words( htmlentities( $cont ), $attr[ 'excerptLength' ], null ) ) );
+
+					// Add the excerpt to the output
 					$output .= '<div class="' . $class . '_post-content">' . $excerpt . '</div>';
 				}
 
 				// If the Read More button should be shown...
 				if ( $attr[ 'showReadMoreButton' ] ) {
-					// Add it to the output
+					// Get the label for the button
+					$readmore = __( 'Read More', 'wpzoom-blocks' );
+					$readmore_title = esc_attr( __( 'Continue reading this post...', 'wpzoom-blocks' ) );
+
+					// Add the button to the output
 					$output .= '<div class="' . $class . '_post-readmore-button wp-block-button">
 						<a href="' . $permalink . '" title="' . $readmore_title . '" class="wp-block-button__link">' . $readmore . '</a>
 					</div>';
@@ -160,8 +234,8 @@ class WPZOOM_Blocks_Posts {
 				// Close the post details wrapper div
 				$output .= '</div>';
 
-				// Close the post wrapper div
-				$output .= '</div>';
+				// Close the post wrapper article
+				$output .= '</article>';
 
 				// Close the list item for this post
 				$output .= '</li>';
@@ -175,7 +249,7 @@ class WPZOOM_Blocks_Posts {
 		}
 
 		// Return the final output
-		return "<div class=\"wpzoom-blocks $class\"><ul class=\"{$class}_posts-list\">$output</ul></div><!--.$class-->";
+		return "<div class=\"wpzoom-blocks $class$align\"><ul class=\"{$class}_posts-list\">$output</ul></div><!--.$class-->";
 	}
 
 	/**

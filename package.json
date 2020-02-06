@@ -16,9 +16,14 @@
 	},
 	"author": "WPZOOM",
 	"license": "GPL-2.0-or-later",
+	"browserslist": [
+		"> 1%",
+		"last 2 versions"
+	],
 	"devDependencies": {
 		"@wordpress/api-fetch": "^3.9.0",
 		"@wordpress/scripts": "6.2.0",
+		"autoprefixer": "^9.7.4",
 		"copy-webpack-plugin": "^5.1.1",
 		"css-loader": "^3.4.2",
 		"ignore-emit-webpack-plugin": "^2.0.2",

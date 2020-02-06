@@ -45,7 +45,8 @@ module.exports = {
 										'custom-media-queries': { preserve: false },
 										'custom-properties': { preserve: true },
 										'nesting-rules': true
-									}
+									},
+									autoprefixer: { grid: true }
 								} )
 							]
 						}
