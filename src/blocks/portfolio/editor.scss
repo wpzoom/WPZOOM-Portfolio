@@ -1,0 +1,97 @@
+.wpzb-settings-panel {
+	.components-panel__body.wpzb-sub-panel {
+		background-color: rgba(0, 0, 0, 0.015);
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		margin: 0 0 16px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+
+		/*hr {
+			margin-left: -16px;
+			margin-right: -16px;
+		}*/
+	}
+
+	.wpzb-layout-type-select {
+		.components-base-control__field {
+			display: flex;
+			flex-wrap: wrap;
+
+			.components-base-control__label {
+				flex: 0 0 100%;
+			}
+
+			.components-radio-control__option {
+				position: relative;
+				flex-basis: 33.333%;
+				flex-grow: 1;
+				text-align: center;
+				padding: 8px 0;
+				margin: 0;
+
+				.components-radio-control__input {
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					height: 100%;
+					width: 100%;
+					padding: 0;
+					border-radius: 0;
+					margin: 0;
+
+					&::before {
+						display: none;
+					}
+
+					&:checked {
+						z-index: 1;
+					}
+
+					&:checked + label, &:checked + label::before {
+						color: #fff;
+					}
+				}
+
+				&:nth-child(2) .components-radio-control__input {
+					border-top-left-radius: 5px;
+					border-bottom-left-radius: 5px;
+					border-right: 0;
+				}
+
+				&:nth-child(4) .components-radio-control__input {
+					border-top-right-radius: 5px;
+					border-bottom-right-radius: 5px;
+					border-left: 0;
+				}
+
+				label {
+					position: relative;
+					z-index: 2;
+				}
+
+				label::before {
+					display: block;
+					font-family: 'dashicons';
+					font-size: 30px;
+					line-height: 1;
+				}
+
+				&:nth-child(2) label::before {
+					content: '\f163';
+				}
+
+				&:nth-child(3) label::before {
+					content: '\f509';
+				}
+
+				&:nth-child(4) label::before {
+					content: '\f489';
+				}
+			}
+		}
+	}
+}

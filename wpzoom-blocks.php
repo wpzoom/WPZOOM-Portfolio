@@ -21,8 +21,14 @@
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
 
+// Instance the plugin
+$wpzoom_blocks = new WPZOOM_Blocks();
+
+// Register plugin activation hook
+register_activation_hook( __FILE__, array( $wpzoom_blocks, 'activate' ) );
+
 // Hook the plugin into WordPress
-add_action( 'init', function() { new WPZOOM_Blocks(); } );
+add_action( 'init', array( $wpzoom_blocks, 'init' ) );
 
 /**
  * Class WPZOOM_Blocks
@@ -40,6 +46,15 @@ class WPZOOM_Blocks {
 	 * @since  1.0.0
 	 */
 	public const VERSION = '1.0.0';
+
+	/**
+	 * Whether the plugin has been initialized.
+	 *
+	 * @var    boolean
+	 * @access public
+	 * @since  1.0.0
+	 */
+	public $initialized = false;
 
 	/**
 	 * The path to this plugin's root directory.
@@ -103,31 +118,53 @@ class WPZOOM_Blocks {
 	 * @since  1.0.0
 	 * @see    WPZOOM_Blocks::load_assets()
 	 */
-	public function __construct() {
-		// Assign the values for the plugins 'root' dir/url
-		$this->plugin_dir_path = plugin_dir_path( __FILE__ );
-		$this->plugin_dir_url = plugin_dir_url( __FILE__ );
+	public function init() {
+		// If the plugin has not already been initialized...
+		if ( false === $this->initialized ) {
+			// Assign the values for the plugins 'root' dir/url
+			$this->plugin_dir_path = plugin_dir_path( __FILE__ );
+			$this->plugin_dir_url = plugin_dir_url( __FILE__ );
 
-		// Assign the values for the plugins 'main' dir/url
-		$this->main_dir_path = trailingslashit( $this->plugin_dir_path . 'build' );
-		$this->main_dir_url = trailingslashit( $this->plugin_dir_url . 'build' );
+			// Assign the values for the plugins 'main' dir/url
+			$this->main_dir_path = trailingslashit( $this->plugin_dir_path . 'build' );
+			$this->main_dir_url = trailingslashit( $this->plugin_dir_url . 'build' );
 
-		// Assign the values for the plugins 'blocks' dir/url
-		$this->blocks_dir_path = trailingslashit( $this->main_dir_path . 'blocks' );
-		$this->blocks_dir_url = trailingslashit( $this->main_dir_url . 'blocks' );
+			// Assign the values for the plugins 'blocks' dir/url
+			$this->blocks_dir_path = trailingslashit( $this->main_dir_path . 'blocks' );
+			$this->blocks_dir_url = trailingslashit( $this->main_dir_url . 'blocks' );
 
-		// Load the correct translation files for the plugin
-		load_plugin_textdomain( 'wpzoom-blocks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+			// Load the correct translation files for the plugin
+			load_plugin_textdomain( 'wpzoom-blocks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
-		// Filter the Gutenberg block categories to add our custom 'WPZOOM Blocks' category if needed
-		add_filter( 'block_categories', array( $this, 'filter_block_categories' ), 10, 2 );
+			// Filter the Gutenberg block categories to add our custom 'WPZOOM Blocks' category if needed
+			add_filter( 'block_categories', array( $this, 'filter_block_categories' ), 10, 2 );
 
-		// Load in all needed assets for the plugin
-		$this->load_assets();
+			// Load in all needed assets for the plugin
+			$this->load_assets();
 
-		// Enqueue the main/root scripts and styles in the Gutenberg editor
-		add_action( 'enqueue_block_editor_assets', function() { wp_enqueue_script( 'wpzoom-blocks-js-index-main' ); wp_enqueue_style( 'wpzoom-blocks-css-editor-main' ); } );
-		add_action( 'enqueue_block_assets', function() { wp_enqueue_script( 'wpzoom-blocks-js-script-main' ); wp_enqueue_style( 'wpzoom-blocks-css-style-main' ); } );
+			// Enqueue the main/root scripts and styles in the Gutenberg editor
+			add_action( 'enqueue_block_editor_assets', function() { wp_enqueue_script( 'wpzoom-blocks-js-index-main' ); wp_enqueue_style( 'wpzoom-blocks-css-editor-main' ); } );
+			add_action( 'enqueue_block_assets', function() { wp_enqueue_script( 'wpzoom-blocks-js-script-main' ); wp_enqueue_style( 'wpzoom-blocks-css-style-main' ); } );
+
+			// Mark the plugin as initialized
+			$this->initialized = true;
+		}
+	}
+
+	/**
+	 * Runs once during the activation of the plugin to run some one-time setup functions.
+	 *
+	 * @access public
+	 * @return void
+	 * @since  1.0.0
+	 * @see    WPZOOM_Blocks::init()
+	 */
+	public function activate() {
+		// Make sure the plugin is initialized
+		$this->init();
+
+		// Flush the rewrite rules so any custom post types work correctly
+		flush_rewrite_rules();
 	}
 
 	/**
