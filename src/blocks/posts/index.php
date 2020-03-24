@@ -89,11 +89,7 @@ class WPZOOM_Blocks_Posts {
 	 * @since  1.0.0
 	 */
 	public function __construct() {
-		// Hook into the REST API in order to add some custom things
-		add_action( 'rest_api_init', array( $this, 'rest_featured_media' ) );
-
-		// Add some extra needed styles on the frontend
-		add_action( 'wp_enqueue_scripts', function() { wp_enqueue_style( 'dashicons' ); } );
+		// Nothing here...
 	}
 
 	/**
@@ -250,111 +246,5 @@ class WPZOOM_Blocks_Posts {
 
 		// Return the final output
 		return "<div class=\"wpzoom-blocks $class$align\"><ul class=\"{$class}_posts-list\">$output</ul></div><!--.$class-->";
-	}
-
-	/**
-	 * Adds extra needed data in the REST API related to media library images.
-	 *
-	 * @access public
-	 * @return void
-	 * @since  1.0.0
-	 * @see    register_rest_route()
-	 * @see    register_rest_field()
-	 * @see    WPZOOM_Blocks_Posts::get_rest_image_sizes()
-	 * @see    WPZOOM_Blocks_Posts::get_featured_media_urls()
-	 */
-	public function rest_featured_media() {
-		// Register the 'image-sizes' REST API route
-		register_rest_route(
-			'wpzoom-blocks/v1',
-			'/image-sizes',
-			array(
-				'methods' => WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_rest_image_sizes' ),
-				'permission_callback' => function() { return current_user_can( 'edit_posts' ); }
-			)
-		);
-
-		// Register the 'featured_media_urls' REST API field on all post types
-		register_rest_field(
-			get_post_types(),
-			'featured_media_urls',
-			array(
-				'get_callback' => array( $this, 'get_featured_media_urls' ),
-				'update_callback' => null,
-				'schema' => array(
-					'description' => __( 'Different sized featured images', 'wpzoom-blocks' ),
-					'type' => 'array'
-				)
-			)
-		);
-	}
-
-	/**
-	 * Returns a REST response containing all available media library image sizes.
-	 *
-	 * @access public
-	 * @return array
-	 * @since  1.0.0
-	 * @see    get_intermediate_image_sizes()
-	 */
-	public function get_rest_image_sizes() {
-		// Call the built-in get_intermediate_image_sizes() WordPress function to get an array of sizes
-		$raw_sizes = get_intermediate_image_sizes();
-
-		// Build an array with sizes and their labels
-		$sizes = array();
-		foreach ( $raw_sizes as $raw_size ) {
-			$sizes[] = array( 'label' => ucwords( preg_replace( '/[_-]/', ' ', $raw_size ) ), 'value' => $raw_size );
-		}
-
-		// Return the sizes array properly formatted for a rest response
-		return rest_ensure_response( $sizes );
-	}
-
-	/**
-	 * Returns an array of all the available image size URLs for the featured media from the given post object.
-	 *
-	 * @access public
-	 * @param  WP_Post|Object $object The object that is the context to get the featured media ID from.
-	 * @return array
-	 * @since  1.0.0
-	 * @see    get_intermediate_image_sizes()
-	 * @see    wp_get_attachment_image_src()
-	 */
-	function get_featured_media_urls( $object ) {
-		// Initialize the array that will be returned
-		$featured_media_urls = array();
-
-		// If the given object has attached featured media...
-		if ( isset( $object[ 'featured_media' ] ) ) {
-			// Keep track of the featured media ID
-			$featured_media_id = $object[ 'featured_media' ];
-
-			// Call wp_get_attachment_image_src() with the default options for the best chance to get a fallback
-			$thumb = wp_get_attachment_image_src( $featured_media_id );
-
-			// If the size above was found...
-			if ( is_array( $thumb ) ) {
-				// Set it so it will be present as a fallback if no other sizes can be found
-				$featured_media_urls[ 'thumbnail' ] = $thumb;
-			}
-
-			// Go through every available image size...
-			foreach ( get_intermediate_image_sizes() as $size ) {
-				// Get the featured media source attached to the given object in the size from the current iteration
-				$src = wp_get_attachment_image_src( $featured_media_id, $size, false );
-
-				// If the size was found...
-				if ( is_array( $src ) ) {
-					// Add it to the array of size URLs
-					$featured_media_urls[ $size ] = $src;
-				}
-			}
-
-		}
-
-		// Return the array
-		return $featured_media_urls;
 	}
 }

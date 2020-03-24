@@ -49,7 +49,7 @@ class WPZOOM_Blocks_Portfolio {
 		],
 		'excerptLength' => [
 			'type' => 'number',
-			'default' => 150
+			'default' => 20
 		],
 		'layout' => [
 			'type' => 'string',
@@ -147,7 +147,7 @@ class WPZOOM_Blocks_Portfolio {
 				'archives'                 => _x( 'Portfolio Archives', 'The post type archive label used in nav menus. Default "Post Archives". Added in 4.4', 'wpzoom-blocks' ),
 				'attributes'               => __( 'Portfolio Item Attributes', 'wpzoom-blocks' ),
 				'edit_item'                => __( 'Edit Portfolio Item', 'wpzoom-blocks' ),
-				'featured_image'           => _x( 'Portfolio Cover Image', 'Overrides the "Featured Image" phrase for this post type. Added in 4.3', 'wpzoom-blocks' ),
+				'featured_image'           => _x( 'Cover Image', 'Overrides the "Featured Image" phrase for this post type. Added in 4.3', 'wpzoom-blocks' ),
 				'filter_items_list'        => _x( 'Filter portfolio items list', 'Screen reader text for the filter links heading on the post type listing screen. Default "Filter posts list". Added in 4.4', 'wpzoom-blocks' ),
 				'insert_into_item'         => _x( 'Insert into portfolio item', 'Overrides the "Insert into post" phrase (used when inserting media into a post). Added in 4.4', 'wpzoom-blocks' ),
 				'items_list'               => _x( 'Portfolio Items list', 'Screen reader text for the items list heading on the post type listing screen. Default "Posts list". Added in 4.4', 'wpzoom-blocks' ),
@@ -178,7 +178,7 @@ class WPZOOM_Blocks_Portfolio {
 			'public'              => true,
 			'rewrite'             => array( 'slug' => 'portfolio/%category%' ),
 			'show_in_rest'        => true,
-			'supports'            => array( 'author', 'editor', 'excerpt', 'revisions', 'thumbnail', 'title' ),
+			'supports'            => array( 'author', 'custom-fields', 'editor', 'excerpt', 'revisions', 'thumbnail', 'title' ),
 		) );
 
 		// Add the portfolio categories taxonomy
@@ -214,6 +214,29 @@ class WPZOOM_Blocks_Portfolio {
 			'show_in_rest'      => true
 		) );
 
+		// Register the post meta fields for storing a video for a portfolio item
+		register_post_meta( 'wpzb_portfolio', '_wpzb_portfolio_video_type', array(
+			'show_in_rest'      => true,
+			'type'              => 'string',
+			'single'            => true,
+			'sanitize_callback' => 'sanitize_text_field',
+			'auth_callback'     => function () { return current_user_can( 'edit_posts' ); }
+		) );
+		register_post_meta( 'wpzb_portfolio', '_wpzb_portfolio_video_id', array(
+			'show_in_rest'      => true,
+			'type'              => 'string',
+			'single'            => true,
+			'sanitize_callback' => 'sanitize_text_field',
+			'auth_callback'     => function () { return current_user_can( 'edit_posts' ); }
+		) );
+		register_post_meta( 'wpzb_portfolio', '_wpzb_portfolio_video_url', array(
+			'show_in_rest'      => true,
+			'type'              => 'string',
+			'single'            => true,
+			'sanitize_callback' => 'sanitize_text_field',
+			'auth_callback'     => function () { return current_user_can( 'edit_posts' ); }
+		) );
+
 		// Ensure there is a Uncategorized category for the portfolio post type
 		if ( is_null( term_exists( 'uncategorized', 'wpzb_portfolio_category' ) ) ) {
 			wp_insert_term( __( 'Uncategorized', 'wpzoom-blocks' ), 'wpzb_portfolio_category', array( 'slug' => 'uncategorized' ) );
@@ -230,13 +253,6 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Filter post type links for portfolio items
 		add_filter( 'post_type_link', array( $this, 'post_type_link_replace' ), 1, 3 );
-
-		// Hook into the REST API in order to add some custom things
-//		add_action( 'rest_api_init', array( $this, 'rest_featured_media' ) );
-// MAYBE MOVE THIS REST THINGY INTO THE MAIN wpzoom-blocks.php FILE SINCE MULTIPLE BLOCKS SEEM TO BE USING IT NOW...
-
-		// Add some extra needed styles on the frontend
-		add_action( 'wp_enqueue_scripts', function() { wp_enqueue_style( 'dashicons' ); } );
 	}
 
 	/**
@@ -254,19 +270,41 @@ class WPZOOM_Blocks_Portfolio {
 		$class = 'wpzoom-blocks_portfolio-block';
 
 		// Might need to align the block
-		$align = isset( $attr[ 'align' ] ) ? ' align' . $attr[ 'align' ] : '';
+		$align = isset( $attr[ 'align' ] ) && ! empty( $attr[ 'align' ] ) ? ' align' . $attr[ 'align' ] : '';
+
+		// CSS classes for the layout type and columns amount
+		$layout = isset( $attr[ 'layout' ] ) && ! empty( $attr[ 'layout' ] ) ? ' layout-' . $attr[ 'layout' ] : '';
+		$columns = isset( $attr[ 'layout' ] ) && 'list' != $attr[ 'layout' ] &&
+		           isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ? ' columns-' . $attr[ 'columnsAmount' ] : '';
+
+		// Build the category filter buttons, if enabled
+		$cats = $this->list_categories( $attr[ 'categories' ] );
+		$cats_filter = $attr[ 'showCategoryFilter' ] && ! empty( $cats ) ? '<div class="' . $class . '_filter"><ul>' . $cats . '</ul></div>' : '';
+
+		// Build the View All button, if enabled
+		$view_all_label = isset( $attr[ 'viewAllLabel' ] ) && ! empty( $attr[ 'viewAllLabel' ] ) ? $attr[ 'viewAllLabel' ] : __( 'View All', 'wpzoom-blocks' );
+		$view_all_link = esc_url( ! empty( $attr[ 'viewAllLink' ] ) ? $attr[ 'viewAllLink' ] : site_url( '/portfolio/' ) );
+		$view_all = $attr[ 'showViewAll' ] ? '<div class="' . $class . '_view-all wp-block-button">
+			<a href="' . $view_all_link . '" title="' . esc_attr( $view_all_label ) . '" class="wp-block-button__link">' . $view_all_label . '</a>
+		</div>' : '';
 
 		// Fetch portfolio items using the specified attributes
 		$params = array(
 			'order'          => isset( $attr[ 'order' ] ) ? $attr[ 'order' ] : 'desc',
 			'orderby'        => isset( $attr[ 'orderBy' ] ) ? $attr[ 'orderBy' ] : 'date',
 			'posts_per_page' => isset( $attr[ 'orderBy' ] ) ? $attr[ 'amount' ] : 6,
-			'post_type'      => 'wpzb_portfolio'
+			'post_type'      => array( 'wpzb_portfolio', 'portfolio_item' )
 		);
 		if ( isset( $attr[ 'categories' ] ) && !empty( $attr[ 'categories' ] ) && count( array_filter( $attr[ 'categories' ] ) ) > 0 ) {
 			$params[ 'tax_query' ] = array(
+				'relation' => 'OR',
 				array(
 					'taxonomy' => 'wpzb_portfolio_category',
+					'field'    => 'term_id',
+					'terms'    => $attr[ 'categories' ]
+				),
+				array(
+					'taxonomy' => 'portfolio',
 					'field'    => 'term_id',
 					'terms'    => $attr[ 'categories' ]
 				)
@@ -385,7 +423,123 @@ class WPZOOM_Blocks_Portfolio {
 		}
 
 		// Return the final output
-		return "<div class=\"wpzoom-blocks $class$align\"><ul class=\"{$class}_portfolio-items-list\">$output</ul></div><!--.$class-->";
+		return "<div class=\"wpzoom-blocks $class$align$layout$columns\">$cats_filter<ul class=\"{$class}_items-list\">$output</ul>$view_all</div><!--.$class-->";
+	}
+
+	/**
+	 * Retrieve an HTML list of categories.
+	 *
+	 * @access public
+	 * @param  int|array $current_category The ID of a category, or array of IDs of categories, that should get the 'current-cat' class.
+	 * @return string
+	 * @since  1.0.0
+	 * @see    get_categories()
+	 */
+	public function list_categories( $selected_category = 0 ) {
+		$args = array(
+			'child_of'            => 0,
+			'current_category'    => $selected_category,
+			'depth'               => 0,
+			'echo'                => 1,
+			'exclude'             => '',
+			'exclude_tree'        => '',
+			'feed'                => '',
+			'feed_image'          => '',
+			'feed_type'           => '',
+			'hide_empty'          => true,
+			'hide_title_if_empty' => false,
+			'hierarchical'        => true,
+			'order'               => 'ASC',
+			'orderby'             => 'name',
+			'separator'           => '',
+			'show_count'          => 0,
+			'show_option_all'     => __( 'All', 'wpzoom-blocks' ),
+			'style'               => 'list',
+			'taxonomy'            => array( 'wpzb_portfolio_category', 'portfolio' ),
+			'use_desc_for_title'  => 1,
+		);
+		$categories = get_categories( $args );
+		$output = '';
+
+		if ( ! empty( $categories ) ) {
+			$posts_page = '';
+
+			// For taxonomies that belong only to custom post types, point to a valid archive.
+			$taxonomy_object = get_taxonomy( 'wpzb_portfolio_category' );
+			if ( ! in_array( 'post', $taxonomy_object->object_type ) && ! in_array( 'page', $taxonomy_object->object_type ) ) {
+				foreach ( $taxonomy_object->object_type as $object_type ) {
+					$_object_type = get_post_type_object( $object_type );
+
+					// Grab the first one.
+					if ( ! empty( $_object_type->has_archive ) ) {
+						$posts_page = get_post_type_archive_link( $object_type );
+						break;
+					}
+				}
+			}
+
+			// Fallback for the 'All' link is the posts page.
+			if ( ! $posts_page ) {
+				if ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ) {
+					$posts_page = get_permalink( get_option( 'page_for_posts' ) );
+				} else {
+					$posts_page = home_url( '/' );
+				}
+			}
+
+			$posts_page = esc_url( $posts_page );
+			$output .= '<li class="wp-block-button cat-item-all' . ( empty( $selected_category ) ? ' current-cat' : '' ) . '">
+				<a href="' . $posts_page . '" class="wp-block-button__link">' . __( 'All', 'wpzoom-blocks' ) . '</a>
+			</li>';
+
+			// Filter the HTML output by the walk_category_tree() function to add needed CSS classes
+			add_filter( 'category_list_link_attributes', array( $this, 'category_list_link_attributes' ), 10, 5 );
+			add_filter( 'category_css_class', array( $this, 'category_css_class' ), 10, 4 );
+
+			// Build the HTML for the categories list
+			$output .= walk_category_tree( $categories, -1, $args );
+
+			// Remove the filters added above
+			remove_filter( 'category_list_link_attributes', array( $this, 'category_list_link_attributes' ) );
+			remove_filter( 'category_css_class', array( $this, 'category_css_class' ) );
+		}
+
+		return $output;
+	}
+
+	/**
+	 * Filters the HTML attributes applied to a category list item’s anchor element.
+	 * 
+	 * @access public
+	 * @param  array   $atts     The HTML attributes applied to the list item's <a> element, empty strings are ignored.
+	 * @param  WP_Term $category Term data object.
+	 * @param  int     $depth    Depth of category, used for padding.
+	 * @param  array   $args     An array of arguments.
+	 * @param  int     $id       ID of the current category.
+	 * @return array
+	 * @since  1.0.0
+	 */
+	public function category_list_link_attributes( $atts, $category, $depth, $args, $id ) {
+		$atts[ 'class' ] = 'wp-block-button__link';
+
+		return $atts;
+	}
+
+	/**
+	 * Filters the list of CSS classes to include with each category in the list.
+	 * 
+	 * @access public
+	 * @param  array   $css_classes An array of CSS classes to be applied to each list item.
+	 * @param  WP_Term $category    Term data object.
+	 * @param  int     $depth       Depth of category, used for padding.
+	 * @param  array   $args        An array of wp_list_categories() arguments.
+	 * @return array
+	 * @since  1.0.0
+	 */
+	public function category_css_class( $css_classes, $category, $depth, $args ) {
+		$css_classes[] = 'wp-block-button';
+
+		return $css_classes;
 	}
 
 	/**
@@ -399,7 +553,7 @@ class WPZOOM_Blocks_Portfolio {
 	 * @since  1.0.0
 	 * @see    get_the_terms()
 	 */
-	function post_type_link_replace( $post_link, $post ) {
+	public function post_type_link_replace( $post_link, $post ) {
 		if ( 'wpzb_portfolio' == get_post_type( $post ) && false !== stripos( $post_link, '%category%' ) ) {
 			$cats = get_the_terms( $post, 'wpzb_portfolio_category' );
 
@@ -424,7 +578,7 @@ class WPZOOM_Blocks_Portfolio {
 	 * @see    get_the_terms()
 	 * @see    wp_set_object_terms()
 	 */
-	function set_default_object_terms( $post_id, $post, $update ) {
+	public function set_default_object_terms( $post_id, $post, $update ) {
 		if ( 'publish' == $post->post_status && 'wpzb_portfolio' == $post->post_type ) {
 			$cats = get_the_terms( $post, 'wpzb_portfolio_category' );
 
@@ -432,111 +586,5 @@ class WPZOOM_Blocks_Portfolio {
 				wp_set_object_terms( $post_id, 'uncategorized', 'wpzb_portfolio_category' );
 			}
 		}
-	}
-
-	/**
-	 * Adds extra needed data in the REST API related to media library images.
-	 *
-	 * @access public
-	 * @return void
-	 * @since  1.0.0
-	 * @see    register_rest_route()
-	 * @see    register_rest_field()
-	 * @see    WPZOOM_Blocks_Posts::get_rest_image_sizes()
-	 * @see    WPZOOM_Blocks_Posts::get_featured_media_urls()
-	 */
-	public function rest_featured_media() {
-		// Register the 'image-sizes' REST API route
-		register_rest_route(
-			'wpzoom-blocks/v1',
-			'/image-sizes',
-			array(
-				'methods' => WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_rest_image_sizes' ),
-				'permission_callback' => function() { return current_user_can( 'edit_posts' ); }
-			)
-		);
-
-		// Register the 'featured_media_urls' REST API field on all post types
-		register_rest_field(
-			get_post_types(),
-			'featured_media_urls',
-			array(
-				'get_callback' => array( $this, 'get_featured_media_urls' ),
-				'update_callback' => null,
-				'schema' => array(
-					'description' => __( 'Different sized featured images', 'wpzoom-blocks' ),
-					'type' => 'array'
-				)
-			)
-		);
-	}
-
-	/**
-	 * Returns a REST response containing all available media library image sizes.
-	 *
-	 * @access public
-	 * @return array
-	 * @since  1.0.0
-	 * @see    get_intermediate_image_sizes()
-	 */
-	public function get_rest_image_sizes() {
-		// Call the built-in get_intermediate_image_sizes() WordPress function to get an array of sizes
-		$raw_sizes = get_intermediate_image_sizes();
-
-		// Build an array with sizes and their labels
-		$sizes = array();
-		foreach ( $raw_sizes as $raw_size ) {
-			$sizes[] = array( 'label' => ucwords( preg_replace( '/[_-]/', ' ', $raw_size ) ), 'value' => $raw_size );
-		}
-
-		// Return the sizes array properly formatted for a rest response
-		return rest_ensure_response( $sizes );
-	}
-
-	/**
-	 * Returns an array of all the available image size URLs for the featured media from the given post object.
-	 *
-	 * @access public
-	 * @param  WP_Post|Object $object The object that is the context to get the featured media ID from.
-	 * @return array
-	 * @since  1.0.0
-	 * @see    get_intermediate_image_sizes()
-	 * @see    wp_get_attachment_image_src()
-	 */
-	function get_featured_media_urls( $object ) {
-		// Initialize the array that will be returned
-		$featured_media_urls = array();
-
-		// If the given object has attached featured media...
-		if ( isset( $object[ 'featured_media' ] ) ) {
-			// Keep track of the featured media ID
-			$featured_media_id = $object[ 'featured_media' ];
-
-			// Call wp_get_attachment_image_src() with the default options for the best chance to get a fallback
-			$thumb = wp_get_attachment_image_src( $featured_media_id );
-
-			// If the size above was found...
-			if ( is_array( $thumb ) ) {
-				// Set it so it will be present as a fallback if no other sizes can be found
-				$featured_media_urls[ 'thumbnail' ] = $thumb;
-			}
-
-			// Go through every available image size...
-			foreach ( get_intermediate_image_sizes() as $size ) {
-				// Get the featured media source attached to the given object in the size from the current iteration
-				$src = wp_get_attachment_image_src( $featured_media_id, $size, false );
-
-				// If the size was found...
-				if ( is_array( $src ) ) {
-					// Add it to the array of size URLs
-					$featured_media_urls[ $size ] = $src;
-				}
-			}
-
-		}
-
-		// Return the array
-		return $featured_media_urls;
 	}
 }

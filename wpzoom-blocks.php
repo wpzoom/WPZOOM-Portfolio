@@ -146,6 +146,12 @@ class WPZOOM_Blocks {
 			add_action( 'enqueue_block_editor_assets', function() { wp_enqueue_script( 'wpzoom-blocks-js-index-main' ); wp_enqueue_style( 'wpzoom-blocks-css-editor-main' ); } );
 			add_action( 'enqueue_block_assets', function() { wp_enqueue_script( 'wpzoom-blocks-js-script-main' ); wp_enqueue_style( 'wpzoom-blocks-css-style-main' ); } );
 
+			// Hook into the REST API in order to add some custom things
+			add_action( 'rest_api_init', array( $this, 'rest_featured_media' ) );
+
+			// Add some extra needed styles on the frontend
+			add_action( 'wp_enqueue_scripts', function() { wp_enqueue_style( 'dashicons' ); } );
+
 			// Mark the plugin as initialized
 			$this->initialized = true;
 		}
@@ -276,5 +282,211 @@ class WPZOOM_Blocks {
 				)
 			)
 		);
+	}
+
+	/**
+	 * Adds extra needed data in the REST API related to media library images.
+	 *
+	 * @access public
+	 * @return void
+	 * @since  1.0.0
+	 * @see    register_rest_route()
+	 * @see    register_rest_field()
+	 * @see    WPZOOM_Blocks_Posts::get_rest_image_sizes()
+	 * @see    WPZOOM_Blocks_Posts::get_featured_media_urls()
+	 */
+	public function rest_featured_media() {
+		// Register the 'image-sizes' REST API route
+		register_rest_route(
+			'wpzoom-blocks/v1',
+			'/image-sizes',
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_rest_image_sizes' ),
+				'permission_callback' => function() { return current_user_can( 'edit_posts' ); }
+			)
+		);
+
+		// Register the 'video-thumbnail' REST API route
+		register_rest_route(
+			'wpzoom-blocks/v1',
+			'/video-thumbnail',
+			array(
+				'methods' => 'GET, POST',
+				'callback' => array( $this, 'get_rest_video_thumbnail' ),
+				'permission_callback' => function() { return current_user_can( 'edit_posts' ); }
+			)
+		);
+
+		// Register the 'featured_media_urls' REST API field on all post types
+		register_rest_field(
+			get_post_types(),
+			'featured_media_urls',
+			array(
+				'get_callback' => array( $this, 'get_featured_media_urls' ),
+				'update_callback' => null,
+				'schema' => array(
+					'description' => __( 'Different sized featured images', 'wpzoom-blocks' ),
+					'type' => 'array'
+				)
+			)
+		);
+	}
+
+	/**
+	 * Returns a REST response containing all available media library image sizes.
+	 *
+	 * @access public
+	 * @return array
+	 * @since  1.0.0
+	 * @see    get_intermediate_image_sizes()
+	 */
+	public function get_rest_image_sizes() {
+		// Call the built-in get_intermediate_image_sizes() WordPress function to get an array of sizes
+		$raw_sizes = get_intermediate_image_sizes();
+
+		// Build an array with sizes and their labels
+		$sizes = array();
+		foreach ( $raw_sizes as $raw_size ) {
+			$sizes[] = array( 'label' => ucwords( preg_replace( '/[_-]/', ' ', $raw_size ) ), 'value' => $raw_size );
+		}
+
+		// Return the sizes array properly formatted for a rest response
+		return rest_ensure_response( $sizes );
+	}
+
+	/**
+	 * Returns a REST response containing a URL to a thumbnail representing the video URL passed in.
+	 *
+	 * @access public
+	 * @return array
+	 * @since  1.0.0
+	 */
+	public function get_rest_video_thumbnail( $request ) {
+		// The result that will be returned
+		$result = false;
+
+		// If the $request argument is of the proper type...
+		if ( $request instanceof WP_REST_Request ) {
+			// Get the parameters
+			$params = $request->get_params();
+
+			// If there is a url parameter and it looks like a valid url...
+			if ( isset( $params[ 'url' ] ) && false !== filter_var( $params[ 'url' ], FILTER_VALIDATE_URL ) ) {
+				// Keep the url around
+				$input_url = $params[ 'url' ];
+
+				// Get the host from the url
+				$host = parse_url( $input_url, PHP_URL_HOST );
+
+				// If the host was able to be parsed...
+				if ( ! is_null( $host ) && false !== $host ) {
+					// Strip off www. from the host
+					$host = preg_replace( '/^www\./i', '', $host );
+
+					// The url to fetch
+					$url = '';
+
+					// Encode the input url so it can be put in the url
+					$input_url = urlencode( $input_url );
+
+					// If the host looks like it is YouTube...
+					if ( 'youtu' === substr( $host, 0, 5 ) ) {
+						$url = "https://www.youtube.com/oembed?url=${input_url}&format=json";
+					}
+					// Otherwise, if the host looks like it is Vimeo...
+					elseif ( 'vimeo' === substr( $host, 0, 5 ) ) {
+						$url = "https://vimeo.com/api/oembed.json?url=${input_url}";
+					}
+
+					// As long as there is a good url to fetch...
+					if ( ! empty( $url ) ) {
+						// Fetch the file
+						$file_contents = file_get_contents( $url );
+
+						// As long as the file fetch worked...
+						if ( false !== $file_contents ) {
+							// Try to decode the returned json
+							$details = json_decode( $file_contents, true );
+
+							// If the decoded details are good...
+							if ( ! is_null( $details ) && false !== $details ) {
+								$thumbnail_url = isset( $details[ 'thumbnail_url' ] ) ? $details[ 'thumbnail_url' ] : false;
+								$thumbnail_height = isset( $details[ 'thumbnail_height' ] ) ? $details[ 'thumbnail_height' ] : false;
+								$thumbnail_width = isset( $details[ 'thumbnail_width' ] ) ? $details[ 'thumbnail_width' ] : false;
+								
+								// If there is a thumbnail url...
+								if ( false !== $thumbnail_url )
+								{
+									// Add it to the result
+									$result = array( 'url' => $thumbnail_url );
+
+									// If there is a thumbnail height...
+									if ( false !== $thumbnail_height ) {
+										// Add it to the result
+										$result[ 'height' ] = $thumbnail_height;
+									}
+
+									// If there is a thumbnail width...
+									if ( false !== $thumbnail_width ) {
+										// Add it to the result
+										$result[ 'width' ] = $thumbnail_width;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Return false since there was an issue
+		return rest_ensure_response( $result );
+	}
+
+	/**
+	 * Returns an array of all the available image size URLs for the featured media from the given post object.
+	 *
+	 * @access public
+	 * @param  WP_Post|Object $object The object that is the context to get the featured media ID from.
+	 * @return array
+	 * @since  1.0.0
+	 * @see    get_intermediate_image_sizes()
+	 * @see    wp_get_attachment_image_src()
+	 */
+	function get_featured_media_urls( $object ) {
+		// Initialize the array that will be returned
+		$featured_media_urls = array();
+
+		// If the given object has attached featured media...
+		if ( isset( $object[ 'featured_media' ] ) ) {
+			// Keep track of the featured media ID
+			$featured_media_id = $object[ 'featured_media' ];
+
+			// Call wp_get_attachment_image_src() with the default options for the best chance to get a fallback
+			$thumb = wp_get_attachment_image_src( $featured_media_id );
+
+			// If the size above was found...
+			if ( is_array( $thumb ) ) {
+				// Set it so it will be present as a fallback if no other sizes can be found
+				$featured_media_urls[ 'thumbnail' ] = $thumb;
+			}
+
+			// Go through every available image size...
+			foreach ( get_intermediate_image_sizes() as $size ) {
+				// Get the featured media source attached to the given object in the size from the current iteration
+				$src = wp_get_attachment_image_src( $featured_media_id, $size, false );
+
+				// If the size was found...
+				if ( is_array( $src ) ) {
+					// Add it to the array of size URLs
+					$featured_media_urls[ $size ] = $src;
+				}
+			}
+
+		}
+
+		// Return the array
+		return $featured_media_urls;
 	}
 }
