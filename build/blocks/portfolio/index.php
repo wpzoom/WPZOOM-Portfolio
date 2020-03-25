@@ -278,7 +278,7 @@ class WPZOOM_Blocks_Portfolio {
 		           isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ? ' columns-' . $attr[ 'columnsAmount' ] : '';
 
 		// Build the category filter buttons, if enabled
-		$cats = $this->list_categories( $attr[ 'categories' ] );
+		$cats = isset( $attr[ 'categories' ] ) ? $this->list_categories( $attr[ 'categories' ] ) : '';
 		$cats_filter = $attr[ 'showCategoryFilter' ] && ! empty( $cats ) ? '<div class="' . $class . '_filter"><ul>' . $cats . '</ul></div>' : '';
 
 		// Build the View All button, if enabled

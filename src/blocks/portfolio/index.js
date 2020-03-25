@@ -232,7 +232,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									label={ __( 'Category', 'wpzoom-blocks' ) }
 									help={ __( 'Multiple selections allowed.', 'wpzoom-blocks' ) }
 									tree={ termsTree }
-									selectedId={ categories.length > 0 ? categories : [-1] }
+									selectedId={ typeof categories !== 'undefined' && categories.length > 0 ? categories : [-1] }
 									multiple
 									onChange={ ( value ) => setAttributes( { categories: '' !== value ? value : undefined } ) }
 								/>
