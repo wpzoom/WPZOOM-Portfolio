@@ -108,6 +108,10 @@
 	}
 }
 
+.wpzb-portfolio-video-panel .wpzb-button-select {
+	margin: 0 0 0.5em;
+}
+
 .wpzb-cover-video {
 	position: relative;
 
@@ -121,9 +125,11 @@
 
 	.components-spinner {
 		position: absolute;
-		top: 10px;
-		right: 10px;
+		top: 10px !important;
+		left: auto !important;
+		right: 10px !important;
 		z-index: 2;
+		margin: 0 !important;
 	}
 
 	.wpzb-cover-video-url-input {
@@ -144,5 +150,9 @@
 				margin: 0;
 			}
 		}
+	}
+
+	&.editor-post-featured-image__toggle .wpzb-cover-video-url-input .components-base-control__field .components-text-control__input {
+		min-height: 90px;
 	}
 }

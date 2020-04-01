@@ -150,7 +150,7 @@ class WPZOOM_Blocks {
 			add_action( 'rest_api_init', array( $this, 'rest_featured_media' ) );
 
 			// Add some extra needed styles on the frontend
-			add_action( 'wp_enqueue_scripts', function() { wp_enqueue_style( 'dashicons' ); } );
+			add_action( 'wp_enqueue_scripts', function() { wp_enqueue_script( 'jquery' ); wp_enqueue_style( 'dashicons' ); } );
 
 			// Mark the plugin as initialized
 			$this->initialized = true;
@@ -359,6 +359,7 @@ class WPZOOM_Blocks {
 	 * Returns a REST response containing a URL to a thumbnail representing the video URL passed in.
 	 *
 	 * @access public
+	 * @param  WP_REST_Request $request Object containing the details of the rest request.
 	 * @return array
 	 * @since  1.0.0
 	 */
@@ -373,67 +374,31 @@ class WPZOOM_Blocks {
 
 			// If there is a url parameter and it looks like a valid url...
 			if ( isset( $params[ 'url' ] ) && false !== filter_var( $params[ 'url' ], FILTER_VALIDATE_URL ) ) {
-				// Keep the url around
-				$input_url = $params[ 'url' ];
+				// Attempt to fetch the video data with oEmbed
+				$video_data = _wp_oembed_get_object()->get_data( $params[ 'url' ] );
 
-				// Get the host from the url
-				$host = parse_url( $input_url, PHP_URL_HOST );
+				// As long as we got some video data...
+				if ( false !== $video_data ) {
+					$thumbnail_url = isset( $video_data->thumbnail_url ) ? $video_data->thumbnail_url : false;
+					$thumbnail_height = isset( $video_data->thumbnail_height ) ? $video_data->thumbnail_height : false;
+					$thumbnail_width = isset( $video_data->thumbnail_width ) ? $video_data->thumbnail_width : false;
+					
+					// If there is a thumbnail url...
+					if ( false !== $thumbnail_url )
+					{
+						// Add it to the result
+						$result = array( 'url' => $thumbnail_url );
 
-				// If the host was able to be parsed...
-				if ( ! is_null( $host ) && false !== $host ) {
-					// Strip off www. from the host
-					$host = preg_replace( '/^www\./i', '', $host );
+						// If there is a thumbnail height...
+						if ( false !== $thumbnail_height ) {
+							// Add it to the result
+							$result[ 'height' ] = $thumbnail_height;
+						}
 
-					// The url to fetch
-					$url = '';
-
-					// Encode the input url so it can be put in the url
-					$input_url = urlencode( $input_url );
-
-					// If the host looks like it is YouTube...
-					if ( 'youtu' === substr( $host, 0, 5 ) ) {
-						$url = "https://www.youtube.com/oembed?url=${input_url}&format=json";
-					}
-					// Otherwise, if the host looks like it is Vimeo...
-					elseif ( 'vimeo' === substr( $host, 0, 5 ) ) {
-						$url = "https://vimeo.com/api/oembed.json?url=${input_url}";
-					}
-
-					// As long as there is a good url to fetch...
-					if ( ! empty( $url ) ) {
-						// Fetch the file
-						$file_contents = file_get_contents( $url );
-
-						// As long as the file fetch worked...
-						if ( false !== $file_contents ) {
-							// Try to decode the returned json
-							$details = json_decode( $file_contents, true );
-
-							// If the decoded details are good...
-							if ( ! is_null( $details ) && false !== $details ) {
-								$thumbnail_url = isset( $details[ 'thumbnail_url' ] ) ? $details[ 'thumbnail_url' ] : false;
-								$thumbnail_height = isset( $details[ 'thumbnail_height' ] ) ? $details[ 'thumbnail_height' ] : false;
-								$thumbnail_width = isset( $details[ 'thumbnail_width' ] ) ? $details[ 'thumbnail_width' ] : false;
-								
-								// If there is a thumbnail url...
-								if ( false !== $thumbnail_url )
-								{
-									// Add it to the result
-									$result = array( 'url' => $thumbnail_url );
-
-									// If there is a thumbnail height...
-									if ( false !== $thumbnail_height ) {
-										// Add it to the result
-										$result[ 'height' ] = $thumbnail_height;
-									}
-
-									// If there is a thumbnail width...
-									if ( false !== $thumbnail_width ) {
-										// Add it to the result
-										$result[ 'width' ] = $thumbnail_width;
-									}
-								}
-							}
+						// If there is a thumbnail width...
+						if ( false !== $thumbnail_width ) {
+							// Add it to the result
+							$result[ 'width' ] = $thumbnail_width;
 						}
 					}
 				}

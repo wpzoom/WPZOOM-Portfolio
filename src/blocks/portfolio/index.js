@@ -1,7 +1,7 @@
 import apiFetch from '@wordpress/api-fetch';
 import { InspectorControls } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
-import { HorizontalRule, PanelBody, Placeholder, RadioControl, RangeControl, SelectControl, Spinner, TextControl, ToggleControl, TreeSelect } from '@wordpress/components';
+import { Disabled, HorizontalRule, PanelBody, Placeholder, RadioControl, RangeControl, SelectControl, Spinner, TextControl, ToggleControl, TreeSelect } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { Component, Fragment } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
@@ -134,6 +134,60 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 
 			const termsTree = buildTermsTree( categoriesList );
 
+			let fields = <>
+				<ToggleControl
+					label={ __( 'Show Author', 'wpzoom-blocks' ) }
+					checked={ showAuthor }
+					onChange={ ( value ) => setAttributes( { showAuthor: value } ) }
+				/>
+
+				<HorizontalRule />
+
+				<ToggleControl
+					label={ __( 'Show Date', 'wpzoom-blocks' ) }
+					checked={ showDate }
+					onChange={ ( value ) => setAttributes( { showDate: value } ) }
+				/>
+
+				<HorizontalRule />
+
+				<ToggleControl
+					label={ __( 'Show Excerpt', 'wpzoom-blocks' ) }
+					checked={ showExcerpt }
+					onChange={ ( value ) => setAttributes( { showExcerpt: value } ) }
+				/>
+
+				{ showExcerpt &&
+					<RangeControl
+						label={ __( 'Excerpt Length', 'wpzoom-blocks' ) }
+						value={ excerptLength }
+						onChange={ ( value ) => setAttributes( { excerptLength: value } ) }
+						min={ 1 }
+						max={ 1000 }
+					/>
+				}
+
+				<HorizontalRule />
+
+				<ToggleControl
+					label={ __( 'Show Read More Button', 'wpzoom-blocks' ) }
+					checked={ showReadMore }
+					onChange={ ( value ) => setAttributes( { showReadMore: value } ) }
+				/>
+
+				{ showReadMore &&
+					<TextControl
+						label={ __( 'Read More Button Label', 'wpzoom-blocks' ) }
+						value={ readMoreLabel }
+						onChange={ ( value ) => setAttributes( { readMoreLabel: value } ) }
+					/>
+				}
+			</>;
+
+			if ( 'list' != layout ) {
+				fields = <Disabled>{ fields }</Disabled>;
+			}
+
 			return (
 				<>
 					<InspectorControls>
@@ -145,13 +199,12 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									onChange={ ( value ) => setAttributes( { layout: value } ) }
 									options={ [
 										{ value: 'list', label: __( 'List', 'wpzoom-blocks' ) },
-										{ value: 'grid', label: __( 'Grid', 'wpzoom-blocks' ) },
-										{ value: 'masonry', label: __( 'Masonry', 'wpzoom-blocks' ) }
+										{ value: 'grid', label: __( 'Grid', 'wpzoom-blocks' ) }
 									] }
 									selected={ layout }
 								/>
 
-								{ ( layout == 'grid' || layout == 'masonry' ) &&
+								{ layout == 'grid' &&
 									<RangeControl
 										label={ __( 'Amount of Columns', 'wpzoom-blocks' ) }
 										max={ 10 }
@@ -281,64 +334,10 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 
 								<HorizontalRule />
 
-								<ToggleControl
-									label={ __( 'Show Author', 'wpzoom-blocks' ) }
-									checked={ showAuthor }
-									onChange={ ( value ) => setAttributes( { showAuthor: value } ) }
-								/>
-
-								<HorizontalRule />
-
-								<ToggleControl
-									label={ __( 'Show Date', 'wpzoom-blocks' ) }
-									checked={ showDate }
-									onChange={ ( value ) => setAttributes( { showDate: value } ) }
-								/>
-
-								<HorizontalRule />
-
-								<ToggleControl
-									label={ __( 'Show Excerpt', 'wpzoom-blocks' ) }
-									checked={ showExcerpt }
-									onChange={ ( value ) => setAttributes( { showExcerpt: value } ) }
-								/>
-
-								{ showExcerpt &&
-									<RangeControl
-										label={ __( 'Excerpt Length', 'wpzoom-blocks' ) }
-										value={ excerptLength }
-										onChange={ ( value ) => setAttributes( { excerptLength: value } ) }
-										min={ 1 }
-										max={ 1000 }
-									/>
-								}
-
-								<HorizontalRule />
-
-								<ToggleControl
-									label={ __( 'Show Read More Button', 'wpzoom-blocks' ) }
-									checked={ showReadMore }
-									onChange={ ( value ) => setAttributes( { showReadMore: value } ) }
-								/>
-
-								{ showReadMore &&
-									<TextControl
-										label={ __( 'Read More Button Label', 'wpzoom-blocks' ) }
-										value={ readMoreLabel }
-										onChange={ ( value ) => setAttributes( { readMoreLabel: value } ) }
-									/>
-								}
+								{ fields }
 							</PanelBody>
 
 							<PanelBody title={ __( 'Other', 'wpzoom-blocks' ) } className="wpzb-sub-panel">
-								<ToggleControl
-									label={ __( 'Load Portfolio Items Dynamically (Lazy Load)', 'wpzoom-blocks' ) }
-									checked={ lazyLoad }
-									onChange={ ( value ) => setAttributes( { lazyLoad: value } ) }
-								/>
-
-								<HorizontalRule />
-
 								<ToggleControl
 									label={ __( 'Open Portfolio Items in a Lightbox', 'wpzoom-blocks' ) }
 									checked={ lightbox }

@@ -55,10 +55,6 @@ class WPZOOM_Blocks_Portfolio {
 			'type' => 'string',
 			'default' => 'grid'
 		],
-		'lazyLoad' => [
-			'type' => 'boolean',
-			'default' => true
-		],
 		'lightbox' => [
 			'type' => 'boolean',
 			'default' => true
@@ -224,7 +220,7 @@ class WPZOOM_Blocks_Portfolio {
 		) );
 		register_post_meta( 'wpzb_portfolio', '_wpzb_portfolio_video_id', array(
 			'show_in_rest'      => true,
-			'type'              => 'string',
+			'type'              => 'integer',
 			'single'            => true,
 			'sanitize_callback' => 'sanitize_text_field',
 			'auth_callback'     => function () { return current_user_can( 'edit_posts' ); }
@@ -273,29 +269,42 @@ class WPZOOM_Blocks_Portfolio {
 		$align = isset( $attr[ 'align' ] ) && ! empty( $attr[ 'align' ] ) ? ' align' . $attr[ 'align' ] : '';
 
 		// CSS classes for the layout type and columns amount
-		$layout = isset( $attr[ 'layout' ] ) && ! empty( $attr[ 'layout' ] ) ? ' layout-' . $attr[ 'layout' ] : '';
+		$layout_type = isset( $attr[ 'layout' ] ) && ! empty( $attr[ 'layout' ] ) ? $attr[ 'layout' ] : 'grid';
+		$layout = ' layout-' . $layout_type;
 		$columns = isset( $attr[ 'layout' ] ) && 'list' != $attr[ 'layout' ] &&
-		           isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ? ' columns-' . $attr[ 'columnsAmount' ] : '';
+				   isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ? ' columns-' . $attr[ 'columnsAmount' ] : '';
 
 		// Build the category filter buttons, if enabled
-		$cats = isset( $attr[ 'categories' ] ) ? $this->list_categories( $attr[ 'categories' ] ) : '';
-		$cats_filter = $attr[ 'showCategoryFilter' ] && ! empty( $cats ) ? '<div class="' . $class . '_filter"><ul>' . $cats . '</ul></div>' : '';
+		$categories = isset( $attr[ 'categories' ] ) && is_array( $attr[ 'categories' ] ) ? array_filter( $attr[ 'categories' ] ) : array();
+		$categories_without_all = ! empty( $categories ) ? array_filter( $categories, function( $v ) { return '-1' != $v; } ) : array();
+		$enough_cats = count( $categories_without_all ) > 1 || empty( $categories ) || in_array( '-1', $categories );
+		$cats = $this->list_categories( $categories_without_all );
+		$cats_filter = $attr[ 'showCategoryFilter' ] && $enough_cats ? '<div class="' . $class . '_filter"><ul>' . $cats . '</ul></div>' : '';
+
+		// Lightbox
+		$use_lightbox = isset( $attr[ 'lightbox' ] ) ? $attr[ 'lightbox' ] : true;
+		$lightbox_caption = isset( $attr[ 'lightboxCaption' ] ) ? $attr[ 'lightboxCaption' ] : true;
+		$lightbox = $use_lightbox ? ( ' use-lightbox' . ( $lightbox_caption ? ' lightbox-with-caption' : '' ) ) : '';
 
 		// Build the View All button, if enabled
 		$view_all_label = isset( $attr[ 'viewAllLabel' ] ) && ! empty( $attr[ 'viewAllLabel' ] ) ? $attr[ 'viewAllLabel' ] : __( 'View All', 'wpzoom-blocks' );
 		$view_all_link = esc_url( ! empty( $attr[ 'viewAllLink' ] ) ? $attr[ 'viewAllLink' ] : site_url( '/portfolio/' ) );
-		$view_all = $attr[ 'showViewAll' ] ? '<div class="' . $class . '_view-all wp-block-button">
+		$show_view_all = isset( $attr[ 'showViewAll' ] ) ? $attr[ 'showViewAll' ] : true;
+		$view_all = $show_view_all ? '<div class="' . $class . '_view-all wp-block-button">
 			<a href="' . $view_all_link . '" title="' . esc_attr( $view_all_label ) . '" class="wp-block-button__link">' . $view_all_label . '</a>
 		</div>' : '';
+
+		// Build a string with all the CSS classes
+		$classes = "$class$align$layout$columns$lightbox";
 
 		// Fetch portfolio items using the specified attributes
 		$params = array(
 			'order'          => isset( $attr[ 'order' ] ) ? $attr[ 'order' ] : 'desc',
 			'orderby'        => isset( $attr[ 'orderBy' ] ) ? $attr[ 'orderBy' ] : 'date',
-			'posts_per_page' => isset( $attr[ 'orderBy' ] ) ? $attr[ 'amount' ] : 6,
+			'posts_per_page' => isset( $attr[ 'amount' ] ) ? $attr[ 'amount' ] : 6,
 			'post_type'      => array( 'wpzb_portfolio', 'portfolio_item' )
 		);
-		if ( isset( $attr[ 'categories' ] ) && !empty( $attr[ 'categories' ] ) && count( array_filter( $attr[ 'categories' ] ) ) > 0 ) {
+		if ( isset( $attr[ 'categories' ] ) && !empty( $attr[ 'categories' ] ) && count( array_filter( $attr[ 'categories' ] ) ) > 0 && '-1' != $attr[ 'categories' ][0] ) {
 			$params[ 'tax_query' ] = array(
 				'relation' => 'OR',
 				array(
@@ -312,6 +321,18 @@ class WPZOOM_Blocks_Portfolio {
 		}
 		$query = new WP_Query( $params );
 
+		// Show more button
+		$show_more = $query->max_num_pages > 1 ? '<div class="' . $class . '_show-more wp-block-button">
+			<a href="#" title="' . esc_attr( __( 'Show more portfolio items', 'wpzoom-blocks' ) ) . '" class="wp-block-button__link">' . __( 'Show More', 'wpzoom-blocks' ) . '</a>
+		</div>' : '';
+
+		// Build the wrapper for the Show More and View All buttons
+		$both_btns = empty( $show_more ) || empty( $view_all ) ? ' single-button' : '';
+		$btns_wrap = ! empty( $show_more ) || ! empty( $view_all ) ? "<div class=\"{$class}_show-more-view-all-wrap{$both_btns}\">
+			$show_more
+			$view_all
+		</div>" : '';
+
 		// If the above query returned any results...
 		if ( $query->have_posts() ) {
 			// Go through every portfolio item in the results...
@@ -321,88 +342,103 @@ class WPZOOM_Blocks_Portfolio {
 				$permalink = esc_url( get_permalink( $post ) );
 				$title = get_the_title( $post );
 				$title_attr = the_title_attribute( array( 'post' => $post, 'echo' => false ) );
+				$the_categories = get_the_terms( $id, 'wpzb_portfolio_category' );
+				$no_category = get_term_by( 'slug', 'uncategorized', 'wpzb_portfolio_category' );
+				$category = ! is_wp_error( $the_categories ) && is_array( $the_categories ) && count( $the_categories ) > 0 ? $the_categories[0]->term_id : $no_category->term_id;
 				$thumbnail = get_the_post_thumbnail( $post, $attr[ 'thumbnailSize' ] );
+				$video_type = 'service' == get_post_meta( $id, '_wpzb_portfolio_video_type', true ) ? 'service' : 'library';
+				$video_id = intval( get_post_meta( $id, '_wpzb_portfolio_video_id', true ) );
+				$video_url = trim( get_post_meta( $id, '_wpzb_portfolio_video_url', true ) );
+				$video = $this->get_video_embed_code( ( 'service' == $video_type ? $video_url : wp_get_attachment_url( $video_id ) ), 'library' == $video_type );
 
 				// Open the list item for this portfolio item
-				$output .= '<li class="' . $class . '_portfolio-item ' . $class . '_portfolio-item-' . $id . '">';
+				$output .= '<li class="' . $class . '_item ' . $class . '_item-' . $id . ' ' . $class . '_category-' . $category . '" data-category="' . $category . '">';
 
 				// Add a wrapper article around the entire portfolio item (including the thumbnail)
-				$output .= '<article class="' . $class . '_portfolio-item-wrap">';
+				$output .= '<article class="' . $class . '_item-wrap">';
 
-				// If the thumbnail should be shown...
-				if ( $attr[ 'showThumbnail' ] && ! empty( $thumbnail ) ) {
+				// If the video should be shown...
+				if ( $attr[ 'showBackgroundVideo' ] && ! empty( $video ) ) {
 					// Add it to the output
-					$output .= '<div class="' . $class . '_portfolio-item-thumbnail">
+					$output .= '<div class="' . $class . '_item-bgvid">' . $video . '</div>';
+				}
+				// If the thumbnail should be shown...
+				elseif ( $attr[ 'showThumbnail' ] && ! empty( $thumbnail ) ) {
+					// Add it to the output
+					$output .= '<div class="' . $class . '_item-thumbnail">
 						<a href="' . $permalink . '" title="' . $title_attr . '" rel="bookmark">' . $thumbnail . '</a>
 					</div>';
 				}
 
 				// Add a wrapper div around just the portfolio item details (excluding the thumbnail)
-				$output .= '<div class="' . $class . '_portfolio-item-details">';
+				$output .= '<div class="' . $class . '_item-details">';
 
 				// Add the portfolio item title to the output
-				$output .= '<h3 class="' . $class . '_portfolio-item-title">
+				$output .= '<h3 class="' . $class . '_item-title">
 					<a href="' . $permalink . '" title="' . $title_attr . '" rel="bookmark">' . $title . '</a>
 				</h3>';
 
-				// Add a wrapper div around just the portfolio item meta if needed
-				if ( $attr[ 'showAuthor' ] || $attr[ 'showDate' ] ) {
-					$output .= '<div class="' . $class . '_portfolio-item-meta">';
-				}
+				// If the layout type is set to list...
+				if ( 'list' == $layout_type ) {
+					// Add a wrapper div around just the portfolio item meta if needed
+					if ( $attr[ 'showAuthor' ] || $attr[ 'showDate' ] ) {
+						$output .= '<div class="' . $class . '_item-meta">';
+					}
 
-				// If the author should be shown...
-				if ( $attr[ 'showAuthor' ] ) {
-					// Get the author details
-					$author_name = get_the_author_meta( 'display_name', $post->post_author );
-					$author_url = esc_url( get_author_posts_url( $post->post_author ) );
-					$author_title = esc_attr( sprintf( __( 'Posts by %s', 'wpzoom-blocks' ), $author_name ) );
+					// If the author should be shown...
+					if ( $attr[ 'showAuthor' ] ) {
+						// Get the author details
+						$author_name = get_the_author_meta( 'display_name', $post->post_author );
+						$author_url = esc_url( get_author_posts_url( $post->post_author ) );
+						$author_title = esc_attr( sprintf( __( 'Posts by %s', 'wpzoom-blocks' ), $author_name ) );
 
-					// Add the author to the output
-					$output .= '<cite class="' . $class . '_portfolio-item-author">
-						<a href="' . $author_url . '" title="' . $author_title . '" rel="author">' . $author_name . '</a>
-					</cite>';
-				}
+						// Add the author to the output
+						$output .= '<cite class="' . $class . '_item-author">
+							<a href="' . $author_url . '" title="' . $author_title . '" rel="author">' . $author_name . '</a>
+						</cite>';
+					}
 
-				// If the date should be shown...
-				if ( $attr[ 'showDate' ] ) {
-					// Get the properly formatted date
-					$date = apply_filters( 'the_date', get_the_date( '', $post ), '', '', '' );
-					$datetime = esc_attr( get_the_date( 'c', $post ) );
-					$date_url = esc_url( get_day_link( get_the_time( 'Y', $post ), get_the_time( 'm', $post ), get_the_time( 'd', $post ) ) );
-					$date_title = esc_attr( sprintf( __( 'Posted on %s', 'wpzoom-blocks' ), $date ) );
+					// If the date should be shown...
+					if ( $attr[ 'showDate' ] ) {
+						// Get the properly formatted date
+						$date = apply_filters( 'the_date', get_the_date( '', $post ), '', '', '' );
+						$datetime = esc_attr( get_the_date( 'c', $post ) );
+						$date_url = esc_url( get_day_link( get_the_time( 'Y', $post ), get_the_time( 'm', $post ), get_the_time( 'd', $post ) ) );
+						$date_title = esc_attr( sprintf( __( 'Posted on %s', 'wpzoom-blocks' ), $date ) );
 
-					// Add the date to the output
-					$output .= '<time datetime="' . $datetime . '" class="' . $class . '_portfolio-item-date">
-						<a href="' . $date_url . '" title="' . $date_title . '">' . $date . '</a>
-					</time>';
-				}
+						// Add the date to the output
+						$output .= '<time datetime="' . $datetime . '" class="' . $class . '_item-date">
+							<a href="' . $date_url . '" title="' . $date_title . '">' . $date . '</a>
+						</time>';
+					}
 
-				// Close the post meta wrapper div if needed
-				if ( $attr[ 'showAuthor' ] || $attr[ 'showDate' ] ) {
-					$output .= '</div>';
-				}
+					// Close the portfolio item meta wrapper div if needed
+					if ( $attr[ 'showAuthor' ] || $attr[ 'showDate' ] ) {
+						$output .= '</div>';
+					}
 
-				// If the excerpt should be shown...
-				if ( $attr[ 'showExcerpt' ] ) {
-					// Get the excerpt
-					$raw_cont = get_the_content( '', false, $post );
-					$cont = str_replace( ']]>', ']]&gt;', apply_filters( 'the_content', excerpt_remove_blocks( strip_shortcodes( $raw_cont ) ) ) );
-					$excerpt = force_balance_tags( html_entity_decode( wp_trim_words( htmlentities( $cont ), $attr[ 'excerptLength' ], null ) ) );
+					// If the excerpt should be shown...
+					if ( $attr[ 'showExcerpt' ] ) {
+						// Get the excerpt
+						$raw_cont = get_the_content( '', false, $post );
+						$cont = str_replace( ']]>', ']]&gt;', apply_filters( 'the_content', excerpt_remove_blocks( strip_shortcodes( $raw_cont ) ) ) );
+						$excerpt = force_balance_tags( html_entity_decode( wp_trim_words( htmlentities( $cont ), $attr[ 'excerptLength' ], null ) ) );
 
-					// Add the excerpt to the output
-					$output .= '<div class="' . $class . '_portfolio-item-content">' . $excerpt . '</div>';
-				}
+						// Add the excerpt to the output
+						$output .= '<div class="' . $class . '_item-content">' . $excerpt . '</div>';
+					}
 
-				// If the Read More button should be shown...
-				if ( $attr[ 'showReadMore' ] ) {
-					// Get the label for the button
-					$readmore = $attr[ 'readMoreLabel' ] ? $attr[ 'readMoreLabel' ] : __( 'Read More', 'wpzoom-blocks' );
-					$readmore_title = esc_attr( __( 'Continue reading this post...', 'wpzoom-blocks' ) );
+					// If the Read More button should be shown...
+					if ( $attr[ 'showReadMore' ] ) {
+						// Get the label for the button
+						$readmore = $attr[ 'readMoreLabel' ] ? $attr[ 'readMoreLabel' ] : __( 'Read More', 'wpzoom-blocks' );
+						$readmore_title = esc_attr( __( 'Continue reading this post...', 'wpzoom-blocks' ) );
 
-					// Add the button to the output
-					$output .= '<div class="' . $class . '_portfolio-item-readmore-button wp-block-button">
-						<a href="' . $permalink . '" title="' . $readmore_title . '" class="wp-block-button__link">' . $readmore . '</a>
-					</div>';
+						// Add the button to the output
+						$output .= '<div class="' . $class . '_item-readmore-button wp-block-button">
+							<a href="' . $permalink . '" title="' . $readmore_title . '" class="wp-block-button__link">' . $readmore . '</a>
+						</div>';
+					}
 				}
 
 				// Close the portfolio item details wrapper div
@@ -423,22 +459,21 @@ class WPZOOM_Blocks_Portfolio {
 		}
 
 		// Return the final output
-		return "<div class=\"wpzoom-blocks $class$align$layout$columns\">$cats_filter<ul class=\"{$class}_items-list\">$output</ul>$view_all</div><!--.$class-->";
+		return "<div class=\"wpzoom-blocks $classes\">$cats_filter<ul class=\"{$class}_items-list\">$output</ul>$btns_wrap</div><!--.$class-->";
 	}
 
 	/**
 	 * Retrieve an HTML list of categories.
 	 *
 	 * @access public
-	 * @param  int|array $current_category The ID of a category, or array of IDs of categories, that should get the 'current-cat' class.
+	 * @param  array  $only Only show category items for categories included in this array.
 	 * @return string
 	 * @since  1.0.0
 	 * @see    get_categories()
 	 */
-	public function list_categories( $selected_category = 0 ) {
+	public function list_categories( $only = array() ) {
 		$args = array(
 			'child_of'            => 0,
-			'current_category'    => $selected_category,
 			'depth'               => 0,
 			'echo'                => 1,
 			'exclude'             => '',
@@ -455,9 +490,18 @@ class WPZOOM_Blocks_Portfolio {
 			'show_count'          => 0,
 			'show_option_all'     => __( 'All', 'wpzoom-blocks' ),
 			'style'               => 'list',
-			'taxonomy'            => array( 'wpzb_portfolio_category', 'portfolio' ),
+			'taxonomy'            => array( 'wpzb_portfolio_category' ),
 			'use_desc_for_title'  => 1,
 		);
+
+		if ( ! empty( $only ) ) {
+			$args[ 'include' ] = $only;
+		}
+
+		if ( taxonomy_exists( 'portfolio' ) ) {
+			$args[ 'taxonomy' ][] = 'portfolio';
+		}
+
 		$categories = get_categories( $args );
 		$output = '';
 
@@ -488,7 +532,7 @@ class WPZOOM_Blocks_Portfolio {
 			}
 
 			$posts_page = esc_url( $posts_page );
-			$output .= '<li class="wp-block-button cat-item-all' . ( empty( $selected_category ) ? ' current-cat' : '' ) . '">
+			$output .= '<li class="wp-block-button cat-item-all current-cat">
 				<a href="' . $posts_page . '" class="wp-block-button__link">' . __( 'All', 'wpzoom-blocks' ) . '</a>
 			</li>';
 
@@ -505,6 +549,75 @@ class WPZOOM_Blocks_Portfolio {
 		}
 
 		return $output;
+	}
+
+	/**
+	 * Returns an HTML embed code for a given video URL.
+	 * 
+	 * @access public
+	 * @param  string $url     The URL to a video to get the embed code for.
+	 * @param  bool   $library Whether the URL points to a video in the local media library.
+	 * @return string
+	 * @since  1.0.0
+	 * @see    wp_video_shortcode()
+	 * @see    WP_oEmbed
+	 * @see    _wp_oembed_get_object()
+	 */
+	public function get_video_embed_code( $url, $library = true, $autoplay = true, $loop = false ) {
+		// The result that will be returned
+		$result = '';
+
+		// As long as the passed url is not empty...
+		if ( ! empty( $url ) ) {
+			// If the url should be treated as a media library url...
+			if ( true === $library ) {
+				// Get the embed code for the given url
+				$embed = wp_video_shortcode( array( 'src' => $url, 'autoplay' => $autoplay, 'loop' => $loop ) );
+
+				// As long as there is an embed code...
+				if ( ! empty( $embed ) ) {
+					// Filter the embed code and use it as the result
+					$result = preg_replace( '/\<video([^>]+)controls="controls"\>/i', '<video$1muted="muted" disablePictureInPicture>', $embed );
+				}
+			}
+			// Otherwise it is a url from an external service...
+			else {
+				// Try to get the video data for the given url
+				$data = _wp_oembed_get_object()->get_data( $url );
+
+				// As long as we got back valid data...
+				if ( false !== $data && isset( $data->provider_name ) ) {
+					// Determine the service the video is from and the html embed code
+					$service = strtolower( trim( $data->provider_name ) );
+					$html = isset( $data->html ) ? $data->html : '';
+
+					// As long as there is an embed code...
+					if ( ! empty( $html ) ) {
+						// Setup some variables
+						$autoplay = intval( $autoplay );
+						$loop = intval( $loop );
+						$args = '';
+
+						// If the service is YouTube...
+						if ( 'youtube' == $service ) {
+							// Setup the proper arguments
+							$args = "&controls=0&modestbranding=1&mute=1&autoplay=$autoplay&loop=$loop";
+						}
+						// If the service is Vimeo...
+						elseif ( 'vimeo' == $service ) {
+							// Setup the proper arguments
+							$args = "&controls=0&background=1&muted=1&autoplay=$autoplay&loop=$loop";
+						}
+
+						// Filter the embed code to add extra needed arguments and use it as the result
+						$result = preg_replace( '/\<iframe([^>]+)src="([^"]+)"/i', '<iframe$1src="$2' . $args . '"', $html );
+					}
+				}
+			}
+		}
+
+		// Return the result
+		return $result;
 	}
 
 	/**

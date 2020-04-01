@@ -34,7 +34,7 @@ const fetchVideoImage = function( videoUrl, context, fromLibrary ) {
 
 					if ( success ) {
 						if ( context.isStillMounted ) {
-							context.setState( { thumbnail: image, thumbnailWidth: video.videoWidth, thumbnailHeight: video.videoHeight } );
+							context.setState( { thumbnailLibrary: { url: image, height: video.videoHeight, width: video.videoWidth } } );
 						}
 						URL.revokeObjectURL( url );
 					}
@@ -63,7 +63,7 @@ const fetchVideoImage = function( videoUrl, context, fromLibrary ) {
 			response.then( data => {
 				if ( !! data ) {
 					if ( context.isStillMounted ) {
-						context.setState( { thumbnail: data.url, thumbnailHeight: data.height, thumbnailWidth: data.width } );
+						context.setState( { thumbnailService: { url: data.url, height: data.height, width: data.width } } );
 					}
 				}
 			} );
@@ -112,20 +112,20 @@ registerPlugin( 'wpzb-portfolio-video-panel', {
 				},
 				onUpdateVideoId( id, context ) {
 					if ( id != context.props.mediaId ) {
-						context.setState( { thumbnail: '', thumbnailHeight: '', thumbnailWidth: '' } );
+						context.setState( { thumbnailLibrary: { url: '', height: '', width: '' } } );
 					}
 
 					editPost( { meta: { _wpzb_portfolio_video_id: id } } );
 				},
 				onUpdateVideoUrl( url, context ) {
 					if ( url != context.props.mediaUrl ) {
-						context.setState( { thumbnail: '', thumbnailHeight: '', thumbnailWidth: '' } );
+						context.setState( { thumbnailService: { url: '', height: '', width: '' } } );
 					}
 
 					editPost( { meta: { _wpzb_portfolio_video_url: url } } );
 				},
 				onRemoveVideo( context ) {
-					context.setState( { thumbnail: '', thumbnailHeight: '', thumbnailWidth: '' } );
+					context.setState( { thumbnailLibrary: { url: '', height: '', width: '' } } );
 
 					editPost( { meta: { _wpzb_portfolio_video_id: '' } } );
 				}
@@ -136,9 +136,16 @@ registerPlugin( 'wpzb-portfolio-video-panel', {
 			super( ...arguments );
 
 			this.state = {
-				thumbnail: '',
-				thumbnailHeight: '',
-				thumbnailWidth: ''
+				thumbnailLibrary: {
+					url: '',
+					height: '',
+					width: ''
+				},
+				thumbnailService: {
+					url: '',
+					height: '',
+					width: ''
+				}
 			};
 		}
 
@@ -152,7 +159,7 @@ registerPlugin( 'wpzb-portfolio-video-panel', {
 
 		render() {
 			const { media, mediaId, mediaType, mediaUrl, noticeUI, onRemoveVideo, onUpdateVideoId, onUpdateVideoType, onUpdateVideoUrl, postType } = this.props,
-			      { thumbnail, thumbnailHeight, thumbnailWidth } = this.state;
+			      { thumbnailLibrary, thumbnailService } = this.state;
 
 			if ( 'wpzb_portfolio' != postType ) {
 				return null;
@@ -161,12 +168,17 @@ registerPlugin( 'wpzb-portfolio-video-panel', {
 			const fromLibrary = 'library' == mediaType && !! mediaId && !! media,
 			      fromUrl = 'service' == mediaType && !! mediaUrl;
 
-			if ( ( fromLibrary || fromUrl ) && ! thumbnail ) {
-				if ( fromLibrary ) {
-					fetchVideoImage( media.source_url, this, true );
-				} else if ( fromUrl ) {
-					fetchVideoImage( mediaUrl, this, false );
-				}
+			if ( fromLibrary && ! thumbnailLibrary.url ) {
+				fetchVideoImage( media.source_url, this, true );
+			} else if ( fromUrl && ! thumbnailService.url ) {
+				fetchVideoImage( mediaUrl, this, false );
+			}
+
+			let parsedUrl = null;
+			if ( fromUrl ) {
+				try {
+					parsedUrl = new URL( mediaUrl );
+				} catch( e ) {}
 			}
 
 			return (
@@ -204,17 +216,17 @@ registerPlugin( 'wpzb-portfolio-video-panel', {
 													onClick={ open }
 													aria-label={ ! mediaId ? null : __( 'Edit or update the video', 'wpzoom-blocks' ) }
 												>
-													{ !! mediaId && !! thumbnail && (
+													{ !! mediaId && !! thumbnailLibrary.url && (
 														<ResponsiveWrapper
 															isInline
-															naturalHeight={ thumbnailHeight }
-															naturalWidth={ thumbnailWidth }
+															naturalHeight={ thumbnailLibrary.height }
+															naturalWidth={ thumbnailLibrary.width }
 														>
-															<img src={ thumbnail } alt="" />
+															<img src={ thumbnailLibrary.url } alt="" />
 														</ResponsiveWrapper>
 													) }
 
-													{ !! mediaId && ! thumbnail && (
+													{ !! mediaId && ! thumbnailLibrary.url && (
 														<Spinner />
 													) }
 
@@ -223,7 +235,7 @@ registerPlugin( 'wpzb-portfolio-video-panel', {
 												</Button>
 
 												{ !! mediaId && !! media && ! media.isLoading && (
-													<Button onClick={ open } isDefault isLarge>
+													<Button onClick={ open } isSecondary isLarge>
 														{ __( 'Replace Video', 'wpzoom-blocks' ) }
 													</Button>
 												) }
@@ -244,18 +256,18 @@ registerPlugin( 'wpzb-portfolio-video-panel', {
 
 						{ 'service' == mediaType &&
 							<div className="editor-post-featured-image">
-								<div className={ 'wpzb-cover-video nopad components-button ' + ( ! mediaUrl ? 'editor-post-featured-image__toggle' : 'editor-post-featured-image__preview' ) }>
-									{ !! mediaUrl && !! thumbnail && (
+								<div className={ 'wpzb-cover-video nopad components-button ' + ( ! thumbnailService.url ? 'editor-post-featured-image__toggle' : 'editor-post-featured-image__preview' ) }>
+									{ !! mediaUrl && !! thumbnailService.url && (
 										<ResponsiveWrapper
 											isInline
-											naturalHeight={ thumbnailHeight }
-											naturalWidth={ thumbnailWidth }
+											naturalHeight={ thumbnailService.height }
+											naturalWidth={ thumbnailService.width }
 										>
-											<img src={ thumbnail } alt="" />
+											<img src={ thumbnailService.url } alt="" />
 										</ResponsiveWrapper>
 									) }
 
-									{ !! mediaUrl && ! thumbnail && (
+									{ !! mediaUrl && !! parsedUrl && ! thumbnailService.url && (
 										<Spinner />
 									) }
 

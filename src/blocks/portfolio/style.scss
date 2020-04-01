@@ -37,9 +37,75 @@
 		}
 	}
 
+	&.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item {
+		margin: 0 0 5em;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
 	&.layout-grid .wpzoom-blocks_portfolio-block_items-list {
 		display: grid;
-		gap: 2em;
+		/*gap: 2em;*/
+
+		.wpzoom-blocks_portfolio-block_item {
+			&:hover {
+				.wpzoom-blocks_portfolio-block_item-thumbnail,
+				.wpzoom-blocks_portfolio-block_item-bgvid {
+					transform: scale(150%);
+				}
+
+				.wpzoom-blocks_portfolio-block_item-details {
+					opacity: 1;
+				}
+			}
+
+			.wpzoom-blocks_portfolio-block_item-thumbnail,
+			.wpzoom-blocks_portfolio-block_item-bgvid {
+				transition: all 0.5s;
+			}
+
+			.wpzoom-blocks_portfolio-block_item-thumbnail {
+				margin: 0;
+			}
+
+			.wpzoom-blocks_portfolio-block_item-details {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba(0, 0, 0, 0.7);
+				backdrop-filter: blur(5px);
+				opacity: 0;
+				transition: all 0.5s;
+
+				.wpzoom-blocks_portfolio-block_item-title {
+					display: block;
+					font-size: 1.5em;
+					height: 100%;
+					width: 100%;
+					padding: 0;
+					margin: 0;
+
+					a {
+						display: flex;
+						text-align: center;
+						text-decoration: none;
+						-webkit-text-stroke: 0.15em rgba(0, 0, 0, 0.5);
+						color: #fff;
+						paint-order: stroke fill;
+						align-items: center;
+						justify-content: center;
+						height: 100%;
+						width: 100%;
+						padding: 20px;
+						margin: 0;
+					}
+				}
+			}
+		}
 	}
 
 	&.layout-grid.columns-1 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(1, 1fr); }
@@ -59,9 +125,19 @@
 		margin: 0;
 
 		.wpzoom-blocks_portfolio-block_item {
+			position: relative;
 			list-style: none;
 			padding: 0;
+			overflow: hidden;
 			margin: 0;
+
+			&.fade-in {
+				animation: fadeIn 1 0.2s linear forwards;
+			}
+
+			&.fade-out {
+				animation: fadeOut 1 0.2s linear forwards;
+			}
 
 			.wpzoom-blocks_portfolio-block_item-thumbnail {
 				margin: 0 0 1em;
@@ -70,6 +146,31 @@
 					display: block;
 					padding: 0;
 					margin: 0;
+				}
+			}
+
+			.wpzoom-blocks_portfolio-block_item-thumbnail,
+			.wpzoom-blocks_portfolio-block_item-bgvid {
+				position: relative;
+				padding-bottom: 56.25%; 
+				height: 0; 
+				overflow: hidden;
+
+				&.wpzoom-blocks_portfolio-block_item-bgvid {
+					pointer-events: none;
+				}
+
+				iframe, video, img {
+					position: absolute;
+					top: 0;
+					left: 0;
+					width: 100%;
+					height: 100%;
+					object-fit: cover;
+				}
+
+				iframe, video {
+					pointer-events: none;
 				}
 			}
 
@@ -148,9 +249,66 @@
 		}
 	}
 
-	.wpzoom-blocks_portfolio-block_view-all {
-		text-align: center;
-		padding: 0;
+	.wpzoom-blocks_portfolio-block_show-more-view-all-wrap {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
 		margin: 3em 0 0;
+
+		&.single-button {
+			justify-content: center;
+		}
+
+		.wpzoom-blocks_portfolio-block_show-more,
+		.wpzoom-blocks_portfolio-block_view-all {
+			padding: 0;
+			margin: 0;
+		}
+	}
+}
+
+@keyframes fadeIn {
+	0% {
+		position: fixed;
+		z-index: -10;
+		opacity: 0;
+		transform: scale(0%);
+	}
+
+	1% {
+		position: static;
+		z-index: 1;
+		opacity: 0;
+		transform: scale(0%);
+	}
+
+	100% {
+		position: static;
+		z-index: 1;
+		opacity: 1;
+		transform: scale(100%);
+	}
+}
+
+@keyframes fadeOut {
+	0% {
+		position: static;
+		z-index: 1;
+		opacity: 1;
+		transform: scale(100%);
+	}
+
+	99% {
+		position: static;
+		z-index: 1;
+		opacity: 0;
+		transform: scale(0%);
+	}
+
+	100% {
+		position: fixed;
+		z-index: -10;
+		opacity: 0;
+		transform: scale(0%);
 	}
 }
