@@ -66,7 +66,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 		html: false
 	},
 	example: {},
-	edit: withSelect( ( select ) => {
+	edit: withSelect( select => {
 		const { getEntityRecords } = select( 'core' );
 
 		var cats = [];

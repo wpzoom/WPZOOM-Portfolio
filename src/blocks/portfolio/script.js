@@ -1,80 +1,168 @@
-function ready( fn ) {
-	if ( document.readyState != 'loading' ) {
-		fn();
-	} else {
-		document.addEventListener( 'DOMContentLoaded', fn );
+import apiFetch from '@wordpress/api-fetch';
+import domReady from '@wordpress/dom-ready';
+import { delegate, extractClassValue } from '../../utility';
+
+/**
+ * Called when one of the portfolio category filter buttons is clicked.
+ *
+ * @param {event}   event
+ * @this  {Element}
+ */
+function filterButtonClick( event ) {
+	event.preventDefault();
+
+	let item = this.parentElement;
+
+	if ( item ) {
+		let cat = extractClassValue( item, 'cat-item-' );
+
+		if ( cat && cat.length > 0 ) {
+			let wrap = item.closest( '.wpzoom-blocks_portfolio-block' ).querySelector( '.wpzoom-blocks_portfolio-block_items-list' ),
+			    show = 'all' == cat ? wrap.querySelectorAll( '[data-category]' ) : wrap.querySelectorAll( '[data-category="' + cat + '"]' ),
+			    hide = 'all' == cat ? [] : wrap.querySelectorAll( '[data-category]:not([data-category="' + cat + '"])' );
+
+			item.parentNode.querySelectorAll( 'li' ).forEach( filterBtn => {
+				filterBtn.classList.remove( 'current-cat' );
+			} );
+			item.classList.add( 'current-cat' );
+
+			show.forEach( theItem => {
+				let classList = theItem.classList;
+
+				if ( classList.contains( 'fade-out' ) ) {
+					classList.remove( 'fade-out' );
+				}
+
+				if ( ! classList.contains( 'fade-in' ) ) {
+					classList.add( 'fade-in' );
+				}
+			} );
+
+			hide.forEach( theItem => {
+				let classList = theItem.classList;
+
+				if ( classList.contains( 'fade-in' ) ) {
+					classList.remove( 'fade-in' );
+				}
+
+				if ( ! classList.contains( 'fade-out' ) ) {
+					classList.add( 'fade-out' );
+				}
+			} );
+		}
 	}
 }
 
-function delegate( eventName, elementSelector, handler ) {
-	document.addEventListener( eventName, function( e ) {
-		for ( var target = e.target; target && target != this; target = target.parentNode ) {
-			if ( target.matches( elementSelector ) ) {
-				handler.call( target, e );
-				break;
-			}
-		}
-	}, false );
-}
+/**
+ * Called when one of the portfolio items is clicked.
+ *
+ * @param {event}   event
+ * @this  {Element}
+ */
+function portfolioItemClick( event ) {
+	let item = this.closest( '.wpzoom-blocks_portfolio-block_item' );
 
-ready( () => {
-	delegate( 'click', '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter a', function( event ) {
+	if ( item.querySelector( '.wpzoom-blocks_portfolio-block_item-bgvid, .wpzoom-blocks_portfolio-block_item-thumbnail' ) ) {
 		event.preventDefault();
 
-		let item = this.parentNode;
+		item.classList.add( 'lightbox' );
+	}
+}
 
-		if ( item.className ) {
-			let classes = item.className.split( /\s/ );
+/**
+ * Called when the close button in a lightbox is clicked.
+ *
+ * @param {event}   event
+ * @this  {Element}
+ */
+function portfolioItemLightboxClose( event ) {
+	let item = this.closest( '.wpzoom-blocks_portfolio-block_item' );
 
-			if ( classes.length > 0 ) {
-				let filteredClasses = classes.filter( cn => { return cn.indexOf( 'cat-item-' ) === 0 } );
+	if ( item.classList.contains( 'lightbox' ) && event.target.matches( '.wpzoom-blocks_portfolio-block_item-bgvid, .wpzoom-blocks_portfolio-block_item-thumbnail' ) ) {
+		event.preventDefault();
 
-				if ( filteredClasses.length > 0 ) {
-					let catClass = filteredClasses[ 0 ];
+		item.classList.remove( 'lightbox' );
+	}
+}
 
-					if ( catClass ) {
-						let catId = catClass.replace( 'cat-item-', '' ),
-						    itemsWrap = item.closest( '.wpzoom-blocks_portfolio-block' ).querySelector( '.wpzoom-blocks_portfolio-block_items-list' ),
-						    showItems = 'all' == catId ? itemsWrap.querySelectorAll( '[data-category]' ) : itemsWrap.querySelectorAll( '[data-category="' + catId + '"]' ),
-						    hideItems = 'all' == catId ? [] : itemsWrap.querySelectorAll( '[data-category]:not([data-category="' + catId + '"])' );
+/**
+ * Called when the show more portfolio items button is clicked.
+ *
+ * @param {event}   event
+ * @this  {Element}
+ */
+function portfolioShowMoreClick( event ) {
+	event.preventDefault();
 
-						item.parentNode.querySelectorAll( 'li' ).forEach( filterBtn => {
-							filterBtn.classList.remove( 'current-cat' );
-						} );
-						item.classList.add( 'current-cat' );
+	let container = this.closest( '.wpzoom-blocks_portfolio-block' ),
+	    itemsContainer = container.querySelector( '.wpzoom-blocks_portfolio-block_items-list' ),
+	    page = parseInt( extractClassValue( container, 'page-' ) ) || 2,
+	    params = new URLSearchParams( {
+	        layout:         extractClassValue( container, 'layout-' ),
+	        order:          extractClassValue( container, 'order-' ),
+	        order_by:       extractClassValue( container, 'orderby-' ),
+	        per_page:       parseInt( extractClassValue( container, 'perpage-' ) ) || 6,
+	        page:           page,
+	        show_thumbnail: container.classList.contains( 'show-thumbnail' ),
+	        thumbnail_size: extractClassValue( container, 'thumbnail-size-' ),
+	        show_video:     container.classList.contains( 'show-video' ),
+	        show_author:    container.classList.contains( 'show-author' ),
+	        show_date:      container.classList.contains( 'show-date' ),
+	        show_excerpt:   container.classList.contains( 'show-excerpt' ),
+	        excerpt_length: parseInt( extractClassValue( container, 'excerpt-length-' ) ) || 20,
+	        show_read_more: container.classList.contains( 'show-readmore' )
+	    } ),
+	    fetchRequest = apiFetch( { path: '/wpzoom-blocks/v1/portfolio-posts?' + params.toString() } );
 
-						showItems.forEach( theItem => {
-							let classList = theItem.classList;
+	fetchRequest.then( response => {
+		if ( response ) {
+			let items = 'items' in response ? response.items : [],
+			    hasMore = 'has_more' in response ? response.has_more : true;
 
-							if ( classList.contains( 'fade-out' ) ) {
-								classList.remove( 'fade-out' );
-							}
+			if ( items ) {
+				itemsContainer.insertAdjacentHTML( 'beforeend', items );
 
-							if ( ! classList.contains( 'fade-in' ) ) {
-								classList.add( 'fade-in' );
-							}
-						} );
+				container.querySelector( '.wpzoom-blocks_portfolio-block_filter .current-cat a' ).click();
 
-						hideItems.forEach( theItem => {
-							let classList = theItem.classList;
+				if ( container.classList.contains( 'page-' + page ) ) {
+					container.classList.replace( 'page-' + page, 'page-' + ( page + 1 ) );
+				} else {
+					container.classList.add( 'page-' + ( page + 1 ) );
+				}
 
-							if ( classList.contains( 'fade-in' ) ) {
-								classList.remove( 'fade-in' );
-							}
-
-							if ( ! classList.contains( 'fade-out' ) ) {
-								classList.add( 'fade-out' );
-							}
-						} );
-					}
+				if ( ! hasMore ) {
+					let moreBtn = container.querySelector( '.wpzoom-blocks_portfolio-block_show-more' );
+					moreBtn.style.display = 'none';
+					moreBtn.parentElement.classList.add( 'single-button' );
 				}
 			}
 		}
 	} );
+}
 
-	delegate( 'click', '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_show-more a', function( event ) {
-		event.preventDefault();
+domReady( () => {
+	delegate(
+		'click',
+		'.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter a',
+		filterButtonClick
+	);
 
-		console.log('Load more...');
-	} );
+	delegate(
+		'click',
+		'.wpzoom-blocks_portfolio-block.use-lightbox .wpzoom-blocks_portfolio-block_item-title a',
+		portfolioItemClick
+	);
+
+	delegate(
+		'click',
+		`.wpzoom-blocks_portfolio-block.use-lightbox .wpzoom-blocks_portfolio-block_item-bgvid,
+		.wpzoom-blocks_portfolio-block.use-lightbox .wpzoom-blocks_portfolio-block_item-thumbnail`,
+		portfolioItemLightboxClose
+	);
+
+	delegate(
+		'click',
+		'.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_show-more a',
+		portfolioShowMoreClick
+	);
 } );

@@ -122,6 +122,15 @@ class WPZOOM_Blocks_Portfolio {
 	];
 
 	/**
+	 * The number of result pages for the portfolio items query.
+	 *
+	 * @var    int
+	 * @access private
+	 * @since  1.0.0
+	 */
+	private $result_pages = 0;
+
+	/**
 	 * Basic class initialization.
 	 *
 	 * @access public
@@ -249,6 +258,9 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Filter post type links for portfolio items
 		add_filter( 'post_type_link', array( $this, 'post_type_link_replace' ), 1, 3 );
+
+		// Hook into the REST API in order to add some custom things
+		add_action( 'rest_api_init', array( $this, 'rest_api_routes' ) );
 	}
 
 	/**
@@ -268,11 +280,37 @@ class WPZOOM_Blocks_Portfolio {
 		// Might need to align the block
 		$align = isset( $attr[ 'align' ] ) && ! empty( $attr[ 'align' ] ) ? ' align' . $attr[ 'align' ] : '';
 
+		// Query parameters
+		$order = isset( $attr[ 'order' ] ) ? $attr[ 'order' ] : 'desc';
+		$order_by = isset( $attr[ 'orderBy' ] ) ? $attr[ 'orderBy' ] : 'date';
+		$per_page = isset( $attr[ 'amount' ] ) ? intval( $attr[ 'amount' ] ) : 6;
+		$show_thumbnail = isset( $attr[ 'showThumbnail' ] ) ? boolval( $attr[ 'showThumbnail' ] ) : true;
+		$thumbnail_size = isset( $attr[ 'thumbnailSize' ] ) ? $attr[ 'thumbnailSize' ] : 'thumbnail';
+		$show_video = isset( $attr[ 'showBackgroundVideo' ] ) ? boolval( $attr[ 'showBackgroundVideo' ] ) : true;
+		$show_author = isset( $attr[ 'showAuthor' ] ) ? boolval( $attr[ 'showAuthor' ] ) : true;
+		$show_date = isset( $attr[ 'showDate' ] ) ? boolval( $attr[ 'showDate' ] ) : true;
+		$show_excerpt = isset( $attr[ 'showExcerpt' ] ) ? boolval( $attr[ 'showExcerpt' ] ) : true;
+		$excerpt_length = isset( $attr[ 'excerptLength' ] ) ? intval( $attr[ 'excerptLength' ] ) : 20;
+		$show_read_more = isset( $attr[ 'showReadMore' ] ) ? boolval( $attr[ 'showReadMore' ] ) : true;
+
+		// CSS classes for query parameters
+		$order_class = ' order-' . $order;
+		$order_by_class = ' orderby-' . $order_by;
+		$per_page_class = ' perpage-' . $per_page;
+		$thumbnail_class = $show_thumbnail ? ' show-thumbnail' : '';
+		$thumbnail_size_class = ' thumbnail-size-' . $thumbnail_size;
+		$video_class = $show_video ? ' show-video' : '';
+		$author_class = $show_author ? ' show-author' : '';
+		$date_class = $show_date ? ' show-date' : '';
+		$excerpt_class = $show_excerpt ? ' show-excerpt' : '';
+		$excerpt_length_class = ' excerpt-length-' . $excerpt_length;
+		$readmore_class = $show_read_more ? ' show-readmore' : '';
+
 		// CSS classes for the layout type and columns amount
-		$layout_type = isset( $attr[ 'layout' ] ) && ! empty( $attr[ 'layout' ] ) ? $attr[ 'layout' ] : 'grid';
-		$layout = ' layout-' . $layout_type;
+		$layout = isset( $attr[ 'layout' ] ) && ! empty( $attr[ 'layout' ] ) ? $attr[ 'layout' ] : 'grid';
+		$layout = ' layout-' . $layout;
 		$columns = isset( $attr[ 'layout' ] ) && 'list' != $attr[ 'layout' ] &&
-				   isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ? ' columns-' . $attr[ 'columnsAmount' ] : '';
+		           isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ? ' columns-' . $attr[ 'columnsAmount' ] : '';
 
 		// Build the category filter buttons, if enabled
 		$categories = isset( $attr[ 'categories' ] ) && is_array( $attr[ 'categories' ] ) ? array_filter( $attr[ 'categories' ] ) : array();
@@ -295,34 +333,30 @@ class WPZOOM_Blocks_Portfolio {
 		</div>' : '';
 
 		// Build a string with all the CSS classes
-		$classes = "$class$align$layout$columns$lightbox";
+		$classes = "$class$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
+		            $date_class$excerpt_class$excerpt_length_class$readmore_class$align$layout$columns$lightbox";
 
-		// Fetch portfolio items using the specified attributes
-		$params = array(
-			'order'          => isset( $attr[ 'order' ] ) ? $attr[ 'order' ] : 'desc',
-			'orderby'        => isset( $attr[ 'orderBy' ] ) ? $attr[ 'orderBy' ] : 'date',
-			'posts_per_page' => isset( $attr[ 'amount' ] ) ? $attr[ 'amount' ] : 6,
-			'post_type'      => array( 'wpzb_portfolio', 'portfolio_item' )
-		);
-		if ( isset( $attr[ 'categories' ] ) && !empty( $attr[ 'categories' ] ) && count( array_filter( $attr[ 'categories' ] ) ) > 0 && '-1' != $attr[ 'categories' ][0] ) {
-			$params[ 'tax_query' ] = array(
-				'relation' => 'OR',
-				array(
-					'taxonomy' => 'wpzb_portfolio_category',
-					'field'    => 'term_id',
-					'terms'    => $attr[ 'categories' ]
-				),
-				array(
-					'taxonomy' => 'portfolio',
-					'field'    => 'term_id',
-					'terms'    => $attr[ 'categories' ]
-				)
-			);
-		}
-		$query = new WP_Query( $params );
+		// Try to get portfolio items
+		$items_html = $this->items_html( array(
+			'class'                 => 'wpzoom-blocks_portfolio-block',
+			'layout'                => $layout,
+			'order'                 => $order,
+			'order_by'              => $order_by,
+			'per_page'              => $per_page,
+			'categories'            => $categories,
+			'show_thumbnail'        => $show_thumbnail,
+			'thumbnail_size'        => $thumbnail_size,
+			'show_background_video' => $show_video,
+			'show_author'           => $show_author,
+			'show_date'             => $show_date,
+			'show_excerpt'          => $show_excerpt,
+			'excerpt_length'        => $excerpt_length,
+			'show_read_more'        => $show_read_more,
+			'read_more_label'       => __( 'Read More', 'wpzoom-blocks' )
+		) );
 
 		// Show more button
-		$show_more = $query->max_num_pages > 1 ? '<div class="' . $class . '_show-more wp-block-button">
+		$show_more = $this->result_pages > 1 ? '<div class="' . $class . '_show-more wp-block-button">
 			<a href="#" title="' . esc_attr( __( 'Show more portfolio items', 'wpzoom-blocks' ) ) . '" class="wp-block-button__link">' . __( 'Show More', 'wpzoom-blocks' ) . '</a>
 		</div>' : '';
 
@@ -332,6 +366,92 @@ class WPZOOM_Blocks_Portfolio {
 			$show_more
 			$view_all
 		</div>" : '';
+
+		// If there are any portfolio items to show...
+		if ( ! empty( $items_html ) ) {
+			// Add them to the final output
+			$output .= $items_html;
+		}
+		// Otherwise, the query returned no portfolio items...
+		else {
+			// Add a 'no portfolio items' message to the output
+			$output .= '<li class="' . $class . '_no-portfolio-items">' . __( 'No portfolio items.', 'wpzoom-blocks' ) . '</li>';
+		}
+
+		// Return the final output
+		return "<div class=\"wpzoom-blocks $classes\">$cats_filter<ul class=\"{$class}_items-list\">$output</ul>$btns_wrap</div><!--.$class-->";
+	}
+
+	/**
+	 * Returns the HTML string for all the portfolio items found matching the given query parameters.
+	 * 
+	 * @access public
+	 * @param  array  $arguments The arguments used to modify the output.
+	 * @return string
+	 * @since  1.0.0
+	 */
+	public function items_html( $arguments = null ) {
+		// Setup some default values
+		$defaults = array(
+			'class'                 => 'wpzoom-blocks_portfolio-block',
+			'layout'                => 'grid',
+			'order'                 => 'desc',
+			'order_by'              => 'date',
+			'per_page'              => 6,
+			'page'                  => 1,
+			'categories'            => array(),
+			'show_thumbnail'        => true,
+			'thumbnail_size'        => 'thumbnail',
+			'show_background_video' => true,
+			'show_author'           => true,
+			'show_date'             => true,
+			'show_excerpt'          => true,
+			'excerpt_length'        => 20,
+			'show_read_more'        => true,
+			'read_more_label'       => __( 'Read More', 'wpzoom-blocks' )
+		);
+
+		// Parse the arguments to build the arguments array
+		$args = wp_parse_args( $arguments, $defaults );
+
+		// The final HTML string value
+		$output = '';
+
+		// The CSS class name with a prefix
+		$class = $args[ 'class' ];
+
+		// Build a parameters array to use for the posts query
+		$params = array(
+			'order'          => $args[ 'order' ],
+			'orderby'        => $args[ 'order_by' ],
+			'posts_per_page' => $args[ 'per_page' ],
+			'paged'          => $args[ 'page' ],
+			'post_type'      => array( 'wpzb_portfolio', 'portfolio_item' )
+		);
+
+		// If filter categories were specified...
+		if ( !empty( $args[ 'categories' ] ) && count( array_filter( $args[ 'categories' ] ) ) > 0 && '-1' != $args[ 'categories' ][0] ) {
+			// Add them to the parameters for the query
+			$params[ 'tax_query' ] = array(
+				'relation' => 'OR',
+				array(
+					'taxonomy' => 'wpzb_portfolio_category',
+					'field'    => 'term_id',
+					'terms'    => $args[ 'categories' ]
+				),
+				array(
+					'taxonomy' => 'portfolio',
+					'field'    => 'term_id',
+					'terms'    => $args[ 'categories' ]
+				)
+			);
+		}
+
+		// Perform the query to get the desired portfolio items
+		$query = new WP_Query( $params );
+
+		// Cache the amount of pages returned by the query
+		$this->result_pages = $query->max_num_pages;
 
 		// If the above query returned any results...
 		if ( $query->have_posts() ) {
@@ -345,61 +465,61 @@ class WPZOOM_Blocks_Portfolio {
 				$the_categories = get_the_terms( $id, 'wpzb_portfolio_category' );
 				$no_category = get_term_by( 'slug', 'uncategorized', 'wpzb_portfolio_category' );
 				$category = ! is_wp_error( $the_categories ) && is_array( $the_categories ) && count( $the_categories ) > 0 ? $the_categories[0]->term_id : $no_category->term_id;
-				$thumbnail = get_the_post_thumbnail( $post, $attr[ 'thumbnailSize' ] );
+				$thumbnail = get_the_post_thumbnail( $post, $args[ 'thumbnail_size' ] );
 				$video_type = 'service' == get_post_meta( $id, '_wpzb_portfolio_video_type', true ) ? 'service' : 'library';
 				$video_id = intval( get_post_meta( $id, '_wpzb_portfolio_video_id', true ) );
 				$video_url = trim( get_post_meta( $id, '_wpzb_portfolio_video_url', true ) );
 				$video = $this->get_video_embed_code( ( 'service' == $video_type ? $video_url : wp_get_attachment_url( $video_id ) ), 'library' == $video_type );
+				$has_cover = ( $args[ 'show_background_video' ] && ! empty( $video ) ) || ( $args[ 'show_thumbnail' ] && ! empty( $thumbnail ) );
+				$cover_class = $has_cover ? ' has-cover' : '';
 
 				// Open the list item for this portfolio item
-				$output .= '<li class="' . $class . '_item ' . $class . '_item-' . $id . ' ' . $class . '_category-' . $category . '" data-category="' . $category . '">';
+				$output .= "<li class='${class}_item ${class}_item-$id ${class}_category-$category$cover_class' data-category='$category'>";
 
 				// Add a wrapper article around the entire portfolio item (including the thumbnail)
-				$output .= '<article class="' . $class . '_item-wrap">';
+				$output .= "<article class='${class}_item-wrap'>";
 
 				// If the video should be shown...
-				if ( $attr[ 'showBackgroundVideo' ] && ! empty( $video ) ) {
+				if ( $args[ 'show_background_video' ] && ! empty( $video ) ) {
 					// Add it to the output
-					$output .= '<div class="' . $class . '_item-bgvid">' . $video . '</div>';
+					$output .= "<div class='${class}_item-bgvid'><div class='${class}_item-media'>$video</div></div>";
 				}
 				// If the thumbnail should be shown...
-				elseif ( $attr[ 'showThumbnail' ] && ! empty( $thumbnail ) ) {
+				elseif ( $args[ 'show_thumbnail' ] && ! empty( $thumbnail ) ) {
 					// Add it to the output
-					$output .= '<div class="' . $class . '_item-thumbnail">
-						<a href="' . $permalink . '" title="' . $title_attr . '" rel="bookmark">' . $thumbnail . '</a>
-					</div>';
+					$output .= "<div class='${class}_item-thumbnail'>
+						<div class='${class}_item-media'>
+							<a href='$permalink' title='$title_attr' rel='bookmark'>$thumbnail</a>
+						</div>
+					</div>";
 				}
 
 				// Add a wrapper div around just the portfolio item details (excluding the thumbnail)
-				$output .= '<div class="' . $class . '_item-details">';
+				$output .= "<div class='${class}_item-details'>";
 
 				// Add the portfolio item title to the output
-				$output .= '<h3 class="' . $class . '_item-title">
-					<a href="' . $permalink . '" title="' . $title_attr . '" rel="bookmark">' . $title . '</a>
-				</h3>';
+				$output .= "<h3 class='${class}_item-title'><a href='$permalink' title='$title_attr' rel='bookmark'>$title</a></h3>";
 
 				// If the layout type is set to list...
-				if ( 'list' == $layout_type ) {
+				if ( 'list' == $args[ 'layout' ] ) {
 					// Add a wrapper div around just the portfolio item meta if needed
-					if ( $attr[ 'showAuthor' ] || $attr[ 'showDate' ] ) {
-						$output .= '<div class="' . $class . '_item-meta">';
+					if ( $args[ 'show_author' ] || $args[ 'show_date' ] ) {
+						$output .= "<div class='${class}_item-meta'>";
 					}
 
 					// If the author should be shown...
-					if ( $attr[ 'showAuthor' ] ) {
+					if ( $args[ 'show_author' ] ) {
 						// Get the author details
 						$author_name = get_the_author_meta( 'display_name', $post->post_author );
 						$author_url = esc_url( get_author_posts_url( $post->post_author ) );
 						$author_title = esc_attr( sprintf( __( 'Posts by %s', 'wpzoom-blocks' ), $author_name ) );
 
 						// Add the author to the output
-						$output .= '<cite class="' . $class . '_item-author">
-							<a href="' . $author_url . '" title="' . $author_title . '" rel="author">' . $author_name . '</a>
-						</cite>';
+						$output .= "<cite class='${class}_item-author'><a href='$author_url' title='$author_title' rel='author'>$author_name</a></cite>";
 					}
 
 					// If the date should be shown...
-					if ( $attr[ 'showDate' ] ) {
+					if ( $args[ 'show_date' ] ) {
 						// Get the properly formatted date
 						$date = apply_filters( 'the_date', get_the_date( '', $post ), '', '', '' );
 						$datetime = esc_attr( get_the_date( 'c', $post ) );
@@ -407,37 +527,35 @@ class WPZOOM_Blocks_Portfolio {
 						$date_title = esc_attr( sprintf( __( 'Posted on %s', 'wpzoom-blocks' ), $date ) );
 
 						// Add the date to the output
-						$output .= '<time datetime="' . $datetime . '" class="' . $class . '_item-date">
-							<a href="' . $date_url . '" title="' . $date_title . '">' . $date . '</a>
-						</time>';
+						$output .= "<time datetime='$datetime' class='${class}_item-date'><a href='$date_url' title='$date_title'>$date</a></time>";
 					}
 
 					// Close the portfolio item meta wrapper div if needed
-					if ( $attr[ 'showAuthor' ] || $attr[ 'showDate' ] ) {
+					if ( $args[ 'show_author' ] || $args[ 'show_date' ] ) {
 						$output .= '</div>';
 					}
 
 					// If the excerpt should be shown...
-					if ( $attr[ 'showExcerpt' ] ) {
+					if ( $args[ 'show_excerpt' ] ) {
 						// Get the excerpt
 						$raw_cont = get_the_content( '', false, $post );
 						$cont = str_replace( ']]>', ']]&gt;', apply_filters( 'the_content', excerpt_remove_blocks( strip_shortcodes( $raw_cont ) ) ) );
-						$excerpt = force_balance_tags( html_entity_decode( wp_trim_words( htmlentities( $cont ), $attr[ 'excerptLength' ], null ) ) );
+						$excerpt = force_balance_tags( html_entity_decode( wp_trim_words( htmlentities( $cont ), $args[ 'excerpt_length' ], null ) ) );
 
 						// Add the excerpt to the output
-						$output .= '<div class="' . $class . '_item-content">' . $excerpt . '</div>';
+						$output .= "<div class='${class}_item-content'>$excerpt</div>";
 					}
 
 					// If the Read More button should be shown...
-					if ( $attr[ 'showReadMore' ] ) {
+					if ( $args[ 'show_read_more' ] ) {
 						// Get the label for the button
-						$readmore = $attr[ 'readMoreLabel' ] ? $attr[ 'readMoreLabel' ] : __( 'Read More', 'wpzoom-blocks' );
+						$readmore = $args[ 'read_more_label' ] ? $args[ 'read_more_label' ] : __( 'Read More', 'wpzoom-blocks' );
 						$readmore_title = esc_attr( __( 'Continue reading this post...', 'wpzoom-blocks' ) );
 
 						// Add the button to the output
-						$output .= '<div class="' . $class . '_item-readmore-button wp-block-button">
-							<a href="' . $permalink . '" title="' . $readmore_title . '" class="wp-block-button__link">' . $readmore . '</a>
-						</div>';
+						$output .= "<div class='${class}_item-readmore-button wp-block-button'>
+							<a href='$permalink' title='$readmore_title' class='wp-block-button__link'>$readmore</a>
+						</div>";
 					}
 				}
 
@@ -453,13 +571,10 @@ class WPZOOM_Blocks_Portfolio {
 
 			// Reset the WordPress post data so this block doesn't mess up the main query
 			wp_reset_postdata();
-		} else {
-			// The query had no portfolio items so return a 'no portfolio items' message
-			$output .= '<li class="' . $class . '_no-portfolio-items">' . __( 'No portfolio items.', 'wpzoom-blocks' ) . '</li>';
 		}
 
-		// Return the final output
-		return "<div class=\"wpzoom-blocks $classes\">$cats_filter<ul class=\"{$class}_items-list\">$output</ul>$btns_wrap</div><!--.$class-->";
+		// Return the final HTML string
+		return $output;
 	}
 
 	/**
@@ -472,6 +587,7 @@ class WPZOOM_Blocks_Portfolio {
 	 * @see    get_categories()
 	 */
 	public function list_categories( $only = array() ) {
+		// Setup the basic query arguments
 		$args = array(
 			'child_of'            => 0,
 			'depth'               => 0,
@@ -494,44 +610,28 @@ class WPZOOM_Blocks_Portfolio {
 			'use_desc_for_title'  => 1,
 		);
 
+		// If the passed $only argument is not empty...
 		if ( ! empty( $only ) ) {
+			// Include it in the arguments for the query
 			$args[ 'include' ] = $only;
 		}
 
+		// If a portfolio taxonomy exists...
 		if ( taxonomy_exists( 'portfolio' ) ) {
+			// Add it to the query arguments
 			$args[ 'taxonomy' ][] = 'portfolio';
 		}
 
+		// Attempt to get all the categories using the above parameters
 		$categories = get_categories( $args );
+
+		// The string that will be output
 		$output = '';
 
+		// As long as some categories were returned...
 		if ( ! empty( $categories ) ) {
-			$posts_page = '';
-
-			// For taxonomies that belong only to custom post types, point to a valid archive.
-			$taxonomy_object = get_taxonomy( 'wpzb_portfolio_category' );
-			if ( ! in_array( 'post', $taxonomy_object->object_type ) && ! in_array( 'page', $taxonomy_object->object_type ) ) {
-				foreach ( $taxonomy_object->object_type as $object_type ) {
-					$_object_type = get_post_type_object( $object_type );
-
-					// Grab the first one.
-					if ( ! empty( $_object_type->has_archive ) ) {
-						$posts_page = get_post_type_archive_link( $object_type );
-						break;
-					}
-				}
-			}
-
-			// Fallback for the 'All' link is the posts page.
-			if ( ! $posts_page ) {
-				if ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_for_posts' ) ) {
-					$posts_page = get_permalink( get_option( 'page_for_posts' ) );
-				} else {
-					$posts_page = home_url( '/' );
-				}
-			}
-
-			$posts_page = esc_url( $posts_page );
+			// Add in the All link
+			$posts_page = esc_url( str_ireplace( '%category%/', '', get_post_type_archive_link( 'wpzb_portfolio' ) ) );
 			$output .= '<li class="wp-block-button cat-item-all current-cat">
 				<a href="' . $posts_page . '" class="wp-block-button__link">' . __( 'All', 'wpzoom-blocks' ) . '</a>
 			</li>';
@@ -548,6 +648,7 @@ class WPZOOM_Blocks_Portfolio {
 			remove_filter( 'category_css_class', array( $this, 'category_css_class' ) );
 		}
 
+		// Return the final output
 		return $output;
 	}
 
@@ -618,6 +719,89 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Return the result
 		return $result;
+	}
+
+	/**
+	 * Adds extra needed routes in the WordPress REST API.
+	 *
+	 * @access public
+	 * @return void
+	 * @since  1.0.0
+	 * @see    register_rest_route()
+	 */
+	public function rest_api_routes() {
+		// Register the 'portfolio-posts' REST API route
+		register_rest_route(
+			'wpzoom-blocks/v1',
+			'/portfolio-posts',
+			array(
+				'methods' => WP_REST_Server::READABLE,
+				'callback' => array( $this, 'get_rest_portfolio_posts' )
+			)
+		);
+	}
+
+	/**
+	 * Returns a REST response containing portfolio items' details for a given set of portfolio items.
+	 *
+	 * @access public
+	 * @param  WP_REST_Request $request Full details about the request.
+	 * @return array
+	 * @since  1.0.0
+	 */
+	public function get_rest_portfolio_posts( $request ) {
+		// [...]
+		$result = array();
+
+		// [...]
+		if ( ! is_null( $request ) && $request instanceof WP_REST_Request ) {
+			// [...]
+			$params = $request->get_params();
+
+			// [...]
+			if ( ! empty( $params ) ) {
+				// [...]
+				$layout = isset( $params[ 'layout' ] ) ? $params[ 'layout' ] : 'grid';
+				$order = isset( $params[ 'order' ] ) ? $params[ 'order' ] : 'desc';
+				$order_by = isset( $params[ 'order_by' ] ) ? $params[ 'order_by' ] : 'date';
+				$per_page = isset( $params[ 'per_page' ] ) ? intval( $params[ 'per_page' ] ) : 6;
+				$page = isset( $params[ 'page' ] ) ? intval( $params[ 'page' ] ) : 1;
+				$categories = isset( $params[ 'cats' ] ) && !empty( $params[ 'cats' ] ) ? json_decode( $params[ 'cats' ] ) : array();
+				$show_thumbnail = isset( $params[ 'show_thumbnail' ] ) ? boolval( $params[ 'show_thumbnail' ] ) : true;
+				$thumbnail_size = isset( $params[ 'thumbnail_size' ] ) ? $params[ 'thumbnail_size' ] : 'thumbnail';
+				$show_background_video = isset( $params[ 'show_background_video' ] ) ? boolval( $params[ 'show_background_video' ] ) : true;
+				$show_author = isset( $params[ 'show_author' ] ) ? boolval( $params[ 'show_author' ] ) : true;
+				$show_date = isset( $params[ 'show_date' ] ) ? boolval( $params[ 'show_date' ] ) : true;
+				$show_excerpt = isset( $params[ 'show_excerpt' ] ) ? boolval( $params[ 'show_excerpt' ] ) : true;
+				$excerpt_length = isset( $params[ 'excerpt_length' ] ) ? intval( $params[ 'excerpt_length' ] ) : 20;
+				$show_read_more = isset( $params[ 'show_read_more' ] ) ? boolval( $params[ 'show_read_more' ] ) : true;
+
+				// [...]
+				$items = $this->items_html( array(
+					'class'                 => 'wpzoom-blocks_portfolio-block',
+					'layout'                => $layout,
+					'order'                 => $order,
+					'order_by'              => $order_by,
+					'per_page'              => $per_page,
+					'page'                  => $page,
+					'categories'            => $categories,
+					'show_thumbnail'        => $show_thumbnail,
+					'thumbnail_size'        => $thumbnail_size,
+					'show_background_video' => $show_background_video,
+					'show_author'           => $show_author,
+					'show_date'             => $show_date,
+					'show_excerpt'          => $show_excerpt,
+					'excerpt_length'        => $excerpt_length,
+					'show_read_more'        => $show_read_more
+				) );
+
+				// [...]
+				$result = array( 'items' => $items, 'has_more' => $page < $this->result_pages );
+			}
+		}
+
+		// Return the portfolio items array properly formatted for a rest response
+		return rest_ensure_response( $result );
 	}
 
 	/**

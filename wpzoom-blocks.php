@@ -147,7 +147,7 @@ class WPZOOM_Blocks {
 			add_action( 'enqueue_block_assets', function() { wp_enqueue_script( 'wpzoom-blocks-js-script-main' ); wp_enqueue_style( 'wpzoom-blocks-css-style-main' ); } );
 
 			// Hook into the REST API in order to add some custom things
-			add_action( 'rest_api_init', array( $this, 'rest_featured_media' ) );
+			add_action( 'rest_api_init', array( $this, 'rest_api_routes' ) );
 
 			// Add some extra needed styles on the frontend
 			add_action( 'wp_enqueue_scripts', function() { wp_enqueue_script( 'jquery' ); wp_enqueue_style( 'dashicons' ); } );
@@ -208,7 +208,7 @@ class WPZOOM_Blocks {
 					$func = 'js' == $ext ? 'wp_register_script' : 'wp_register_style';
 					$url = trailingslashit( 'main' == $slug_ ? $this->main_dir_url : $this->blocks_dir_url . $slug ) . "$name.$ext";
 					$depends = 'js' == $ext ? $asset[ 'dependencies' ] : array();
-					$func( "wpzoom-blocks-$ext-$name-$slug_", $url, $depends, $asset[ 'version' ] );
+					$func( "wpzoom-blocks-$ext-$name-$slug_", $url, $depends, $asset[ 'version' ], ( 'main' != $slug_ && 'js' == $ext ) );
 
 					// If the file in the current iteration is a script...
 					if ( 'js' == $ext && function_exists( 'wp_set_script_translations' ) ) {
@@ -285,17 +285,17 @@ class WPZOOM_Blocks {
 	}
 
 	/**
-	 * Adds extra needed data in the REST API related to media library images.
+	 * Adds extra needed routes in the WordPress REST API.
 	 *
 	 * @access public
 	 * @return void
 	 * @since  1.0.0
 	 * @see    register_rest_route()
 	 * @see    register_rest_field()
-	 * @see    WPZOOM_Blocks_Posts::get_rest_image_sizes()
-	 * @see    WPZOOM_Blocks_Posts::get_featured_media_urls()
+	 * @see    WPZOOM_Blocks::get_rest_image_sizes()
+	 * @see    WPZOOM_Blocks::get_featured_media_urls()
 	 */
-	public function rest_featured_media() {
+	public function rest_api_routes() {
 		// Register the 'image-sizes' REST API route
 		register_rest_route(
 			'wpzoom-blocks/v1',
