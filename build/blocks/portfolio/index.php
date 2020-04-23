@@ -109,7 +109,7 @@ class WPZOOM_Blocks_Portfolio {
 		],
 		'thumbnailSize' => [
 			'type' => 'string',
-			'default' => 'thumbnail'
+			'default' => 'portfolio_item-thumbnail'
 		],
 		'viewAllLabel' => [
 			'type' => 'string',
@@ -241,6 +241,9 @@ class WPZOOM_Blocks_Portfolio {
 			'sanitize_callback' => 'sanitize_text_field',
 			'auth_callback'     => function () { return current_user_can( 'edit_posts' ); }
 		) );
+
+		// Register a custom image size for use as the default image size
+		add_image_size( 'portfolio_item-thumbnail', 600, 400, true );
 
 		// Ensure there is a Uncategorized category for the portfolio post type
 		if ( is_null( term_exists( 'uncategorized', 'wpzb_portfolio_category' ) ) ) {
@@ -401,7 +404,7 @@ class WPZOOM_Blocks_Portfolio {
 			'page'                  => 1,
 			'categories'            => array(),
 			'show_thumbnail'        => true,
-			'thumbnail_size'        => 'thumbnail',
+			'thumbnail_size'        => 'portfolio_item-thumbnail',
 			'show_background_video' => true,
 			'show_author'           => true,
 			'show_date'             => true,
@@ -750,17 +753,17 @@ class WPZOOM_Blocks_Portfolio {
 	 * @since  1.0.0
 	 */
 	public function get_rest_portfolio_posts( $request ) {
-		// [...]
+		// The results that will be returned in the REST response
 		$result = array();
 
-		// [...]
+		// As long as it is a valid request...
 		if ( ! is_null( $request ) && $request instanceof WP_REST_Request ) {
-			// [...]
+			// Get the request parameters
 			$params = $request->get_params();
 
-			// [...]
+			// As long as the parameters are not empty...
 			if ( ! empty( $params ) ) {
-				// [...]
+				// Parse the parameters into variables to use for building the HTML to return
 				$layout = isset( $params[ 'layout' ] ) ? $params[ 'layout' ] : 'grid';
 				$order = isset( $params[ 'order' ] ) ? $params[ 'order' ] : 'desc';
 				$order_by = isset( $params[ 'order_by' ] ) ? $params[ 'order_by' ] : 'date';
@@ -768,7 +771,7 @@ class WPZOOM_Blocks_Portfolio {
 				$page = isset( $params[ 'page' ] ) ? intval( $params[ 'page' ] ) : 1;
 				$categories = isset( $params[ 'cats' ] ) && !empty( $params[ 'cats' ] ) ? json_decode( $params[ 'cats' ] ) : array();
 				$show_thumbnail = isset( $params[ 'show_thumbnail' ] ) ? boolval( $params[ 'show_thumbnail' ] ) : true;
-				$thumbnail_size = isset( $params[ 'thumbnail_size' ] ) ? $params[ 'thumbnail_size' ] : 'thumbnail';
+				$thumbnail_size = isset( $params[ 'thumbnail_size' ] ) ? $params[ 'thumbnail_size' ] : 'portfolio_item-thumbnail';
 				$show_background_video = isset( $params[ 'show_background_video' ] ) ? boolval( $params[ 'show_background_video' ] ) : true;
 				$show_author = isset( $params[ 'show_author' ] ) ? boolval( $params[ 'show_author' ] ) : true;
 				$show_date = isset( $params[ 'show_date' ] ) ? boolval( $params[ 'show_date' ] ) : true;
@@ -776,7 +779,7 @@ class WPZOOM_Blocks_Portfolio {
 				$excerpt_length = isset( $params[ 'excerpt_length' ] ) ? intval( $params[ 'excerpt_length' ] ) : 20;
 				$show_read_more = isset( $params[ 'show_read_more' ] ) ? boolval( $params[ 'show_read_more' ] ) : true;
 
-				// [...]
+				// Build the HTML to return
 				$items = $this->items_html( array(
 					'class'                 => 'wpzoom-blocks_portfolio-block',
 					'layout'                => $layout,
@@ -795,7 +798,7 @@ class WPZOOM_Blocks_Portfolio {
 					'show_read_more'        => $show_read_more
 				) );
 
-				// [...]
+				// Assign the results to return
 				$result = array( 'items' => $items, 'has_more' => $page < $this->result_pages );
 			}
 		}
@@ -805,7 +808,7 @@ class WPZOOM_Blocks_Portfolio {
 	}
 
 	/**
-	 * Filters the HTML attributes applied to a category list item’s anchor element.
+	 * Filters the HTML attributes applied to a category list item's anchor element.
 	 * 
 	 * @access public
 	 * @param  array   $atts     The HTML attributes applied to the list item's <a> element, empty strings are ignored.
@@ -851,10 +854,14 @@ class WPZOOM_Blocks_Portfolio {
 	 * @see    get_the_terms()
 	 */
 	public function post_type_link_replace( $post_link, $post ) {
+		// If the post type is our portfolio type and the link includes the replacement string...
 		if ( 'wpzb_portfolio' == get_post_type( $post ) && false !== stripos( $post_link, '%category%' ) ) {
+			// Get the categories for the given post
 			$cats = get_the_terms( $post, 'wpzb_portfolio_category' );
 
+			// As long as there are some categories...
 			if ( false !== $cats && !is_wp_error( $cats ) ) {
+				// Return the link with the replacement string replaced with the first category
 				return str_ireplace( '%category%', $cats[0]->slug, $post_link );
 			}
 		}
@@ -876,10 +883,14 @@ class WPZOOM_Blocks_Portfolio {
 	 * @see    wp_set_object_terms()
 	 */
 	public function set_default_object_terms( $post_id, $post, $update ) {
+		// As long as the post status is Publish and the post type is our portfolio type...
 		if ( 'publish' == $post->post_status && 'wpzb_portfolio' == $post->post_type ) {
+			// Get the categories for the given post
 			$cats = get_the_terms( $post, 'wpzb_portfolio_category' );
 
+			// As long as there are no categories...
 			if ( false === $cats || is_wp_error( $cats ) ) {
+				// Set the category for the given post to Uncategorized
 				wp_set_object_terms( $post_id, 'uncategorized', 'wpzb_portfolio_category' );
 			}
 		}
