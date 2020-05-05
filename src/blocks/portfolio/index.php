@@ -28,95 +28,99 @@ class WPZOOM_Blocks_Portfolio {
 	 */
 	public $attributes = [
 		'align' => [
-			'type' => 'string',
+			'type'    => 'string',
 			'default' => ''
 		],
 		'amount' => [
-			'type' => 'number',
+			'type'    => 'number',
 			'default' => 6
 		],
 		'alwaysPlayBackgroundVideo' => [
-			'type' => 'boolean',
+			'type'    => 'boolean',
 			'default' => false
 		],
 		'categories' => [
-			'type' => 'array',
+			'type'  => 'array',
 			'items' => [ 'type' => 'string' ]
 		],
 		'columnsAmount' => [
-			'type' => 'number',
+			'type'    => 'number',
 			'default' => 4
 		],
 		'excerptLength' => [
-			'type' => 'number',
+			'type'    => 'number',
 			'default' => 20
 		],
 		'layout' => [
-			'type' => 'string',
+			'type'    => 'string',
 			'default' => 'grid'
 		],
 		'lightbox' => [
-			'type' => 'boolean',
+			'type'    => 'boolean',
 			'default' => true
 		],
 		'lightboxCaption' => [
-			'type' => 'boolean',
+			'type'    => 'boolean',
 			'default' => false
 		],
 		'order' => [
-			'type' => 'string',
+			'type'    => 'string',
 			'default' => 'desc'
 		],
 		'orderBy' => [
-			'type' => 'string',
+			'type'    => 'string',
 			'default' => 'date'
 		],
 		'readMoreLabel' => [
-			'type' => 'string',
+			'type'    => 'string',
 			'default' => 'Read More'
 		],
 		'showAuthor' => [
-			'type' => 'boolean',
+			'type'    => 'boolean',
 			'default' => true
 		],
 		'showBackgroundVideo' => [
-			'type' => 'boolean',
+			'type'    => 'boolean',
 			'default' => true
 		],
 		'showCategoryFilter' => [
-			'type' => 'boolean',
+			'type'    => 'boolean',
 			'default' => true
 		],
 		'showDate' => [
-			'type' => 'boolean',
+			'type'    => 'boolean',
 			'default' => true
 		],
 		'showExcerpt' => [
-			'type' => 'boolean',
+			'type'    => 'boolean',
 			'default' => true
 		],
 		'showReadMore' => [
-			'type' => 'boolean',
+			'type'    => 'boolean',
 			'default' => true
 		],
 		'showThumbnail' => [
-			'type' => 'boolean',
+			'type'    => 'boolean',
 			'default' => true
 		],
 		'showViewAll' => [
-			'type' => 'boolean',
+			'type'    => 'boolean',
 			'default' => true
 		],
+		'source' => [
+			'type'    => 'string',
+			'default' => 'wpzb_portfolio'
+		],
 		'thumbnailSize' => [
-			'type' => 'string',
+			'type'    => 'string',
 			'default' => 'portfolio_item-thumbnail'
 		],
 		'viewAllLabel' => [
-			'type' => 'string',
+			'type'    => 'string',
 			'default' => 'View All'
 		],
 		'viewAllLink' => [
-			'type' => 'string',
+			'type'    => 'string',
 			'default' => ''
 		]
 	];
@@ -280,6 +284,12 @@ class WPZOOM_Blocks_Portfolio {
 		$output = '';
 		$class = 'wpzoom-blocks_portfolio-block';
 
+		// Determine where the portfolio items should come from
+		$source = isset( $attr[ 'source' ] ) && ! empty( $attr[ 'source' ] ) ? $attr[ 'source' ] : 'wpzb_portfolio';
+		if ( 'portfolio' == $source && ! post_type_exists( 'portfolio' ) ) {
+			$source = 'wpzb_portfolio';
+		}
+
 		// Might need to align the block
 		$align = isset( $attr[ 'align' ] ) && ! empty( $attr[ 'align' ] ) ? ' align' . $attr[ 'align' ] : '';
 
@@ -341,21 +351,22 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Try to get portfolio items
 		$items_html = $this->items_html( array(
+			'categories'            => $categories,
 			'class'                 => 'wpzoom-blocks_portfolio-block',
+			'excerpt_length'        => $excerpt_length,
 			'layout'                => $layout,
 			'order'                 => $order,
 			'order_by'              => $order_by,
 			'per_page'              => $per_page,
-			'categories'            => $categories,
-			'show_thumbnail'        => $show_thumbnail,
-			'thumbnail_size'        => $thumbnail_size,
-			'show_background_video' => $show_video,
+			'read_more_label'       => __( 'Read More', 'wpzoom-blocks' ),
 			'show_author'           => $show_author,
+			'show_background_video' => $show_video,
 			'show_date'             => $show_date,
 			'show_excerpt'          => $show_excerpt,
-			'excerpt_length'        => $excerpt_length,
 			'show_read_more'        => $show_read_more,
-			'read_more_label'       => __( 'Read More', 'wpzoom-blocks' )
+			'show_thumbnail'        => $show_thumbnail,
+			'source'                => $source,
+			'thumbnail_size'        => $thumbnail_size
 		) );
 
 		// Show more button
@@ -396,22 +407,23 @@ class WPZOOM_Blocks_Portfolio {
 	public function items_html( $arguments = null ) {
 		// Setup some default values
 		$defaults = array(
+			'categories'            => array(),
 			'class'                 => 'wpzoom-blocks_portfolio-block',
+			'excerpt_length'        => 20,
 			'layout'                => 'grid',
 			'order'                 => 'desc',
 			'order_by'              => 'date',
-			'per_page'              => 6,
 			'page'                  => 1,
-			'categories'            => array(),
-			'show_thumbnail'        => true,
-			'thumbnail_size'        => 'portfolio_item-thumbnail',
-			'show_background_video' => true,
+			'per_page'              => 6,
+			'read_more_label'       => __( 'Read More', 'wpzoom-blocks' ),
 			'show_author'           => true,
+			'show_background_video' => true,
 			'show_date'             => true,
 			'show_excerpt'          => true,
-			'excerpt_length'        => 20,
 			'show_read_more'        => true,
-			'read_more_label'       => __( 'Read More', 'wpzoom-blocks' )
+			'show_thumbnail'        => true,
+			'source'                => 'wpzb_portfolio',
+			'thumbnail_size'        => 'portfolio_item-thumbnail'
 		);
 
 		// Parse the arguments to build the arguments array
@@ -423,27 +435,27 @@ class WPZOOM_Blocks_Portfolio {
 		// The CSS class name with a prefix
 		$class = $args[ 'class' ];
 
+		// The source of the posts
+		$source = $args[ 'source' ];
+		if ( 'portfolio' == $source && ! post_type_exists( 'portfolio' ) ) {
+			$source = 'wpzb_portfolio';
+		}
+
 		// Build a parameters array to use for the posts query
 		$params = array(
 			'order'          => $args[ 'order' ],
 			'orderby'        => $args[ 'order_by' ],
 			'posts_per_page' => $args[ 'per_page' ],
 			'paged'          => $args[ 'page' ],
-			'post_type'      => array( 'wpzb_portfolio', 'portfolio_item' )
+			'post_type'      => $source
 		);
 
 		// If filter categories were specified...
 		if ( !empty( $args[ 'categories' ] ) && count( array_filter( $args[ 'categories' ] ) ) > 0 && '-1' != $args[ 'categories' ][0] ) {
 			// Add them to the parameters for the query
 			$params[ 'tax_query' ] = array(
-				'relation' => 'OR',
 				array(
-					'taxonomy' => 'wpzb_portfolio_category',
-					'field'    => 'term_id',
-					'terms'    => $args[ 'categories' ]
-				),
-				array(
-					'taxonomy' => 'portfolio',
+					'taxonomy' => 'wpzb_portfolio' == $source ? 'wpzb_portfolio_category' : 'portfolio',
 					'field'    => 'term_id',
 					'terms'    => $args[ 'categories' ]
 				)

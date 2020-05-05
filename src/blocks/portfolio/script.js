@@ -66,6 +66,14 @@ function portfolioItemClick( event ) {
 		event.preventDefault();
 
 		item.classList.add( 'lightbox' );
+
+		if ( item.classList.contains( 'fade-in' ) ) {
+			item.classList.remove( 'fade-in' );
+		}
+
+		if ( item.classList.contains( 'fade-out' ) ) {
+			item.classList.remove( 'fade-out' );
+		}
 	}
 }
 

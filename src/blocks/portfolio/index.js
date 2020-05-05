@@ -119,7 +119,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 			const { attributes, setAttributes, categoriesList } = this.props;
 			const { amount, alwaysPlayBackgroundVideo, categories, columnsAmount, excerptLength, layout, lazyLoad, lightbox,
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showBackgroundVideo, showCategoryFilter, showDate,
-					showExcerpt, showReadMore, showThumbnail, showViewAll, thumbnailSize, viewAllLabel, viewAllLink } = attributes;
+					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink } = attributes;
 			const { imageSizes } = this.state;
 
 			if ( ! categoriesList || ! imageSizes ) {
@@ -192,6 +192,74 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 				<>
 					<InspectorControls>
 						<PanelBody title={ __( 'Options', 'wpzoom-blocks' ) } className="wpzb-settings-panel">
+							<PanelBody title={ __( 'Filtering', 'wpzoom-blocks' ) } className="wpzb-sub-panel">
+								<SelectControl
+									label={ __( 'Portfolio Items Source', 'wpzoom-blocks' ) }
+									value={ source }
+									options={ [
+										{
+											label: __( 'From WPZOOM Blocks', 'wpzoom-blocks' ),
+											value: 'wpzb_portfolio'
+										},
+										{
+											label: __( 'From WPZOOM Theme', 'wpzoom-blocks' ),
+											value: 'portfolio'
+										}
+									] }
+									onChange={ ( value ) => setAttributes( { source: value } ) }
+								/>
+
+								<SelectControl
+									label={ __( 'Order By', 'wpzoom-blocks' ) }
+									value={ `${ orderBy }/${ order }` }
+									options={ [
+										{
+											label: __( 'Newest to Oldest', 'wpzoom-blocks' ),
+											value: 'date/desc'
+										},
+										{
+											label: __( 'Oldest to Newest', 'wpzoom-blocks' ),
+											value: 'date/asc'
+										},
+										{
+											label: __( 'A → Z', 'wpzoom-blocks' ),
+											value: 'title/asc'
+										},
+										{
+											label: __( 'Z → A', 'wpzoom-blocks' ),
+											value: 'title/desc'
+										}
+									] }
+									onChange={ ( value ) => {
+										const [ newOrderBy, newOrder ] = value.split( '/' );
+										if ( newOrder !== order ) {
+											setAttributes( { order: newOrder } );
+										}
+										if ( newOrderBy !== orderBy ) {
+											setAttributes( { orderBy: newOrderBy } );
+										}
+									} }
+								/>
+
+								<TreeSelect
+									label={ __( 'Category', 'wpzoom-blocks' ) }
+									help={ __( 'Multiple selections allowed.', 'wpzoom-blocks' ) }
+									tree={ termsTree }
+									selectedId={ typeof categories !== 'undefined' && categories.length > 0 ? categories : [-1] }
+									multiple
+									onChange={ ( value ) => setAttributes( { categories: '' !== value ? value : undefined } ) }
+								/>
+
+								<RangeControl
+									label={ __( 'Number of Items', 'wpzoom-blocks' ) }
+									value={ amount }
+									onChange={ ( value ) => setAttributes( { amount: value } ) }
+									min={ 1 }
+									max={ 100 }
+									required
+								/>
+							</PanelBody>
+
 							<PanelBody title={ __( 'Layout', 'wpzoom-blocks' ) } className="wpzb-sub-panel">
 								<RadioControl
 									className="wpzb-button-select wpzb-button-select-icons"
@@ -246,58 +314,6 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										onChange={ ( value ) => setAttributes( { viewAllLink: value } ) }
 									/>
 								}
-							</PanelBody>
-
-							<PanelBody title={ __( 'Filtering', 'wpzoom-blocks' ) } className="wpzb-sub-panel">
-								<SelectControl
-									label={ __( 'Order By', 'wpzoom-blocks' ) }
-									value={ `${ orderBy }/${ order }` }
-									options={ [
-										{
-											label: __( 'Newest to Oldest', 'wpzoom-blocks' ),
-											value: 'date/desc',
-										},
-										{
-											label: __( 'Oldest to Newest', 'wpzoom-blocks' ),
-											value: 'date/asc',
-										},
-										{
-											label: __( 'A → Z', 'wpzoom-blocks' ),
-											value: 'title/asc',
-										},
-										{
-											label: __( 'Z → A', 'wpzoom-blocks' ),
-											value: 'title/desc',
-										},
-									] }
-									onChange={ ( value ) => {
-										const [ newOrderBy, newOrder ] = value.split( '/' );
-										if ( newOrder !== order ) {
-											setAttributes( { order: newOrder } );
-										}
-										if ( newOrderBy !== orderBy ) {
-											setAttributes( { orderBy: newOrderBy } );
-										}
-									} }
-								/>
-
-								<TreeSelect
-									label={ __( 'Category', 'wpzoom-blocks' ) }
-									help={ __( 'Multiple selections allowed.', 'wpzoom-blocks' ) }
-									tree={ termsTree }
-									selectedId={ typeof categories !== 'undefined' && categories.length > 0 ? categories : [-1] }
-									multiple
-									onChange={ ( value ) => setAttributes( { categories: '' !== value ? value : undefined } ) }
-								/>
-
-								<RangeControl
-									label={ __( 'Number of Items', 'wpzoom-blocks' ) }
-									value={ amount }
-									onChange={ ( value ) => setAttributes( { amount: value } ) }
-									min={ 1 }
-									max={ 100 }
-									required
-								/>
 							</PanelBody>
 
 							<PanelBody title={ __( 'Fields', 'wpzoom-blocks' ) } className="wpzb-sub-panel">
