@@ -1,11 +1,41 @@
 import apiFetch from '@wordpress/api-fetch';
 import { InspectorControls } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
-import { PanelBody, Placeholder, QueryControls, RangeControl, SelectControl, Spinner, ToggleControl } from '@wordpress/components';
+import { PanelBody, Placeholder, QueryControls, RangeControl, SelectControl, Spinner, ToggleControl, TreeSelect } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { Component, Fragment } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { groupBy } from 'lodash';
 import ServerSideRender from '@wordpress/server-side-render';
+
+function buildTermsTree( flatTerms ) {
+	const flatTermsWithParentAndChildren = flatTerms.map( ( term ) => {
+		return {
+			children: [],
+			parent: null,
+			...term,
+		};
+	} );
+
+	const termsByParent = groupBy( flatTermsWithParentAndChildren, 'parent' );
+	if ( termsByParent.null && termsByParent.null.length ) {
+		return flatTermsWithParentAndChildren;
+	}
+	const fillWithChildren = ( terms ) => {
+		return terms.map( ( term ) => {
+			const children = termsByParent[ term.id ];
+			return {
+				...term,
+				children:
+					children && children.length
+						? fillWithChildren( children )
+						: [],
+			};
+		} );
+	};
+
+	return fillWithChildren( termsByParent[ '0' ] || [] );
+}
 
 registerBlockType( 'wpzoom-blocks/posts', {
 	title: __( 'Posts', 'wpzoom-blocks' ),
@@ -60,7 +90,7 @@ registerBlockType( 'wpzoom-blocks/posts', {
 
 		render() {
 			const { attributes, setAttributes, categoriesList } = this.props;
-			const { categories, amount, order, orderBy, showThumbnail, thumbnailSize, showAuthor, showDate, showCommentCount, showExcerpt, excerptLength, showReadMoreButton } = attributes;
+			const { categories, amount, columnsAmount, order, orderBy, showThumbnail, thumbnailSize, showAuthor, showDate, showCommentCount, showExcerpt, excerptLength, showReadMoreButton } = attributes;
 			const { imageSizes } = this.state;
 
 			if ( ! categoriesList || ! imageSizes ) {
@@ -73,19 +103,60 @@ registerBlockType( 'wpzoom-blocks/posts', {
 				);
 			}
 
+			const termsTree = buildTermsTree( categoriesList );
+
 			return (
 				<>
 					<InspectorControls>
 						<PanelBody title={ __( 'Options', 'wpzoom-blocks' ) }>
-							<QueryControls
-								{ ...{ order, orderBy } }
-								numberOfItems={ amount }
-								categoriesList={ categoriesList }
-								selectedCategoryId={ categories }
-								onOrderChange={ ( value ) => setAttributes( { order: value } ) }
-								onOrderByChange={ ( value ) => setAttributes( { orderBy: value } ) }
-								onCategoryChange={ ( value ) => setAttributes( { categories: '' !== value ? value : undefined } ) }
-								onNumberOfItemsChange={ ( value ) => setAttributes( { amount: value } ) }
+							<RangeControl
+								label={ __( 'Amount of Columns', 'wpzoom-blocks' ) }
+								max={ 10 }
+								min={ 1 }
+								onChange={ ( value ) => setAttributes( { columnsAmount: value } ) }
+								value={ columnsAmount }
+							/>
+
+							<SelectControl
+								label={ __( 'Order By', 'wpzoom-blocks' ) }
+								value={ `${ orderBy }/${ order }` }
+								options={ [
+									{
+										label: __( 'Newest to Oldest', 'wpzoom-blocks' ),
+										value: 'date/desc'
+									},
+									{
+										label: __( 'Most Popular', 'wpzoom-blocks' ),
+										value: 'comments/desc'
+									}
+								] }
+								onChange={ ( value ) => {
+									const [ newOrderBy, newOrder ] = value.split( '/' );
+									if ( newOrder !== order ) {
+										setAttributes( { order: newOrder } );
+									}
+									if ( newOrderBy !== orderBy ) {
+										setAttributes( { orderBy: newOrderBy } );
+									}
+								} }
+							/>
+
+							<TreeSelect
+								label={ __( 'Category', 'wpzoom-blocks' ) }
+								help={ __( 'Multiple selections allowed.', 'wpzoom-blocks' ) }
+								tree={ termsTree }
+								selectedId={ typeof categories !== 'undefined' && categories.length > 0 ? categories : [-1] }
+								multiple
+								onChange={ ( value ) => setAttributes( { categories: '' !== value ? value : undefined } ) }
+							/>
+
+							<RangeControl
+								label={ __( 'Number of Items', 'wpzoom-blocks' ) }
+								value={ amount }
+								onChange={ ( value ) => setAttributes( { amount: value } ) }
+								min={ 1 }
+								max={ 100 }
+								required
 							/>
 
 							<ToggleControl

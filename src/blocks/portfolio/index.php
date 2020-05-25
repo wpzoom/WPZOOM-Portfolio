@@ -477,8 +477,8 @@ class WPZOOM_Blocks_Portfolio {
 				$permalink = esc_url( get_permalink( $post ) );
 				$title = get_the_title( $post );
 				$title_attr = the_title_attribute( array( 'post' => $post, 'echo' => false ) );
-				$the_categories = get_the_terms( $id, 'wpzb_portfolio_category' );
-				$no_category = get_term_by( 'slug', 'uncategorized', 'wpzb_portfolio_category' );
+				$the_categories = get_the_terms( $id, ( 'wpzb_portfolio' == $source ? 'wpzb_portfolio_category' : 'portfolio' ) );
+				$no_category = get_term_by( 'slug', 'uncategorized', ( 'wpzb_portfolio' == $source ? 'wpzb_portfolio_category' : 'portfolio' ) );
 				$category = ! is_wp_error( $the_categories ) && is_array( $the_categories ) && count( $the_categories ) > 0 ? $the_categories[0]->term_id : $no_category->term_id;
 				$thumbnail = get_the_post_thumbnail( $post, $args[ 'thumbnail_size' ] );
 				$video_type = 'service' == get_post_meta( $id, '_wpzb_portfolio_video_type', true ) ? 'service' : 'library';

@@ -39,6 +39,10 @@ class WPZOOM_Blocks_Posts {
 			'type' => 'string',
 			'default' => ''
 		],
+		'columnsAmount' => [
+			'type' => 'number',
+			'default' => 3
+		],
 		'excerptLength' => [
 			'type' => 'number',
 			'default' => 150
@@ -108,6 +112,9 @@ class WPZOOM_Blocks_Posts {
 
 		// Might need to align the block
 		$align = isset( $attr[ 'align' ] ) ? ' align' . $attr[ 'align' ] : '';
+
+		// Columns amount class
+		$columns = isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ? ' columns-' . $attr[ 'columnsAmount' ] : '';
 
 		// Fetch recent posts using the specified attributes
 		$query = new WP_Query( array(
@@ -245,6 +252,6 @@ class WPZOOM_Blocks_Posts {
 		}
 
 		// Return the final output
-		return "<div class=\"wpzoom-blocks $class$align\"><ul class=\"{$class}_posts-list\">$output</ul></div><!--.$class-->";
+		return "<div class=\"wpzoom-blocks $class$align$columns\"><ul class=\"{$class}_posts-list\">$output</ul></div><!--.$class-->";
 	}
 }
