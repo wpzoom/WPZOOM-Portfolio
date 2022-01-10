@@ -203,7 +203,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										},
 										{
 											label: __( 'From WPZOOM Theme', 'wpzoom-blocks' ),
-											value: 'portfolio'
+											value: 'portfolio_item'
 										}
 									] }
 									onChange={ ( value ) => setAttributes( { source: value } ) }

@@ -286,7 +286,7 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Determine where the portfolio items should come from
 		$source = isset( $attr[ 'source' ] ) && ! empty( $attr[ 'source' ] ) ? $attr[ 'source' ] : 'wpzb_portfolio';
-		if ( 'portfolio' == $source && ! post_type_exists( 'portfolio' ) ) {
+		if ( 'portfolio_item' == $source && ! post_type_exists( 'portfolio_item' ) ) {
 			$source = 'wpzb_portfolio';
 		}
 
@@ -437,7 +437,7 @@ class WPZOOM_Blocks_Portfolio {
 
 		// The source of the posts
 		$source = $args[ 'source' ];
-		if ( 'portfolio' == $source && ! post_type_exists( 'portfolio' ) ) {
+		if ( 'portfolio' == $source && ! post_type_exists( 'portfolio_item' ) ) {
 			$source = 'wpzb_portfolio';
 		}
 
@@ -751,7 +751,8 @@ class WPZOOM_Blocks_Portfolio {
 			'/portfolio-posts',
 			array(
 				'methods' => WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_rest_portfolio_posts' )
+				'callback' => array( $this, 'get_rest_portfolio_posts' ),
+                'permission_callback' => function() { return current_user_can( 'edit_posts' ); }
 			)
 		);
 	}
