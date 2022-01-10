@@ -137,7 +137,7 @@ class WPZOOM_Blocks {
 			load_plugin_textdomain( 'wpzoom-blocks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 			// Filter the Gutenberg block categories to add our custom 'WPZOOM Blocks' category if needed
-			add_filter( 'block_categories', array( $this, 'filter_block_categories' ), 10, 2 );
+			add_filter( 'block_categories_all', array( $this, 'filter_block_categories' ), 10, 2 );
 
 			// Load in all needed assets for the plugin
 			$this->load_assets();
