@@ -25,9 +25,26 @@
 					pointer-events: none;
 
 					a {
-						background-color: #444 !important;
+						color: #0bb4aa;
 					}
 				}
+
+
+                a:hover {
+                    color: #0bb4aa;
+                }
+
+                .wpz-portfolio-button__link {
+                    display: inline-block;
+                    width: auto;
+                    color: #333;
+                    margin: 0 20px;
+                    font-size: 18px;
+                    font-weight: 500;
+                    border-radius: 0;
+                }
+
+
 			}
 		}
 	}
@@ -47,7 +64,7 @@
 		.wpzoom-blocks_portfolio-block_item {
 			.wpzoom-blocks_portfolio-block_item-thumbnail,
 			.wpzoom-blocks_portfolio-block_item-bgvid {
-				transition: all 0.5s;
+				transition: all 0.2s;
 			}
 
 			.wpzoom-blocks_portfolio-block_item-thumbnail {
@@ -61,7 +78,7 @@
 				right: 0;
 				bottom: 0;
 				background: rgba(0, 0, 0, 0.1);
-				transition: all 0.5s;
+				transition: all 0.2s;
 
 				.wpzoom-blocks_portfolio-block_item-title {
 					display: block;
@@ -89,7 +106,7 @@
 				&:hover {
 					.wpzoom-blocks_portfolio-block_item-thumbnail,
 					.wpzoom-blocks_portfolio-block_item-bgvid {
-						transform: scale(150%);
+						transform: scale(110%);
 					}
 	
 					.wpzoom-blocks_portfolio-block_item-details {
@@ -104,9 +121,10 @@
 
 					.wpzoom-blocks_portfolio-block_item-title {
 						a {
-							-webkit-text-stroke: 0.15em rgba(0, 0, 0, 0.5);
 							color: #fff;
-							paint-order: stroke fill;
+                            font-size: 20px;
+                            font-weight: 500;
+
 						}
 					}
 				}

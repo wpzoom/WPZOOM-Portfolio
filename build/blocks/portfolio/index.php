@@ -342,7 +342,7 @@ class WPZOOM_Blocks_Portfolio {
 		$view_all_link = esc_url( ! empty( $attr[ 'viewAllLink' ] ) ? $attr[ 'viewAllLink' ] : site_url( '/portfolio/' ) );
 		$show_view_all = isset( $attr[ 'showViewAll' ] ) ? $attr[ 'showViewAll' ] : true;
 		$view_all = $show_view_all ? '<div class="' . $class . '_view-all wp-block-button">
-			<a href="' . $view_all_link . '" title="' . esc_attr( $view_all_label ) . '" class="wp-block-button__link">' . $view_all_label . '</a>
+			<a href="' . $view_all_link . '" title="' . esc_attr( $view_all_label ) . '" class="wpz-portfolio-button__link">' . $view_all_label . '</a>
 		</div>' : '';
 
 		// Build a string with all the CSS classes
@@ -648,7 +648,7 @@ class WPZOOM_Blocks_Portfolio {
 			// Add in the All link
 			$posts_page = esc_url( str_ireplace( '%category%/', '', get_post_type_archive_link( 'wpzb_portfolio' ) ) );
 			$output .= '<li class="wp-block-button cat-item-all current-cat">
-				<a href="' . $posts_page . '" class="wp-block-button__link">' . __( 'All', 'wpzoom-blocks' ) . '</a>
+				<a href="' . $posts_page . '" class="wpz-portfolio-button__link">' . __( 'All', 'wpzoom-blocks' ) . '</a>
 			</li>';
 
 			// Filter the HTML output by the walk_category_tree() function to add needed CSS classes
@@ -833,7 +833,7 @@ class WPZOOM_Blocks_Portfolio {
 	 * @since  1.0.0
 	 */
 	public function category_list_link_attributes( $atts, $category, $depth, $args, $id ) {
-		$atts[ 'class' ] = 'wp-block-button__link';
+		$atts[ 'class' ] = 'wpz-portfolio-button__link';
 
 		return $atts;
 	}
