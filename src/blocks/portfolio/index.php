@@ -45,7 +45,7 @@ class WPZOOM_Blocks_Portfolio {
 		],
 		'columnsAmount' => [
 			'type'    => 'number',
-			'default' => 4
+			'default' => 3
 		],
 		'excerptLength' => [
 			'type'    => 'number',
@@ -109,7 +109,7 @@ class WPZOOM_Blocks_Portfolio {
 		],
 		'source' => [
 			'type'    => 'string',
-			'default' => 'wpzb_portfolio'
+			'default' => 'portfolio_item'
 		],
 		'thumbnailSize' => [
 			'type'    => 'string',
@@ -143,14 +143,14 @@ class WPZOOM_Blocks_Portfolio {
 	 */
 	public function __construct() {
 		// Add the portfolio post type
-		register_post_type( 'wpzb_portfolio', array(
+		register_post_type( 'portfolio_item', array(
 			'can_export'          => true,
 			'description'         => __( 'A portfolio type for featuring items in your portfolio.', 'wpzoom-blocks' ),
 			'exclude_from_search' => false,
 			'has_archive'         => true,
 			'hierarchical'        => false,
 			'labels'              => array(
-				'add_new'                  => _x( 'Add New', 'wpzb_portfolio', 'wpzoom-blocks' ),
+				'add_new'                  => _x( 'Add New', 'portfolio_item', 'wpzoom-blocks' ),
 				'add_new_item'             => __( 'Add New Portfolio Item', 'wpzoom-blocks' ),
 				'all_items'                => __( 'All Portfolio Items', 'wpzoom-blocks' ),
 				'archives'                 => _x( 'Portfolio Archives', 'The post type archive label used in nav menus. Default "Post Archives". Added in 4.4', 'wpzoom-blocks' ),
@@ -191,7 +191,7 @@ class WPZOOM_Blocks_Portfolio {
 		) );
 
 		// Add the portfolio categories taxonomy
-		register_taxonomy( 'wpzb_portfolio_category', 'wpzb_portfolio', array(
+		register_taxonomy( 'wpzb_portfolio_category', 'portfolio_item', array(
 			'description'       => __( 'Categories for portfolio items.', 'wpzoom-blocks' ),
 			'hierarchical'      => true,
 			'labels'            => array(
@@ -224,21 +224,21 @@ class WPZOOM_Blocks_Portfolio {
 		) );
 
 		// Register the post meta fields for storing a video for a portfolio item
-		register_post_meta( 'wpzb_portfolio', '_wpzb_portfolio_video_type', array(
+		register_post_meta( 'portfolio_item', '_wpzb_portfolio_video_type', array(
 			'show_in_rest'      => true,
 			'type'              => 'string',
 			'single'            => true,
 			'sanitize_callback' => 'sanitize_text_field',
 			'auth_callback'     => function () { return current_user_can( 'edit_posts' ); }
 		) );
-		register_post_meta( 'wpzb_portfolio', '_wpzb_portfolio_video_id', array(
+		register_post_meta( 'portfolio_item', '_wpzb_portfolio_video_id', array(
 			'show_in_rest'      => true,
 			'type'              => 'integer',
 			'single'            => true,
 			'sanitize_callback' => 'sanitize_text_field',
 			'auth_callback'     => function () { return current_user_can( 'edit_posts' ); }
 		) );
-		register_post_meta( 'wpzb_portfolio', '_wpzb_portfolio_video_url', array(
+		register_post_meta( 'portfolio_item', '_wpzb_portfolio_video_url', array(
 			'show_in_rest'      => true,
 			'type'              => 'string',
 			'single'            => true,
@@ -285,9 +285,9 @@ class WPZOOM_Blocks_Portfolio {
 		$class = 'wpzoom-blocks_portfolio-block';
 
 		// Determine where the portfolio items should come from
-		$source = isset( $attr[ 'source' ] ) && ! empty( $attr[ 'source' ] ) ? $attr[ 'source' ] : 'wpzb_portfolio';
+		$source = isset( $attr[ 'source' ] ) && ! empty( $attr[ 'source' ] ) ? $attr[ 'source' ] : 'portfolio_item';
 		if ( 'portfolio_item' == $source && ! post_type_exists( 'portfolio_item' ) ) {
-			$source = 'wpzb_portfolio';
+			$source = 'portfolio_item';
 		}
 
 		// Might need to align the block
@@ -342,7 +342,7 @@ class WPZOOM_Blocks_Portfolio {
 		$view_all_link = esc_url( ! empty( $attr[ 'viewAllLink' ] ) ? $attr[ 'viewAllLink' ] : site_url( '/portfolio/' ) );
 		$show_view_all = isset( $attr[ 'showViewAll' ] ) ? $attr[ 'showViewAll' ] : true;
 		$view_all = $show_view_all ? '<div class="' . $class . '_view-all wp-block-button">
-			<a href="' . $view_all_link . '" title="' . esc_attr( $view_all_label ) . '" class="wp-block-button__link">' . $view_all_label . '</a>
+			<a href="' . $view_all_link . '" title="' . esc_attr( $view_all_label ) . '" class="wpz-portfolio-button__link">' . $view_all_label . '</a>
 		</div>' : '';
 
 		// Build a string with all the CSS classes
@@ -371,7 +371,7 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Show more button
 		$show_more = $this->result_pages > 1 ? '<div class="' . $class . '_show-more wp-block-button">
-			<a href="#" title="' . esc_attr( __( 'Show more portfolio items', 'wpzoom-blocks' ) ) . '" class="wp-block-button__link">' . __( 'Show More', 'wpzoom-blocks' ) . '</a>
+			<a href="#" title="' . esc_attr( __( 'Show more portfolio items', 'wpzoom-blocks' ) ) . '" class="wpz-portfolio-button__link">' . __( 'Load More', 'wpzoom-blocks' ) . '</a>
 		</div>' : '';
 
 		// Build the wrapper for the Show More and View All buttons
@@ -398,7 +398,7 @@ class WPZOOM_Blocks_Portfolio {
 
 	/**
 	 * Returns the HTML string for all the portfolio items found matching the given query parameters.
-	 * 
+	 *
 	 * @access public
 	 * @param  array  $arguments The arguments used to modify the output.
 	 * @return string
@@ -422,7 +422,7 @@ class WPZOOM_Blocks_Portfolio {
 			'show_excerpt'          => true,
 			'show_read_more'        => true,
 			'show_thumbnail'        => true,
-			'source'                => 'wpzb_portfolio',
+			'source'                => 'portfolio_item',
 			'thumbnail_size'        => 'portfolio_item-thumbnail'
 		);
 
@@ -438,7 +438,7 @@ class WPZOOM_Blocks_Portfolio {
 		// The source of the posts
 		$source = $args[ 'source' ];
 		if ( 'portfolio' == $source && ! post_type_exists( 'portfolio_item' ) ) {
-			$source = 'wpzb_portfolio';
+			$source = 'portfolio_item';
 		}
 
 		// Build a parameters array to use for the posts query
@@ -455,7 +455,7 @@ class WPZOOM_Blocks_Portfolio {
 			// Add them to the parameters for the query
 			$params[ 'tax_query' ] = array(
 				array(
-					'taxonomy' => 'wpzb_portfolio' == $source ? 'wpzb_portfolio_category' : 'portfolio',
+					'taxonomy' => 'portfolio_item' == $source ? 'wpzb_portfolio_category' : 'portfolio',
 					'field'    => 'term_id',
 					'terms'    => $args[ 'categories' ]
 				)
@@ -477,8 +477,8 @@ class WPZOOM_Blocks_Portfolio {
 				$permalink = esc_url( get_permalink( $post ) );
 				$title = get_the_title( $post );
 				$title_attr = the_title_attribute( array( 'post' => $post, 'echo' => false ) );
-				$the_categories = get_the_terms( $id, ( 'wpzb_portfolio' == $source ? 'wpzb_portfolio_category' : 'portfolio' ) );
-				$no_category = get_term_by( 'slug', 'uncategorized', ( 'wpzb_portfolio' == $source ? 'wpzb_portfolio_category' : 'portfolio' ) );
+				$the_categories = get_the_terms( $id, ( 'portfolio_item' == $source ? 'wpzb_portfolio_category' : 'portfolio' ) );
+				$no_category = get_term_by( 'slug', 'uncategorized', ( 'portfolio_item' == $source ? 'wpzb_portfolio_category' : 'portfolio' ) );
 				$category = ! is_wp_error( $the_categories ) && is_array( $the_categories ) && count( $the_categories ) > 0 ? $the_categories[0]->term_id : $no_category->term_id;
 				$thumbnail = get_the_post_thumbnail( $post, $args[ 'thumbnail_size' ] );
 				$video_type = 'service' == get_post_meta( $id, '_wpzb_portfolio_video_type', true ) ? 'service' : 'library';
@@ -569,7 +569,7 @@ class WPZOOM_Blocks_Portfolio {
 
 						// Add the button to the output
 						$output .= "<div class='${class}_item-readmore-button wp-block-button'>
-							<a href='$permalink' title='$readmore_title' class='wp-block-button__link'>$readmore</a>
+							<a href='$permalink' title='$readmore_title' class='wpz-portfolio-button__link'>$readmore</a>
 						</div>";
 					}
 				}
@@ -646,9 +646,9 @@ class WPZOOM_Blocks_Portfolio {
 		// As long as some categories were returned...
 		if ( ! empty( $categories ) ) {
 			// Add in the All link
-			$posts_page = esc_url( str_ireplace( '%category%/', '', get_post_type_archive_link( 'wpzb_portfolio' ) ) );
+			$posts_page = esc_url( str_ireplace( '%category%/', '', get_post_type_archive_link( 'portfolio_item' ) ) );
 			$output .= '<li class="wp-block-button cat-item-all current-cat">
-				<a href="' . $posts_page . '" class="wp-block-button__link">' . __( 'All', 'wpzoom-blocks' ) . '</a>
+				<a href="' . $posts_page . '" class="wpz-portfolio-button__link">' . __( 'All', 'wpzoom-blocks' ) . '</a>
 			</li>';
 
 			// Filter the HTML output by the walk_category_tree() function to add needed CSS classes
@@ -669,7 +669,7 @@ class WPZOOM_Blocks_Portfolio {
 
 	/**
 	 * Returns an HTML embed code for a given video URL.
-	 * 
+	 *
 	 * @access public
 	 * @param  string $url     The URL to a video to get the embed code for.
 	 * @param  bool   $library Whether the URL points to a video in the local media library.
@@ -822,7 +822,7 @@ class WPZOOM_Blocks_Portfolio {
 
 	/**
 	 * Filters the HTML attributes applied to a category list item's anchor element.
-	 * 
+	 *
 	 * @access public
 	 * @param  array   $atts     The HTML attributes applied to the list item's <a> element, empty strings are ignored.
 	 * @param  WP_Term $category Term data object.
@@ -833,14 +833,14 @@ class WPZOOM_Blocks_Portfolio {
 	 * @since  1.0.0
 	 */
 	public function category_list_link_attributes( $atts, $category, $depth, $args, $id ) {
-		$atts[ 'class' ] = 'wp-block-button__link';
+		$atts[ 'class' ] = 'wpz-portfolio-button__link';
 
 		return $atts;
 	}
 
 	/**
 	 * Filters the list of CSS classes to include with each category in the list.
-	 * 
+	 *
 	 * @access public
 	 * @param  array   $css_classes An array of CSS classes to be applied to each list item.
 	 * @param  WP_Term $category    Term data object.
@@ -868,7 +868,7 @@ class WPZOOM_Blocks_Portfolio {
 	 */
 	public function post_type_link_replace( $post_link, $post ) {
 		// If the post type is our portfolio type and the link includes the replacement string...
-		if ( 'wpzb_portfolio' == get_post_type( $post ) && false !== stripos( $post_link, '%category%' ) ) {
+		if ( 'portfolio_item' == get_post_type( $post ) && false !== stripos( $post_link, '%category%' ) ) {
 			// Get the categories for the given post
 			$cats = get_the_terms( $post, 'wpzb_portfolio_category' );
 
@@ -897,7 +897,7 @@ class WPZOOM_Blocks_Portfolio {
 	 */
 	public function set_default_object_terms( $post_id, $post, $update ) {
 		// As long as the post status is Publish and the post type is our portfolio type...
-		if ( 'publish' == $post->post_status && 'wpzb_portfolio' == $post->post_type ) {
+		if ( 'publish' == $post->post_status && 'portfolio_item' == $post->post_type ) {
 			// Get the categories for the given post
 			$cats = get_the_terms( $post, 'wpzb_portfolio_category' );
 

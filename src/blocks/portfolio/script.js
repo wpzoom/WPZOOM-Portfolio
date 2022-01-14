@@ -157,7 +157,7 @@ domReady( () => {
 
 	delegate(
 		'click',
-		'.wpzoom-blocks_portfolio-block.use-lightbox .wpzoom-blocks_portfolio-block_item-title a',
+		'.wpzoom-blocks_portfolio-block.use-lightbox .wpzoom-blocks_portfolio-block_lightbox_icon',
 		portfolioItemClick
 	);
 

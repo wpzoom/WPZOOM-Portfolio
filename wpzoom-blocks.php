@@ -307,16 +307,6 @@ class WPZOOM_Blocks {
 			)
 		);
 
-		// Register the 'video-thumbnail' REST API route
-		register_rest_route(
-			'wpzoom-blocks/v1',
-			'/video-thumbnail',
-			array(
-				'methods' => 'GET, POST',
-				'callback' => array( $this, 'get_rest_video_thumbnail' ),
-				'permission_callback' => function() { return current_user_can( 'edit_posts' ); }
-			)
-		);
 
 		// Register the 'featured_media_urls' REST API field on all post types
 		register_rest_field(
@@ -355,59 +345,7 @@ class WPZOOM_Blocks {
 		return rest_ensure_response( $sizes );
 	}
 
-	/**
-	 * Returns a REST response containing a URL to a thumbnail representing the video URL passed in.
-	 *
-	 * @access public
-	 * @param  WP_REST_Request $request Object containing the details of the rest request.
-	 * @return array
-	 * @since  1.0.0
-	 */
-	public function get_rest_video_thumbnail( $request ) {
-		// The result that will be returned
-		$result = false;
 
-		// If the $request argument is of the proper type...
-		if ( $request instanceof WP_REST_Request ) {
-			// Get the parameters
-			$params = $request->get_params();
-
-			// If there is a url parameter and it looks like a valid url...
-			if ( isset( $params[ 'url' ] ) && false !== filter_var( $params[ 'url' ], FILTER_VALIDATE_URL ) ) {
-				// Attempt to fetch the video data with oEmbed
-				$video_data = _wp_oembed_get_object()->get_data( $params[ 'url' ] );
-
-				// As long as we got some video data...
-				if ( false !== $video_data ) {
-					$thumbnail_url = isset( $video_data->thumbnail_url ) ? $video_data->thumbnail_url : false;
-					$thumbnail_height = isset( $video_data->thumbnail_height ) ? $video_data->thumbnail_height : false;
-					$thumbnail_width = isset( $video_data->thumbnail_width ) ? $video_data->thumbnail_width : false;
-					
-					// If there is a thumbnail url...
-					if ( false !== $thumbnail_url )
-					{
-						// Add it to the result
-						$result = array( 'url' => $thumbnail_url );
-
-						// If there is a thumbnail height...
-						if ( false !== $thumbnail_height ) {
-							// Add it to the result
-							$result[ 'height' ] = $thumbnail_height;
-						}
-
-						// If there is a thumbnail width...
-						if ( false !== $thumbnail_width ) {
-							// Add it to the result
-							$result[ 'width' ] = $thumbnail_width;
-						}
-					}
-				}
-			}
-		}
-
-		// Return false since there was an issue
-		return rest_ensure_response( $result );
-	}
 
 	/**
 	 * Returns an array of all the available image size URLs for the featured media from the given post object.

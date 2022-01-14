@@ -1,9 +1,39 @@
+$primary_color: #0bb4aa;
+
 .wpzoom-blocks_portfolio-block {
 	font-size: 1rem;
+    margin: 50px 0;
 
 	* {
 		font-size: inherit;
 	}
+
+
+    .wpz-portfolio-button__link {
+        color: #fff !important;
+        background-color: #111;
+        border-radius: 3px;
+        box-shadow: none;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 16px;
+        padding: 10px 30px;
+        text-align: center;
+        text-decoration: none;
+        overflow-wrap: break-word;
+        box-sizing: border-box;
+
+        &:hover {
+            background: $primary_color;
+        }
+
+        &:focus,
+        &:active {
+            background: $primary_color;
+            color: #000;
+        }
+
+    }
 
 	.wpzoom-blocks_portfolio-block_filter {
 		padding: 0;
@@ -25,25 +55,25 @@
 					pointer-events: none;
 
 					a {
-						color: #0bb4aa;
+						color: $primary_color;
 					}
 				}
 
+                a {
+                    text-decoration: none;
 
-                a:hover {
-                    color: #0bb4aa;
-                }
-
-                .wpz-portfolio-button__link {
                     display: inline-block;
                     width: auto;
                     color: #333;
                     margin: 0 20px;
                     font-size: 18px;
-                    font-weight: 500;
+                    font-weight: normal;
                     border-radius: 0;
                 }
 
+                a:hover {
+                    color: $primary_color;
+                }
 
 			}
 		}
@@ -69,6 +99,10 @@
 
 			.wpzoom-blocks_portfolio-block_item-thumbnail {
 				margin: 0;
+
+                img {
+                    width: 100%;
+                }
 			}
 
 			.wpzoom-blocks_portfolio-block_item-details {
@@ -79,6 +113,37 @@
 				bottom: 0;
 				background: rgba(0, 0, 0, 0.1);
 				transition: all 0.2s;
+
+
+                .wpzoom-blocks_portfolio-block_lightbox_icon {
+                    position: absolute;
+                    top: 5%;
+                    right: 2%;
+                    content: '\2715';
+                    cursor: pointer;
+                    font-size: 24px;
+                    line-height: 1;
+                    color: #eee;
+                    paint-order: stroke fill;
+
+                    svg {
+                        color: #fff;
+                        path: #fff;
+                        fill: #fff;
+                        display: block;
+                        width: 24px;
+                        height: 24px;
+                        border-radius: 3px;
+                        opacity: .3;
+                        transition: .2s ease all;
+
+                        &:hover {
+                            opacity: 1;
+                        }
+                    }
+
+                }
+
 
 				.wpzoom-blocks_portfolio-block_item-title {
 					display: block;
@@ -98,6 +163,7 @@
 						width: 100%;
 						padding: 20px;
 						margin: 0;
+
 					}
 				}
 			}
@@ -116,7 +182,6 @@
 
 				.wpzoom-blocks_portfolio-block_item-details {
 					background: rgba(0, 0, 0, 0.7);
-					backdrop-filter: blur(5px);
 					opacity: 0;
 
 					.wpzoom-blocks_portfolio-block_item-title {
@@ -193,10 +258,9 @@
 						position: absolute;
 						top: 5%;
 						right: 2%;
-						content: '\274c';
+						content: '\2715';
 						cursor: pointer;
-						font-size: 2em; 
-						-webkit-text-stroke: 0.15em rgba(0, 0, 0, 0.5);
+						font-size: 32px;
 						line-height: 1;
 						color: #eee;
 						paint-order: stroke fill;
@@ -223,15 +287,15 @@
 			.wpzoom-blocks_portfolio-block_item-thumbnail,
 			.wpzoom-blocks_portfolio-block_item-bgvid {
 				position: relative;
-				padding-bottom: 56.25%; 
-				height: 0; 
+				// padding-bottom: 56.25%;
+				// height: 0;
 				overflow: hidden;
 
 				&.wpzoom-blocks_portfolio-block_item-bgvid {
 					pointer-events: none;
 				}
 
-				iframe, video, img {
+				iframe, video {
 					position: absolute;
 					top: 0;
 					left: 0;
@@ -382,4 +446,55 @@
 		opacity: 0;
 		transform: scale(0%);
 	}
+}
+
+
+
+@media screen and (max-width: 768px) {
+
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-1 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-2 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-3 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-4 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-5 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-6 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-7 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-8 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-9 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-10 .wpzoom-blocks_portfolio-block_items-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+
+    .wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul {
+        overflow-x: auto;
+        display: flex;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+
+        li {
+            display: inline-block;
+            float: left;
+            flex-shrink: 0;
+        }
+    }
+}
+
+
+
+@media screen and (max-width: 460px) {
+
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-1 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-2 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-3 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-4 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-5 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-6 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-7 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-8 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-9 .wpzoom-blocks_portfolio-block_items-list,
+    .wpzoom-blocks_portfolio-block.layout-grid.columns-10 .wpzoom-blocks_portfolio-block_items-list {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
 }

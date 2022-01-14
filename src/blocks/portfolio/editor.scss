@@ -8,6 +8,10 @@
 			margin-bottom: 0;
 		}
 	}
+
+    select[multiple] {
+        height: 100px !important;
+    }
 }
 
 .wpzb-button-select {
@@ -44,10 +48,11 @@
 				}
 
 				&:checked {
-					z-index: 1;
+					// z-index: 1;
 				}
 
-				&:checked + label, &:checked + label::before {
+				&:checked + label,
+                &:checked + label::before {
 					color: #fff;
 				}
 			}

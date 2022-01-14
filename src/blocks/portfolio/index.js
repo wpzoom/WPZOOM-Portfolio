@@ -8,8 +8,6 @@ import { __ } from '@wordpress/i18n';
 import { groupBy } from 'lodash';
 import ServerSideRender from '@wordpress/server-side-render';
 
-import './video.js';
-
 function buildTermsTree( flatTerms ) {
 	const flatTermsWithParentAndChildren = flatTerms.map( ( term ) => {
 		return {
@@ -59,7 +57,7 @@ function dynamicSort( property ) {
 registerBlockType( 'wpzoom-blocks/portfolio', {
 	title: __( 'Portfolio', 'wpzoom-blocks' ),
 	description: __( 'Display a customizable list of portfolio items.', 'wpzoom-blocks' ),
-	icon: 'portfolio',
+	icon: 'images-alt2',
 	category: 'wpzoom-blocks',
 	supports: {
 		align: true,
@@ -70,9 +68,9 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 		const { getEntityRecords } = select( 'core' );
 
 		var cats = [];
-		var cats1 = getEntityRecords( 'taxonomy', 'wpzb_portfolio_category', { per_page: -1, hide_empty: false } );
+		var cats1 = getEntityRecords( 'taxonomy', 'portfolio', { per_page: -1, hide_empty: false } );
 		if ( Array.isArray( cats1 ) ) cats.push( ...cats1 );
-		var cats2 = getEntityRecords( 'taxonomy', 'portfolio', { per_page: -1, hide_empty: false } );
+		var cats2 = getEntityRecords( 'taxonomy', 'category', { per_page: -1, hide_empty: false } );
 		if ( Array.isArray( cats2 ) ) cats.push( ...cats2 );
 		cats.sort( dynamicSort( 'name' ) );
 		cats.unshift( { id: -1, name: __( 'All', 'wpzoom-blocks' ) } );
@@ -117,15 +115,15 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 
 		render() {
 			const { attributes, setAttributes, categoriesList } = this.props;
-			const { amount, alwaysPlayBackgroundVideo, categories, columnsAmount, excerptLength, layout, lazyLoad, lightbox,
-					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showBackgroundVideo, showCategoryFilter, showDate,
+			const { amount, categories, columnsAmount, excerptLength, layout, lazyLoad, lightbox,
+					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink } = attributes;
 			const { imageSizes } = this.state;
 
 			if ( ! categoriesList || ! imageSizes ) {
 				return (
 					<>
-						<Placeholder icon="list-view" label={ __( 'WPZOOM Blocks - Portfolio', 'wpzoom-blocks' ) }>
+						<Placeholder icon="list-view" label={ __( 'WPZOOM Portfolio', 'wpzoom-blocks' ) }>
 							<Spinner /> { __( 'Loading...', 'wpzoom-blocks' ) }
 						</Placeholder>
 					</>
@@ -198,12 +196,12 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									value={ source }
 									options={ [
 										{
-											label: __( 'From WPZOOM Blocks', 'wpzoom-blocks' ),
-											value: 'wpzb_portfolio'
+											label: __( 'Portfolio Posts', 'wpzoom-blocks' ),
+											value: 'portfolio_item'
 										},
 										{
-											label: __( 'From WPZOOM Theme', 'wpzoom-blocks' ),
-											value: 'portfolio_item'
+											label: __( 'Blog Posts', 'wpzoom-blocks' ),
+											value: 'post'
 										}
 									] }
 									onChange={ ( value ) => setAttributes( { source: value } ) }
@@ -285,7 +283,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								<HorizontalRule />
 
 								<ToggleControl
-									label={ __( 'Show Category Filter Buttons', 'wpzoom-blocks' ) }
+									label={ __( 'Show Category Filter at the Top', 'wpzoom-blocks' ) }
 									checked={ showCategoryFilter }
 									onChange={ ( value ) => setAttributes( { showCategoryFilter: value } ) }
 								/>
@@ -334,21 +332,6 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 
 								<HorizontalRule />
 
-								<ToggleControl
-									label={ __( 'Show Background Video', 'wpzoom-blocks' ) }
-									checked={ showBackgroundVideo }
-									onChange={ ( value ) => setAttributes( { showBackgroundVideo: value } ) }
-								/>
-
-								{ showBackgroundVideo &&
-									<ToggleControl
-										label={ __( 'Always Play Background Video', 'wpzoom-blocks' ) }
-										checked={ alwaysPlayBackgroundVideo }
-										onChange={ ( value ) => setAttributes( { alwaysPlayBackgroundVideo: value } ) }
-									/>
-								}
-
-								<HorizontalRule />
 
 								{ fields }
 							</PanelBody>
