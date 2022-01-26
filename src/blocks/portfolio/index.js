@@ -68,14 +68,22 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 		const { getEntityRecords } = select( 'core' );
 
 		var cats = [];
+		var taxonomies = [];
+		
 		var cats1 = getEntityRecords( 'taxonomy', 'portfolio', { per_page: -1, hide_empty: false } );
-		if ( Array.isArray( cats1 ) ) cats.push( ...cats1 );
+		if ( Array.isArray( cats1 ) ) taxonomies.push( ...cats1 );
+		
 		var cats2 = getEntityRecords( 'taxonomy', 'category', { per_page: -1, hide_empty: false } );
 		if ( Array.isArray( cats2 ) ) cats.push( ...cats2 );
+		
 		cats.sort( dynamicSort( 'name' ) );
 		cats.unshift( { id: -1, name: __( 'All', 'wpzoom-blocks' ) } );
 
+		taxonomies.sort( dynamicSort( 'name' ) );
+		taxonomies.unshift( { id: -1, name: __( 'All', 'wpzoom-blocks' ) } );
+
 		return {
+			taxonomyList: taxonomies,
 			categoriesList: cats
 		};
 	} )( class extends Component {
@@ -114,13 +122,13 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 		}
 
 		render() {
-			const { attributes, setAttributes, categoriesList } = this.props;
+			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
 			const { amount, categories, columnsAmount, excerptLength, layout, lazyLoad, lightbox,
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink } = attributes;
 			const { imageSizes } = this.state;
 
-			if ( ! categoriesList || ! imageSizes ) {
+			if ( ! taxonomyList || ! imageSizes ) {
 				return (
 					<>
 						<Placeholder icon="list-view" label={ __( 'WPZOOM Portfolio', 'wpzoom-blocks' ) }>
@@ -130,7 +138,8 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 				);
 			}
 
-			const termsTree = buildTermsTree( categoriesList );
+			const termsTree = buildTermsTree( taxonomyList );
+			const catTree   = buildTermsTree( categoriesList );
 
 			let fields = <>
 				<ToggleControl
@@ -204,7 +213,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 											value: 'post'
 										}
 									] }
-									onChange={ ( value ) => setAttributes( { source: value } ) }
+									onChange={ ( value ) => setAttributes( { source: value, categories: [] } ) }
 								/>
 
 								<SelectControl
@@ -238,15 +247,26 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										}
 									} }
 								/>
-
+								{ 'post' ===  source && (
 								<TreeSelect
-									label={ __( 'Category', 'wpzoom-blocks' ) }
+									label={ __( 'Categories', 'wpzoom-blocks' ) }
+									help={ __( 'Multiple selections allowed.', 'wpzoom-blocks' ) }
+									tree={ catTree }
+									selectedId={ typeof categories !== 'undefined' && categories.length > 0 ? categories : [-1] }
+									multiple
+									onChange={ ( value ) => setAttributes( { categories: '' !== value ? value : undefined } ) }
+								/>
+								)}
+								{ 'post' !== source && (
+								<TreeSelect
+									label={ __( 'Categories', 'wpzoom-blocks' ) }
 									help={ __( 'Multiple selections allowed.', 'wpzoom-blocks' ) }
 									tree={ termsTree }
 									selectedId={ typeof categories !== 'undefined' && categories.length > 0 ? categories : [-1] }
 									multiple
 									onChange={ ( value ) => setAttributes( { categories: '' !== value ? value : undefined } ) }
 								/>
+								) }
 
 								<RangeControl
 									label={ __( 'Number of Items', 'wpzoom-blocks' ) }
