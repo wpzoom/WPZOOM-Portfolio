@@ -90,6 +90,7 @@ $primary_color: #0bb4aa;
 	&.layout-grid .wpzoom-blocks_portfolio-block_items-list {
 		display: grid;
 		/*gap: 2em;*/
+        margin: 0;
 
 		.wpzoom-blocks_portfolio-block_item {
 			.wpzoom-blocks_portfolio-block_item-thumbnail,
@@ -102,6 +103,10 @@ $primary_color: #0bb4aa;
 
                 img {
                     width: 100%;
+                    height: auto;
+                    vertical-align: top;
+                    margin: 0;
+                    padding: 0;
                 }
 			}
 

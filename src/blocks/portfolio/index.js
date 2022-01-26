@@ -273,7 +273,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								{ layout == 'grid' &&
 									<RangeControl
 										label={ __( 'Amount of Columns', 'wpzoom-blocks' ) }
-										max={ 10 }
+										max={ 6 }
 										min={ 1 }
 										onChange={ ( value ) => setAttributes( { columnsAmount: value } ) }
 										value={ columnsAmount }
