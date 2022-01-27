@@ -371,7 +371,7 @@ class WPZOOM_Blocks_Portfolio {
 		$categories = isset( $attr[ 'categories' ] ) && is_array( $attr[ 'categories' ] ) ? array_filter( $attr[ 'categories' ] ) : array();
 		$categories_without_all = ! empty( $categories ) ? array_filter( $categories, function( $v ) { return '-1' != $v; } ) : array();
 		$enough_cats = count( $categories_without_all ) > 1 || empty( $categories ) || in_array( '-1', $categories );
-		$cats = $this->list_categories( $categories_without_all );
+		$cats = $this->list_categories( $categories_without_all, $source );
 		$cats_filter = $attr[ 'showCategoryFilter' ] && $enough_cats ? '<div class="' . $class . '_filter"><ul>' . $cats . '</ul></div>' : '';
 
 		// Lightbox
@@ -646,7 +646,7 @@ class WPZOOM_Blocks_Portfolio {
 	 * @since  1.0.0
 	 * @see    get_categories()
 	 */
-	public function list_categories( $only = array() ) {
+	public function list_categories( $only = array(), $post_type = 'post' ) {
 		// Setup the basic query arguments
 		$args = array(
 			'child_of'            => 0,
@@ -664,9 +664,8 @@ class WPZOOM_Blocks_Portfolio {
 			'orderby'             => 'name',
 			'separator'           => '',
 			'show_count'          => 0,
-			'show_option_all'     => __( 'All', 'wpzoom-blocks' ),
+			'show_option_all'     => esc_html__( 'All', 'wpzoom-blocks' ),
 			'style'               => 'list',
-			'taxonomy'            => array( 'portfolio' ),
 			'use_desc_for_title'  => 1,
 		);
 
@@ -677,7 +676,7 @@ class WPZOOM_Blocks_Portfolio {
 		}
 
 		// If a portfolio taxonomy exists...
-		if ( taxonomy_exists( 'portfolio' ) ) {
+		if ( taxonomy_exists( 'portfolio' ) && 'portfolio_item' == $post_type  ) {
 			// Add it to the query arguments
 			$args[ 'taxonomy' ][] = 'portfolio';
 		}
