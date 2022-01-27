@@ -47,7 +47,7 @@ class WPZOOM_Blocks_Portfolio {
 		],
 		'columnsAmount' => [
 			'type'    => 'number',
-			'default' => 4
+			'default' => 3
 		],
 		'excerptLength' => [
 			'type'    => 'number',
@@ -107,7 +107,7 @@ class WPZOOM_Blocks_Portfolio {
 		],
 		'showViewAll' => [
 			'type'    => 'boolean',
-			'default' => true
+			'default' => false
 		],
 		'source' => [
 			'type'    => 'string',

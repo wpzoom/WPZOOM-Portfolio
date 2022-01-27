@@ -105,7 +105,7 @@ class WPZOOM_Blocks_Portfolio {
 		],
 		'showViewAll' => [
 			'type'    => 'boolean',
-			'default' => true
+			'default' => false
 		],
 		'source' => [
 			'type'    => 'string',
