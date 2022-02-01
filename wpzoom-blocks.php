@@ -277,7 +277,7 @@ class WPZOOM_Blocks {
 			array(
 				array(
 					'slug' => 'wpzoom-blocks',
-					'title' => __( 'WPZOOM - Blocks', 'wpzoom-blocks' ),
+					'title' => esc_html__( 'WPZOOM - Blocks', 'wpzoom-blocks' ),
 					'icon' => 'wordpress'
 				)
 			)
@@ -316,7 +316,7 @@ class WPZOOM_Blocks {
 				'get_callback' => array( $this, 'get_featured_media_urls' ),
 				'update_callback' => null,
 				'schema' => array(
-					'description' => __( 'Different sized featured images', 'wpzoom-blocks' ),
+					'description' => esc_html__( 'Different sized featured images', 'wpzoom-blocks' ),
 					'type' => 'array'
 				)
 			)
