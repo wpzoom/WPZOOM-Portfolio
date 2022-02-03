@@ -1,135 +1,116 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: WPZOOM Blocks\n"
+"Project-Id-Version: Portfolio Posts\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-01 09:21+0000\n"
+"POT-Creation-Date: 2022-02-03 10:44+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
+"Language: \n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.5.4; wp-5.8.1\n"
-"X-Domain: social-icons-widget-by-wpzoom\n"
-"\n"
-"Language: "
+"X-Loco-Version: 2.5.7; wp-5.9.1-alpha-52643\n"
+"X-Domain: portfolio-posts"
 
 #: build/blocks/portfolio/index.php:205 src/blocks/portfolio/index.php:197
-#: build/build/src/blocks/portfolio/index.php:197
 msgid "&larr; Back to Categories"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:156 src/blocks/portfolio/index.php:148
-#: build/build/src/blocks/portfolio/index.php:148
 msgid "A portfolio type for featuring items in your portfolio."
 msgstr ""
 
 #: build/blocks/portfolio/index.php:202 src/blocks/portfolio/index.php:194
-#: build/build/src/blocks/portfolio/index.php:194
 msgid "Add New Category"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:178 src/blocks/portfolio/index.php:170
-#: build/build/src/blocks/portfolio/index.php:170
 msgctxt "Add New on Toolbar"
 msgid "Portfolio Item"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:162 src/blocks/portfolio/index.php:154
-#: build/build/src/blocks/portfolio/index.php:154
 msgid "Add New Portfolio Item"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:203 src/blocks/portfolio/index.php:195
-#: build/build/src/blocks/portfolio/index.php:195
 msgid "Add or remove categories"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:176 src/blocks/portfolio/index.php:168
-#: build/build/src/blocks/portfolio/index.php:168
 msgctxt "Admin Menu text"
 msgid "Portfolio"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:667 build/blocks/portfolio/index.php:695
 #: src/blocks/portfolio/index.php:618 src/blocks/portfolio/index.php:647
-#: build/build/src/blocks/portfolio/index.php:618
-#: build/build/src/blocks/portfolio/index.php:647
 msgid "All"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:204 src/blocks/portfolio/index.php:196
-#: build/build/src/blocks/portfolio/index.php:196
 msgid "All Categories"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:163 src/blocks/portfolio/index.php:155
-#: build/build/src/blocks/portfolio/index.php:155
 msgid "All Portfolio Items"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:210 src/blocks/portfolio/index.php:202
-#: build/build/src/blocks/portfolio/index.php:202
 msgctxt "categories"
 msgid "Most Used"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:199 src/blocks/portfolio/index.php:191
-#: build/build/src/blocks/portfolio/index.php:191
 msgid "Categories for portfolio items."
 msgstr ""
 
 #: build/blocks/portfolio/index.php:208 src/blocks/portfolio/index.php:200
-#: build/build/src/blocks/portfolio/index.php:200
 msgid "Categories list"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:209 src/blocks/portfolio/index.php:201
-#: build/build/src/blocks/portfolio/index.php:201
 msgid "Categories list navigation"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:206 src/blocks/portfolio/index.php:198
-#: build/build/src/blocks/portfolio/index.php:198
 msgid "Choose from the most used categories"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:613 src/blocks/portfolio/index.php:564
-#: build/build/src/blocks/portfolio/index.php:564
 msgid "Continue reading this post..."
 msgstr ""
 
-#. Description of the plugin
-msgid "Custom Gutenberg blocks designed by WPZOOM."
-msgstr ""
-
-#: wpzoom-blocks.php:319
+#: portfolio-posts.php:321
 msgid "Different sized featured images"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:207 src/blocks/portfolio/index.php:199
-#: build/build/src/blocks/portfolio/index.php:199
 msgid "Edit Category"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:166 src/blocks/portfolio/index.php:158
-#: build/build/src/blocks/portfolio/index.php:158
 msgid "Edit Portfolio Item"
 msgstr ""
 
 #. Author URI of the plugin
-msgid "https://wpzoom.com"
+msgid "https://www.wpzoom.com"
 msgstr ""
 
 #. URI of the plugin
-msgid "https://wpzoom.com/plugins/gutenberg-blocks/"
+msgid "https://www.wpzoom.com/plugins/portfolio-posts/"
+msgstr ""
+
+#. Description of the plugin
+msgid ""
+"Just a simple plugin to create Portfolio posts and display them in a "
+"beautiful grid via Gutenberg. Includes isotope filtering effect."
 msgstr ""
 
 #: src/blocks/portfolio/index.php:370
-#: build/build/src/blocks/portfolio/index.php:370
 msgid "Load More"
 msgstr ""
 
@@ -138,42 +119,34 @@ msgid "Load More..."
 msgstr ""
 
 #: build/blocks/portfolio/index.php:212 src/blocks/portfolio/index.php:204
-#: build/build/src/blocks/portfolio/index.php:204
 msgid "New Category Name"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:179 src/blocks/portfolio/index.php:171
-#: build/build/src/blocks/portfolio/index.php:171
 msgid "New Portfolio Item"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:213 src/blocks/portfolio/index.php:205
-#: build/build/src/blocks/portfolio/index.php:205
 msgid "No categories"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:214 src/blocks/portfolio/index.php:206
-#: build/build/src/blocks/portfolio/index.php:206
 msgid "No categories found."
 msgstr ""
 
 #: build/blocks/portfolio/index.php:181 src/blocks/portfolio/index.php:173
-#: build/build/src/blocks/portfolio/index.php:173
 msgid "No portfolio items found in Trash."
 msgstr ""
 
 #: build/blocks/portfolio/index.php:180 src/blocks/portfolio/index.php:172
-#: build/build/src/blocks/portfolio/index.php:172
 msgid "No portfolio items found."
 msgstr ""
 
 #: build/blocks/portfolio/index.php:434 src/blocks/portfolio/index.php:388
-#: build/build/src/blocks/portfolio/index.php:388
 msgid "No portfolio items."
 msgstr ""
 
 #: build/blocks/portfolio/index.php:168 src/blocks/portfolio/index.php:160
-#: build/build/src/blocks/portfolio/index.php:160
 msgctxt ""
 "Overrides the \"Insert into post\" phrase (used when inserting media into a "
 "post). Added in 4.4"
@@ -181,7 +154,6 @@ msgid "Insert into portfolio item"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:185 src/blocks/portfolio/index.php:177
-#: build/build/src/blocks/portfolio/index.php:177
 msgctxt ""
 "Overrides the \"Uploaded to this post\" phrase (used when viewing media "
 "attached to a post). Added in 4.4"
@@ -189,81 +161,70 @@ msgid "Uploaded to this portfolio item"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:215 src/blocks/portfolio/index.php:207
-#: build/build/src/blocks/portfolio/index.php:207
 msgid "Parent Category"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:216 src/blocks/portfolio/index.php:208
-#: build/build/src/blocks/portfolio/index.php:208
 msgid "Parent Category:"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:182 src/blocks/portfolio/index.php:174
-#: build/build/src/blocks/portfolio/index.php:174
 msgid "Parent Portfolio Items:"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:217 src/blocks/portfolio/index.php:209
-#: build/build/src/blocks/portfolio/index.php:209
 msgid "Popular Categories"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:165 src/blocks/portfolio/index.php:157
-#: build/build/src/blocks/portfolio/index.php:157
 msgid "Portfolio Item Attributes"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:172 src/blocks/portfolio/index.php:164
-#: build/build/src/blocks/portfolio/index.php:164
 msgid "Portfolio Item published privately."
 msgstr ""
 
 #: build/blocks/portfolio/index.php:171 src/blocks/portfolio/index.php:163
-#: build/build/src/blocks/portfolio/index.php:163
 msgid "Portfolio Item published."
 msgstr ""
 
 #: build/blocks/portfolio/index.php:173 src/blocks/portfolio/index.php:165
-#: build/build/src/blocks/portfolio/index.php:165
 msgid "Portfolio Item reverted to draft."
 msgstr ""
 
 #: build/blocks/portfolio/index.php:174 src/blocks/portfolio/index.php:166
-#: build/build/src/blocks/portfolio/index.php:166
 msgid "Portfolio Item scheduled."
 msgstr ""
 
 #: build/blocks/portfolio/index.php:175 src/blocks/portfolio/index.php:167
-#: build/build/src/blocks/portfolio/index.php:167
 msgid "Portfolio Item updated."
 msgstr ""
 
+#. Name of the plugin
+msgid "Portfolio Posts"
+msgstr ""
+
 #: build/blocks/portfolio/index.php:161 src/blocks/portfolio/index.php:153
-#: build/build/src/blocks/portfolio/index.php:153
 msgctxt "portfolio_item"
 msgid "Add New"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:177 src/blocks/portfolio/index.php:169
-#: build/build/src/blocks/portfolio/index.php:169
 msgctxt "Post type general name"
 msgid "Portfolio"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:184 src/blocks/portfolio/index.php:176
-#: build/build/src/blocks/portfolio/index.php:176
 msgctxt "Post type singular name"
 msgid "Portfolio Item"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:587 src/blocks/portfolio/index.php:538
-#: build/build/src/blocks/portfolio/index.php:538
 #, php-format
 msgid "Posted on %s"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:575 src/blocks/portfolio/index.php:526
-#: build/build/src/blocks/portfolio/index.php:526
 #, php-format
 msgid "Posts by %s"
 msgstr ""
@@ -271,14 +232,10 @@ msgstr ""
 #: build/blocks/portfolio/index.php:403 build/blocks/portfolio/index.php:460
 #: build/blocks/portfolio/index.php:612 src/blocks/portfolio/index.php:357
 #: src/blocks/portfolio/index.php:414 src/blocks/portfolio/index.php:563
-#: build/build/src/blocks/portfolio/index.php:357
-#: build/build/src/blocks/portfolio/index.php:414
-#: build/build/src/blocks/portfolio/index.php:563
 msgid "Read More"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:167 src/blocks/portfolio/index.php:159
-#: build/build/src/blocks/portfolio/index.php:159
 msgctxt ""
 "Screen reader text for the filter links heading on the post type listing "
 "screen. Default \"Filter posts list\". Added in 4.4"
@@ -286,7 +243,6 @@ msgid "Filter portfolio items list"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:169 src/blocks/portfolio/index.php:161
-#: build/build/src/blocks/portfolio/index.php:161
 msgctxt ""
 "Screen reader text for the items list heading on the post type listing "
 "screen. Default \"Posts list\". Added in 4.4"
@@ -294,7 +250,6 @@ msgid "Portfolio Items list"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:170 src/blocks/portfolio/index.php:162
-#: build/build/src/blocks/portfolio/index.php:162
 msgctxt ""
 "Screen reader text for the pagination heading on the post type listing "
 "screen. Default \"Posts list navigation\". Added in 4.4"
@@ -302,39 +257,32 @@ msgid "Portfolio Items list navigation"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:218 src/blocks/portfolio/index.php:210
-#: build/build/src/blocks/portfolio/index.php:210
 msgid "Search Categories"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:183 src/blocks/portfolio/index.php:175
-#: build/build/src/blocks/portfolio/index.php:175
 msgid "Search Portfolio Items"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:219 src/blocks/portfolio/index.php:211
-#: build/build/src/blocks/portfolio/index.php:211
 msgid "Separate categories with commas"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:416 src/blocks/portfolio/index.php:370
-#: build/build/src/blocks/portfolio/index.php:370
 msgid "Show more portfolio items"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:211 src/blocks/portfolio/index.php:203
-#: build/build/src/blocks/portfolio/index.php:203
 msgctxt "taxonomy general name"
 msgid "Categories"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:220 src/blocks/portfolio/index.php:212
-#: build/build/src/blocks/portfolio/index.php:212
 msgctxt "taxonomy singular name"
 msgid "Category"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:164 src/blocks/portfolio/index.php:156
-#: build/build/src/blocks/portfolio/index.php:156
 msgctxt ""
 "The post type archive label used in nav menus. Default \"Post Archives\". "
 "Added in 4.4"
@@ -342,32 +290,26 @@ msgid "Portfolio Archives"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:258 src/blocks/portfolio/index.php:250
-#: build/build/src/blocks/portfolio/index.php:250
 msgid "Uncategorized"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:221 src/blocks/portfolio/index.php:213
-#: build/build/src/blocks/portfolio/index.php:213
 msgid "Update Category"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:383 src/blocks/portfolio/index.php:337
-#: build/build/src/blocks/portfolio/index.php:337
 msgid "View All"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:222 src/blocks/portfolio/index.php:214
-#: build/build/src/blocks/portfolio/index.php:214
 msgid "View Category"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:186 src/blocks/portfolio/index.php:178
-#: build/build/src/blocks/portfolio/index.php:178
 msgid "View Portfolio Item"
 msgstr ""
 
 #: build/blocks/portfolio/index.php:187 src/blocks/portfolio/index.php:179
-#: build/build/src/blocks/portfolio/index.php:179
 msgid "View Portfolio Items"
 msgstr ""
 
@@ -375,10 +317,6 @@ msgstr ""
 msgid "WPZOOM"
 msgstr ""
 
-#: wpzoom-blocks.php:280
+#: portfolio-posts.php:282
 msgid "WPZOOM - Blocks"
-msgstr ""
-
-#. Name of the plugin
-msgid "WPZOOM Blocks"
 msgstr ""

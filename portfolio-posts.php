@@ -13,6 +13,8 @@
  * Description: Just a simple plugin to create Portfolio posts and display them in a beautiful grid via Gutenberg. Includes isotope filtering effect.
  * Author:      WPZOOM
  * Author URI:  https://www.wpzoom.com
+ * Text Domain:       portfolio-posts
+
  * Version:     1.0.0
  * License:     GPL2+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -134,7 +136,7 @@ class WPZOOM_Blocks {
 			$this->blocks_dir_url = trailingslashit( $this->main_dir_url . 'blocks' );
 
 			// Load the correct translation files for the plugin
-			load_plugin_textdomain( 'wpzoom-blocks', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+			load_plugin_textdomain( 'portfolio-posts', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 			// Filter the Gutenberg block categories to add our custom 'WPZOOM Blocks' category if needed
 			add_filter( 'block_categories_all', array( $this, 'filter_block_categories' ), 10, 2 );
@@ -213,7 +215,7 @@ class WPZOOM_Blocks {
 					// If the file in the current iteration is a script...
 					if ( 'js' == $ext && function_exists( 'wp_set_script_translations' ) ) {
 						// Setup the translations for it
-						wp_set_script_translations( "wpzoom-blocks-js-$name-$slug_", 'wpzoom-blocks', plugin_dir_path( __FILE__ ) . 'languages' );
+						wp_set_script_translations( "wpzoom-blocks-js-$name-$slug_", 'portfolio-posts', plugin_dir_path( __FILE__ ) . 'languages' );
 					}
 				}
 			}
@@ -272,12 +274,12 @@ class WPZOOM_Blocks {
 		$category_slugs = wp_list_pluck( $categories, 'slug' );
 
 		// Return the list of categories with our custom category included
-		return in_array( 'wpzoom-blocks', $category_slugs, true ) ? $categories : array_merge(
+		return in_array( 'portfolio-posts', $category_slugs, true ) ? $categories : array_merge(
 			$categories,
 			array(
 				array(
-					'slug' => 'wpzoom-blocks',
-					'title' => esc_html__( 'WPZOOM - Blocks', 'wpzoom-blocks' ),
+					'slug' => 'portfolio-posts',
+					'title' => esc_html__( 'WPZOOM - Blocks', 'portfolio-posts' ),
 					'icon' => 'wordpress'
 				)
 			)
@@ -316,7 +318,7 @@ class WPZOOM_Blocks {
 				'get_callback' => array( $this, 'get_featured_media_urls' ),
 				'update_callback' => null,
 				'schema' => array(
-					'description' => esc_html__( 'Different sized featured images', 'wpzoom-blocks' ),
+					'description' => esc_html__( 'Different sized featured images', 'portfolio-posts' ),
 					'type' => 'array'
 				)
 			)
