@@ -1,4 +1,4 @@
-=== Portfolio Posts ===
+=== WPZOOM Portfolio ===
 Contributors:      WPZOOM, alexus450, ciorici
 Donate link:       http://paypal.me/wpzm/10usd
 Author URI:        https://www.wpzoom.com/

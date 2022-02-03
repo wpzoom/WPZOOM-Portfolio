@@ -1,6 +1,6 @@
 <?php
 /**
- * Portfolio Posts by WPZOOM
+ * WPZOOM Portfolio
  *
  * @package   WPZOOM_Blocks
  * @author    WPZOOM
@@ -8,13 +8,12 @@
  * @license   GPL-2.0-or-later
  *
  * @wordpress-plugin
- * Plugin Name: Portfolio Posts
+ * Plugin Name: WPZOOM Portfolio
  * Plugin URI:  https://www.wpzoom.com/plugins/portfolio-posts/
  * Description: Just a simple plugin to create Portfolio posts and display them in a beautiful grid via Gutenberg. Includes isotope filtering effect.
  * Author:      WPZOOM
  * Author URI:  https://www.wpzoom.com
- * Text Domain:       portfolio-posts
-
+ * Text Domain: wpzoom-portfolio
  * Version:     1.0.0
  * License:     GPL2+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
@@ -136,7 +135,7 @@ class WPZOOM_Blocks {
 			$this->blocks_dir_url = trailingslashit( $this->main_dir_url . 'blocks' );
 
 			// Load the correct translation files for the plugin
-			load_plugin_textdomain( 'portfolio-posts', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+			load_plugin_textdomain( 'wpzoom-portfolio', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 			// Filter the Gutenberg block categories to add our custom 'WPZOOM Blocks' category if needed
 			add_filter( 'block_categories_all', array( $this, 'filter_block_categories' ), 10, 2 );
@@ -215,7 +214,7 @@ class WPZOOM_Blocks {
 					// If the file in the current iteration is a script...
 					if ( 'js' == $ext && function_exists( 'wp_set_script_translations' ) ) {
 						// Setup the translations for it
-						wp_set_script_translations( "wpzoom-blocks-js-$name-$slug_", 'portfolio-posts', plugin_dir_path( __FILE__ ) . 'languages' );
+						wp_set_script_translations( "wpzoom-blocks-js-$name-$slug_", 'wpzoom-portfolio', plugin_dir_path( __FILE__ ) . 'languages' );
 					}
 				}
 			}
@@ -274,12 +273,12 @@ class WPZOOM_Blocks {
 		$category_slugs = wp_list_pluck( $categories, 'slug' );
 
 		// Return the list of categories with our custom category included
-		return in_array( 'portfolio-posts', $category_slugs, true ) ? $categories : array_merge(
+		return in_array( 'wpzoom-portfolio', $category_slugs, true ) ? $categories : array_merge(
 			$categories,
 			array(
 				array(
-					'slug' => 'portfolio-posts',
-					'title' => esc_html__( 'WPZOOM - Blocks', 'portfolio-posts' ),
+					'slug' => 'wpzoom-portfolio',
+					'title' => esc_html__( 'WPZOOM - Blocks', 'wpzoom-portfolio' ),
 					'icon' => 'wordpress'
 				)
 			)
@@ -318,7 +317,7 @@ class WPZOOM_Blocks {
 				'get_callback' => array( $this, 'get_featured_media_urls' ),
 				'update_callback' => null,
 				'schema' => array(
-					'description' => esc_html__( 'Different sized featured images', 'portfolio-posts' ),
+					'description' => esc_html__( 'Different sized featured images', 'wpzoom-portfolio' ),
 					'type' => 'array'
 				)
 			)

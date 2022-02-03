@@ -55,8 +55,8 @@ function dynamicSort( property ) {
 }
 
 registerBlockType( 'wpzoom-blocks/portfolio', {
-	title: __( 'Portfolio', 'portfolio-posts' ),
-	description: __( 'Display a customizable grid of portfolio items.', 'portfolio-posts' ),
+	title: __( 'Portfolio', 'wpzoom-portfolio' ),
+	description: __( 'Display a customizable grid of portfolio items.', 'wpzoom-portfolio' ),
 	icon: 'images-alt2',
 	category: 'wpzoom-blocks',
 	supports: {
@@ -77,10 +77,10 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 		if ( Array.isArray( cats2 ) ) cats.push( ...cats2 );
 		
 		cats.sort( dynamicSort( 'name' ) );
-		cats.unshift( { id: -1, name: __( 'All', 'portfolio-posts' ) } );
+		cats.unshift( { id: -1, name: __( 'All', 'wpzoom-portfolio' ) } );
 
 		taxonomies.sort( dynamicSort( 'name' ) );
-		taxonomies.unshift( { id: -1, name: __( 'All', 'portfolio-posts' ) } );
+		taxonomies.unshift( { id: -1, name: __( 'All', 'wpzoom-portfolio' ) } );
 
 		return {
 			taxonomyList: taxonomies,
@@ -131,8 +131,8 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 			if ( ! taxonomyList || ! imageSizes ) {
 				return (
 					<>
-						<Placeholder icon="list-view" label={ __( 'WPZOOM Portfolio', 'portfolio-posts' ) }>
-							<Spinner /> { __( 'Loading...', 'portfolio-posts' ) }
+						<Placeholder icon="list-view" label={ __( 'WPZOOM Portfolio', 'wpzoom-portfolio' ) }>
+							<Spinner /> { __( 'Loading...', 'wpzoom-portfolio' ) }
 						</Placeholder>
 					</>
 				);
@@ -143,7 +143,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 
 			let fields = <>
 				<ToggleControl
-					label={ __( 'Show Author', 'portfolio-posts' ) }
+					label={ __( 'Show Author', 'wpzoom-portfolio' ) }
 					checked={ showAuthor }
 					onChange={ ( value ) => setAttributes( { showAuthor: value } ) }
 				/>
@@ -151,7 +151,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 				<HorizontalRule />
 
 				<ToggleControl
-					label={ __( 'Show Date', 'portfolio-posts' ) }
+					label={ __( 'Show Date', 'wpzoom-portfolio' ) }
 					checked={ showDate }
 					onChange={ ( value ) => setAttributes( { showDate: value } ) }
 				/>
@@ -159,14 +159,14 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 				<HorizontalRule />
 
 				<ToggleControl
-					label={ __( 'Show Excerpt', 'portfolio-posts' ) }
+					label={ __( 'Show Excerpt', 'wpzoom-portfolio' ) }
 					checked={ showExcerpt }
 					onChange={ ( value ) => setAttributes( { showExcerpt: value } ) }
 				/>
 
 				{ showExcerpt &&
 					<RangeControl
-						label={ __( 'Excerpt Length', 'portfolio-posts' ) }
+						label={ __( 'Excerpt Length', 'wpzoom-portfolio' ) }
 						value={ excerptLength }
 						onChange={ ( value ) => setAttributes( { excerptLength: value } ) }
 						min={ 1 }
@@ -177,14 +177,14 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 				<HorizontalRule />
 
 				<ToggleControl
-					label={ __( 'Show Read More Button', 'portfolio-posts' ) }
+					label={ __( 'Show Read More Button', 'wpzoom-portfolio' ) }
 					checked={ showReadMore }
 					onChange={ ( value ) => setAttributes( { showReadMore: value } ) }
 				/>
 
 				{ showReadMore &&
 					<TextControl
-						label={ __( 'Read More Button Label', 'portfolio-posts' ) }
+						label={ __( 'Read More Button Label', 'wpzoom-portfolio' ) }
 						value={ readMoreLabel }
 						onChange={ ( value ) => setAttributes( { readMoreLabel: value } ) }
 					/>
@@ -198,18 +198,18 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 			return (
 				<>
 					<InspectorControls>
-						<PanelBody title={ __( 'Options', 'portfolio-posts' ) } className="wpzb-settings-panel">
-							<PanelBody title={ __( 'Filtering', 'portfolio-posts' ) } className="wpzb-sub-panel">
+						<PanelBody title={ __( 'Options', 'wpzoom-portfolio' ) } className="wpzb-settings-panel">
+							<PanelBody title={ __( 'Filtering', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
 								<SelectControl
-									label={ __( 'Portfolio Items Source', 'portfolio-posts' ) }
+									label={ __( 'Portfolio Items Source', 'wpzoom-portfolio' ) }
 									value={ source }
 									options={ [
 										{
-											label: __( 'Portfolio Posts', 'portfolio-posts' ),
+											label: __( 'Portfolio Posts', 'wpzoom-portfolio' ),
 											value: 'portfolio_item'
 										},
 										{
-											label: __( 'Blog Posts', 'portfolio-posts' ),
+											label: __( 'Blog Posts', 'wpzoom-portfolio' ),
 											value: 'post'
 										}
 									] }
@@ -217,23 +217,23 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								/>
 
 								<SelectControl
-									label={ __( 'Order By', 'portfolio-posts' ) }
+									label={ __( 'Order By', 'wpzoom-portfolio' ) }
 									value={ `${ orderBy }/${ order }` }
 									options={ [
 										{
-											label: __( 'Newest to Oldest', 'portfolio-posts' ),
+											label: __( 'Newest to Oldest', 'wpzoom-portfolio' ),
 											value: 'date/desc'
 										},
 										{
-											label: __( 'Oldest to Newest', 'portfolio-posts' ),
+											label: __( 'Oldest to Newest', 'wpzoom-portfolio' ),
 											value: 'date/asc'
 										},
 										{
-											label: __( 'A → Z', 'portfolio-posts' ),
+											label: __( 'A → Z', 'wpzoom-portfolio' ),
 											value: 'title/asc'
 										},
 										{
-											label: __( 'Z → A', 'portfolio-posts' ),
+											label: __( 'Z → A', 'wpzoom-portfolio' ),
 											value: 'title/desc'
 										}
 									] }
@@ -249,8 +249,8 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								/>
 								{ 'post' ===  source && (
 								<TreeSelect
-									label={ __( 'Categories', 'portfolio-posts' ) }
-									help={ __( 'Multiple selections allowed.', 'portfolio-posts' ) }
+									label={ __( 'Categories', 'wpzoom-portfolio' ) }
+									help={ __( 'Multiple selections allowed.', 'wpzoom-portfolio' ) }
 									tree={ catTree }
 									selectedId={ typeof categories !== 'undefined' && categories.length > 0 ? categories : [-1] }
 									multiple
@@ -259,8 +259,8 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								)}
 								{ 'post' !== source && (
 								<TreeSelect
-									label={ __( 'Categories', 'portfolio-posts' ) }
-									help={ __( 'Multiple selections allowed.', 'portfolio-posts' ) }
+									label={ __( 'Categories', 'wpzoom-portfolio' ) }
+									help={ __( 'Multiple selections allowed.', 'wpzoom-portfolio' ) }
 									tree={ termsTree }
 									selectedId={ typeof categories !== 'undefined' && categories.length > 0 ? categories : [-1] }
 									multiple
@@ -269,7 +269,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								) }
 
 								<RangeControl
-									label={ __( 'Number of Items', 'portfolio-posts' ) }
+									label={ __( 'Number of Items', 'wpzoom-portfolio' ) }
 									value={ amount }
 									onChange={ ( value ) => setAttributes( { amount: value } ) }
 									min={ 1 }
@@ -278,21 +278,21 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								/>
 							</PanelBody>
 
-							<PanelBody title={ __( 'Layout', 'portfolio-posts' ) } className="wpzb-sub-panel">
+							<PanelBody title={ __( 'Layout', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
 								<RadioControl
 									className="wpzb-button-select wpzb-button-select-icons"
-									label={ __( 'Layout Type', 'portfolio-posts' ) }
+									label={ __( 'Layout Type', 'wpzoom-portfolio' ) }
 									onChange={ ( value ) => setAttributes( { layout: value } ) }
 									options={ [
-										{ value: 'list', label: __( 'List', 'portfolio-posts' ) },
-										{ value: 'grid', label: __( 'Grid', 'portfolio-posts' ) }
+										{ value: 'list', label: __( 'List', 'wpzoom-portfolio' ) },
+										{ value: 'grid', label: __( 'Grid', 'wpzoom-portfolio' ) }
 									] }
 									selected={ layout }
 								/>
 
 								{ layout == 'grid' &&
 									<RangeControl
-										label={ __( 'Amount of Columns', 'portfolio-posts' ) }
+										label={ __( 'Amount of Columns', 'wpzoom-portfolio' ) }
 										max={ 6 }
 										min={ 1 }
 										onChange={ ( value ) => setAttributes( { columnsAmount: value } ) }
@@ -303,7 +303,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								<HorizontalRule />
 
 								<ToggleControl
-									label={ __( 'Show Category Filter at the Top', 'portfolio-posts' ) }
+									label={ __( 'Show Category Filter at the Top', 'wpzoom-portfolio' ) }
 									checked={ showCategoryFilter }
 									onChange={ ( value ) => setAttributes( { showCategoryFilter: value } ) }
 								/>
@@ -311,14 +311,14 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								<HorizontalRule />
 
 								<ToggleControl
-									label={ __( 'Show View All Button', 'portfolio-posts' ) }
+									label={ __( 'Show View All Button', 'wpzoom-portfolio' ) }
 									checked={ showViewAll }
 									onChange={ ( value ) => setAttributes( { showViewAll: value } ) }
 								/>
 
 								{ showViewAll &&
 									<TextControl
-										label={ __( 'View All Button Label', 'portfolio-posts' ) }
+										label={ __( 'View All Button Label', 'wpzoom-portfolio' ) }
 										value={ viewAllLabel }
 										onChange={ ( value ) => setAttributes( { viewAllLabel: value } ) }
 									/>
@@ -327,23 +327,23 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								{ showViewAll &&
 									<TextControl
 										type="url"
-										label={ __( 'View All Button Link', 'portfolio-posts' ) }
+										label={ __( 'View All Button Link', 'wpzoom-portfolio' ) }
 										value={ viewAllLink }
 										onChange={ ( value ) => setAttributes( { viewAllLink: value } ) }
 									/>
 								}
 							</PanelBody>
 
-							<PanelBody title={ __( 'Fields', 'portfolio-posts' ) } className="wpzb-sub-panel">
+							<PanelBody title={ __( 'Fields', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
 								<ToggleControl
-									label={ __( 'Show Thumbnail', 'portfolio-posts' ) }
+									label={ __( 'Show Thumbnail', 'wpzoom-portfolio' ) }
 									checked={ showThumbnail }
 									onChange={ ( value ) => setAttributes( { showThumbnail: value } ) }
 								/>
 
 								{ showThumbnail &&
 									<SelectControl
-										label={ __( 'Thumbnail Size', 'portfolio-posts' ) }
+										label={ __( 'Thumbnail Size', 'wpzoom-portfolio' ) }
 										value={ thumbnailSize }
 										options={ imageSizes }
 										onChange={ ( value ) => setAttributes( { thumbnailSize: value } ) }
@@ -356,16 +356,16 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								{ fields }
 							</PanelBody>
 
-							<PanelBody title={ __( 'Other', 'portfolio-posts' ) } className="wpzb-sub-panel">
+							<PanelBody title={ __( 'Other', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
 								<ToggleControl
-									label={ __( 'Open Portfolio Items in a Lightbox', 'portfolio-posts' ) }
+									label={ __( 'Open Portfolio Items in a Lightbox', 'wpzoom-portfolio' ) }
 									checked={ lightbox }
 									onChange={ ( value ) => setAttributes( { lightbox: value } ) }
 								/>
 
 								{ lightbox &&
 									<ToggleControl
-										label={ __( 'Show Lightbox Caption', 'portfolio-posts' ) }
+										label={ __( 'Show Lightbox Caption', 'wpzoom-portfolio' ) }
 										checked={ lightboxCaption }
 										onChange={ ( value ) => setAttributes( { lightboxCaption: value } ) }
 									/>

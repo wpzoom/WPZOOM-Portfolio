@@ -153,38 +153,38 @@ class WPZOOM_Blocks_Portfolio {
 		// Add the portfolio post type
 		register_post_type( 'portfolio_item', array(
 			'can_export'          => true,
-			'description'         => esc_html__( 'A portfolio type for featuring items in your portfolio.', 'portfolio-posts' ),
+			'description'         => esc_html__( 'A portfolio type for featuring items in your portfolio.', 'wpzoom-portfolio' ),
 			'exclude_from_search' => false,
 			'has_archive'         => true,
 			'hierarchical'        => false,
 			'labels'              => array(
-				'add_new'                  => esc_html_x( 'Add New', 'portfolio_item', 'portfolio-posts' ),
-				'add_new_item'             => esc_html__( 'Add New Portfolio Post', 'portfolio-posts' ),
-				'all_items'                => esc_html__( 'All Portfolio Posts', 'portfolio-posts' ),
-				'archives'                 => esc_html_x( 'Portfolio Archives', 'The post type archive label used in nav menus. Default "Post Archives". Added in 4.4', 'portfolio-posts' ),
-				'attributes'               => esc_html__( 'Portfolio Post Attributes', 'portfolio-posts' ),
-				'edit_item'                => esc_html__( 'Edit Portfolio Post', 'portfolio-posts' ),
-				'filter_items_list'        => esc_html_x( 'Filter portfolio items list', 'Screen reader text for the filter links heading on the post type listing screen. Default "Filter posts list". Added in 4.4', 'portfolio-posts' ),
-				'insert_into_item'         => esc_html_x( 'Insert into portfolio item', 'Overrides the "Insert into post" phrase (used when inserting media into a post). Added in 4.4', 'portfolio-posts' ),
-				'items_list'               => esc_html_x( 'Portfolio Items list', 'Screen reader text for the items list heading on the post type listing screen. Default "Posts list". Added in 4.4', 'portfolio-posts' ),
-				'items_list_navigation'    => esc_html_x( 'Portfolio Items list navigation', 'Screen reader text for the pagination heading on the post type listing screen. Default "Posts list navigation". Added in 4.4', 'portfolio-posts' ),
-				'item_published'           => esc_html__( 'Portfolio Post published.', 'portfolio-posts' ),
-				'item_published_privately' => esc_html__( 'Portfolio Post published privately.', 'portfolio-posts' ),
-				'item_reverted_to_draft'   => esc_html__( 'Portfolio Post reverted to draft.', 'portfolio-posts' ),
-				'item_scheduled'           => esc_html__( 'Portfolio Post scheduled.', 'portfolio-posts' ),
-				'item_updated'             => esc_html__( 'Portfolio Post updated.', 'portfolio-posts' ),
-				'menu_name'                => esc_html_x( 'Portfolio', 'Admin Menu text', 'portfolio-posts' ),
-				'name'                     => esc_html_x( 'Portfolio', 'Post type general name', 'portfolio-posts' ),
-				'name_admin_bar'           => esc_html_x( 'Portfolio Post', 'Add New on Toolbar', 'portfolio-posts' ),
-				'new_item'                 => esc_html__( 'New Portfolio Post', 'portfolio-posts' ),
-				'not_found'                => esc_html__( 'No portfolio posts found.', 'portfolio-posts' ),
-				'not_found_in_trash'       => esc_html__( 'No portfolio posts found in Trash.', 'portfolio-posts' ),
-				'parent_item_colon'        => esc_html__( 'Parent Portfolio Items:', 'portfolio-posts' ),
-				'search_items'             => esc_html__( 'Search Portfolio Posts', 'portfolio-posts' ),
-				'singular_name'            => esc_html_x( 'Portfolio Post', 'Post type singular name', 'portfolio-posts' ),
-				'uploaded_to_this_item'    => esc_html_x( 'Uploaded to this portfolio item', 'Overrides the "Uploaded to this post" phrase (used when viewing media attached to a post). Added in 4.4', 'portfolio-posts' ),
-				'view_item'                => esc_html__( 'View Portfolio Post', 'portfolio-posts' ),
-				'view_items'               => esc_html__( 'View Portfolio Posts', 'portfolio-posts' )
+				'add_new'                  => esc_html_x( 'Add New', 'portfolio_item', 'wpzoom-portfolio' ),
+				'add_new_item'             => esc_html__( 'Add New Portfolio Post', 'wpzoom-portfolio' ),
+				'all_items'                => esc_html__( 'All Portfolio Posts', 'wpzoom-portfolio' ),
+				'archives'                 => esc_html_x( 'Portfolio Archives', 'The post type archive label used in nav menus. Default "Post Archives". Added in 4.4', 'wpzoom-portfolio' ),
+				'attributes'               => esc_html__( 'Portfolio Post Attributes', 'wpzoom-portfolio' ),
+				'edit_item'                => esc_html__( 'Edit Portfolio Post', 'wpzoom-portfolio' ),
+				'filter_items_list'        => esc_html_x( 'Filter portfolio items list', 'Screen reader text for the filter links heading on the post type listing screen. Default "Filter posts list". Added in 4.4', 'wpzoom-portfolio' ),
+				'insert_into_item'         => esc_html_x( 'Insert into portfolio item', 'Overrides the "Insert into post" phrase (used when inserting media into a post). Added in 4.4', 'wpzoom-portfolio' ),
+				'items_list'               => esc_html_x( 'Portfolio Items list', 'Screen reader text for the items list heading on the post type listing screen. Default "Posts list". Added in 4.4', 'wpzoom-portfolio' ),
+				'items_list_navigation'    => esc_html_x( 'Portfolio Items list navigation', 'Screen reader text for the pagination heading on the post type listing screen. Default "Posts list navigation". Added in 4.4', 'wpzoom-portfolio' ),
+				'item_published'           => esc_html__( 'Portfolio Post published.', 'wpzoom-portfolio' ),
+				'item_published_privately' => esc_html__( 'Portfolio Post published privately.', 'wpzoom-portfolio' ),
+				'item_reverted_to_draft'   => esc_html__( 'Portfolio Post reverted to draft.', 'wpzoom-portfolio' ),
+				'item_scheduled'           => esc_html__( 'Portfolio Post scheduled.', 'wpzoom-portfolio' ),
+				'item_updated'             => esc_html__( 'Portfolio Post updated.', 'wpzoom-portfolio' ),
+				'menu_name'                => esc_html_x( 'Portfolio', 'Admin Menu text', 'wpzoom-portfolio' ),
+				'name'                     => esc_html_x( 'Portfolio', 'Post type general name', 'wpzoom-portfolio' ),
+				'name_admin_bar'           => esc_html_x( 'Portfolio Post', 'Add New on Toolbar', 'wpzoom-portfolio' ),
+				'new_item'                 => esc_html__( 'New Portfolio Post', 'wpzoom-portfolio' ),
+				'not_found'                => esc_html__( 'No portfolio posts found.', 'wpzoom-portfolio' ),
+				'not_found_in_trash'       => esc_html__( 'No portfolio posts found in Trash.', 'wpzoom-portfolio' ),
+				'parent_item_colon'        => esc_html__( 'Parent Portfolio Items:', 'wpzoom-portfolio' ),
+				'search_items'             => esc_html__( 'Search Portfolio Posts', 'wpzoom-portfolio' ),
+				'singular_name'            => esc_html_x( 'Portfolio Post', 'Post type singular name', 'wpzoom-portfolio' ),
+				'uploaded_to_this_item'    => esc_html_x( 'Uploaded to this portfolio item', 'Overrides the "Uploaded to this post" phrase (used when viewing media attached to a post). Added in 4.4', 'wpzoom-portfolio' ),
+				'view_item'                => esc_html__( 'View Portfolio Post', 'wpzoom-portfolio' ),
+				'view_items'               => esc_html__( 'View Portfolio Posts', 'wpzoom-portfolio' )
 			),
 			'menu_icon'           => 'dashicons-portfolio',
 			'menu_position'       => 26,
@@ -203,30 +203,30 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Add the portfolio categories taxonomy
 		register_taxonomy( 'portfolio', 'portfolio_item', array(
-			'description'       => esc_html__( 'Categories for portfolio items.', 'portfolio-posts' ),
+			'description'       => esc_html__( 'Categories for portfolio items.', 'wpzoom-portfolio' ),
 			'hierarchical'      => true,
 			'labels'            => array(
-				'add_new_item'               => esc_html__( 'Add New Category', 'portfolio-posts' ),
-				'add_or_remove_items'        => esc_html__( 'Add or remove categories', 'portfolio-posts' ),
-				'all_items'                  => esc_html__( 'All Categories', 'portfolio-posts' ),
-				'back_to_items'              => esc_html__( '&larr; Back to Categories', 'portfolio-posts' ),
-				'choose_from_most_used'      => esc_html__( 'Choose from the most used categories', 'portfolio-posts' ),
-				'edit_item'                  => esc_html__( 'Edit Category', 'portfolio-posts' ),
-				'items_list'                 => esc_html__( 'Categories list', 'portfolio-posts' ),
-				'items_list_navigation'      => esc_html__( 'Categories list navigation', 'portfolio-posts' ),
-				'most_used'                  => esc_html_x( 'Most Used', 'categories', 'portfolio-posts' ),
-				'name'                       => esc_html_x( 'Categories', 'taxonomy general name', 'portfolio-posts' ),
-				'new_item_name'              => esc_html__( 'New Category Name', 'portfolio-posts' ),
-				'no_terms'                   => esc_html__( 'No categories', 'portfolio-posts' ),
-				'not_found'                  => esc_html__( 'No categories found.', 'portfolio-posts' ),
-				'parent_item'                => esc_html__( 'Parent Category', 'portfolio-posts' ),
-				'parent_item_colon'          => esc_html__( 'Parent Category:', 'portfolio-posts' ),
-				'popular_items'              => esc_html__( 'Popular Categories', 'portfolio-posts' ),
-				'search_items'               => esc_html__( 'Search Categories', 'portfolio-posts' ),
-				'separate_items_with_commas' => esc_html__( 'Separate categories with commas', 'portfolio-posts' ),
-				'singular_name'              => esc_html_x( 'Category', 'taxonomy singular name', 'portfolio-posts' ),
-				'update_item'                => esc_html__( 'Update Category', 'portfolio-posts' ),
-				'view_item'                  => esc_html__( 'View Category', 'portfolio-posts' )
+				'add_new_item'               => esc_html__( 'Add New Category', 'wpzoom-portfolio' ),
+				'add_or_remove_items'        => esc_html__( 'Add or remove categories', 'wpzoom-portfolio' ),
+				'all_items'                  => esc_html__( 'All Categories', 'wpzoom-portfolio' ),
+				'back_to_items'              => esc_html__( '&larr; Back to Categories', 'wpzoom-portfolio' ),
+				'choose_from_most_used'      => esc_html__( 'Choose from the most used categories', 'wpzoom-portfolio' ),
+				'edit_item'                  => esc_html__( 'Edit Category', 'wpzoom-portfolio' ),
+				'items_list'                 => esc_html__( 'Categories list', 'wpzoom-portfolio' ),
+				'items_list_navigation'      => esc_html__( 'Categories list navigation', 'wpzoom-portfolio' ),
+				'most_used'                  => esc_html_x( 'Most Used', 'categories', 'wpzoom-portfolio' ),
+				'name'                       => esc_html_x( 'Categories', 'taxonomy general name', 'wpzoom-portfolio' ),
+				'new_item_name'              => esc_html__( 'New Category Name', 'wpzoom-portfolio' ),
+				'no_terms'                   => esc_html__( 'No categories', 'wpzoom-portfolio' ),
+				'not_found'                  => esc_html__( 'No categories found.', 'wpzoom-portfolio' ),
+				'parent_item'                => esc_html__( 'Parent Category', 'wpzoom-portfolio' ),
+				'parent_item_colon'          => esc_html__( 'Parent Category:', 'wpzoom-portfolio' ),
+				'popular_items'              => esc_html__( 'Popular Categories', 'wpzoom-portfolio' ),
+				'search_items'               => esc_html__( 'Search Categories', 'wpzoom-portfolio' ),
+				'separate_items_with_commas' => esc_html__( 'Separate categories with commas', 'wpzoom-portfolio' ),
+				'singular_name'              => esc_html_x( 'Category', 'taxonomy singular name', 'wpzoom-portfolio' ),
+				'update_item'                => esc_html__( 'Update Category', 'wpzoom-portfolio' ),
+				'view_item'                  => esc_html__( 'View Category', 'wpzoom-portfolio' )
 			),
 			'public'            => true,
             'rewrite'             => array(
@@ -269,7 +269,7 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Ensure there is a Uncategorized category for the portfolio post type
 		if ( is_null( term_exists( 'uncategorized', 'portfolio' ) ) ) {
-			wp_insert_term( esc_html__( 'Uncategorized', 'portfolio-posts' ), 'portfolio', array( 'slug' => 'uncategorized' ) );
+			wp_insert_term( esc_html__( 'Uncategorized', 'wpzoom-portfolio' ), 'portfolio', array( 'slug' => 'uncategorized' ) );
 		}
 
 		// Ensure the Uncategorized category is the default for the portfolio post type
@@ -394,7 +394,7 @@ class WPZOOM_Blocks_Portfolio {
 		$lightbox = $use_lightbox ? ( ' use-lightbox' . ( $lightbox_caption ? ' lightbox-with-caption' : '' ) ) : '';
 
 		// Build the View All button, if enabled
-		$view_all_label = isset( $attr[ 'viewAllLabel' ] ) && ! empty( $attr[ 'viewAllLabel' ] ) ? $attr[ 'viewAllLabel' ] : esc_html__( 'View All', 'portfolio-posts' );
+		$view_all_label = isset( $attr[ 'viewAllLabel' ] ) && ! empty( $attr[ 'viewAllLabel' ] ) ? $attr[ 'viewAllLabel' ] : esc_html__( 'View All', 'wpzoom-portfolio' );
 		$view_all_link = esc_url( ! empty( $attr[ 'viewAllLink' ] ) ? $attr[ 'viewAllLink' ] : site_url( '/portfolio/' ) );
 		$show_view_all = isset( $attr[ 'showViewAll' ] ) ? $attr[ 'showViewAll' ] : true;
 		$view_all = $show_view_all ? '<div class="' . $class . '_view-all wp-block-button">
@@ -414,7 +414,7 @@ class WPZOOM_Blocks_Portfolio {
 			'order'                 => $order,
 			'order_by'              => $order_by,
 			'per_page'              => $per_page,
-			'read_more_label'       => esc_html__( 'Read More', 'portfolio-posts' ),
+			'read_more_label'       => esc_html__( 'Read More', 'wpzoom-portfolio' ),
 			'show_author'           => $show_author,
 			'show_background_video' => $show_video,
 			'show_date'             => $show_date,
@@ -427,7 +427,7 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Show more button
 		$show_more = $this->result_pages > 1 ? '<div class="' . $class . '_show-more wp-block-button">
-			<a href="#" title="' . esc_attr__( 'Show more portfolio items', 'portfolio-posts' ) . '" class="wpz-portfolio-button__link">' . esc_html__( 'Load More...', 'portfolio-posts' ) . '</a>
+			<a href="#" title="' . esc_attr__( 'Show more portfolio items', 'wpzoom-portfolio' ) . '" class="wpz-portfolio-button__link">' . esc_html__( 'Load More...', 'wpzoom-portfolio' ) . '</a>
 		</div>' : '';
 
 		// Build the wrapper for the Show More and View All buttons
@@ -445,7 +445,7 @@ class WPZOOM_Blocks_Portfolio {
 		// Otherwise, the query returned no portfolio items...
 		else {
 			// Add a 'no portfolio items' message to the output
-			$output .= '<li class="' . $class . '_no-portfolio-items">' . esc_html__(  'No portfolio items.', 'portfolio-posts' ) . '</li>';
+			$output .= '<li class="' . $class . '_no-portfolio-items">' . esc_html__(  'No portfolio items.', 'wpzoom-portfolio' ) . '</li>';
 		}
 
 		// Return the final output
@@ -471,7 +471,7 @@ class WPZOOM_Blocks_Portfolio {
 			'order_by'              => 'date',
 			'page'                  => 1,
 			'per_page'              => 6,
-			'read_more_label'       => esc_html__(  'Read More', 'portfolio-posts' ),
+			'read_more_label'       => esc_html__(  'Read More', 'wpzoom-portfolio' ),
 			'show_author'           => true,
 			'show_background_video' => true,
 			'show_date'             => true,
@@ -586,7 +586,7 @@ class WPZOOM_Blocks_Portfolio {
 						// Get the author details
 						$author_name = get_the_author_meta( 'display_name', $post->post_author );
 						$author_url = esc_url( get_author_posts_url( $post->post_author ) );
-						$author_title = esc_attr( sprintf( __( 'Posts by %s', 'portfolio-posts' ), $author_name ) );
+						$author_title = esc_attr( sprintf( __( 'Posts by %s', 'wpzoom-portfolio' ), $author_name ) );
 
 						// Add the author to the output
 						$output .= "<cite class='${class}_item-author'><a href='$author_url' title='$author_title' rel='author'>$author_name</a></cite>";
@@ -598,7 +598,7 @@ class WPZOOM_Blocks_Portfolio {
 						$date = apply_filters( 'the_date', get_the_date( '', $post ), '', '', '' );
 						$datetime = esc_attr( get_the_date( 'c', $post ) );
 						$date_url = esc_url( get_day_link( get_the_time( 'Y', $post ), get_the_time( 'm', $post ), get_the_time( 'd', $post ) ) );
-						$date_title = esc_attr( sprintf( __( 'Posted on %s', 'portfolio-posts' ), $date ) );
+						$date_title = esc_attr( sprintf( __( 'Posted on %s', 'wpzoom-portfolio' ), $date ) );
 
 						// Add the date to the output
 						$output .= "<time datetime='$datetime' class='${class}_item-date'><a href='$date_url' title='$date_title'>$date</a></time>";
@@ -623,8 +623,8 @@ class WPZOOM_Blocks_Portfolio {
 					// If the Read More button should be shown...
 					if ( $args[ 'show_read_more' ] ) {
 						// Get the label for the button
-						$readmore = $args[ 'read_more_label' ] ? $args[ 'read_more_label' ] : esc_html__( 'Read More', 'portfolio-posts' );
-						$readmore_title = esc_attr__( 'Continue reading this post...', 'portfolio-posts' );
+						$readmore = $args[ 'read_more_label' ] ? $args[ 'read_more_label' ] : esc_html__( 'Read More', 'wpzoom-portfolio' );
+						$readmore_title = esc_attr__( 'Continue reading this post...', 'wpzoom-portfolio' );
 
 						// Add the button to the output
 						$output .= "<div class='${class}_item-readmore-button wp-block-button'>
@@ -678,7 +678,7 @@ class WPZOOM_Blocks_Portfolio {
 			'orderby'             => 'name',
 			'separator'           => '',
 			'show_count'          => 0,
-			'show_option_all'     => esc_html__( 'All', 'portfolio-posts' ),
+			'show_option_all'     => esc_html__( 'All', 'wpzoom-portfolio' ),
 			'style'               => 'list',
 			'use_desc_for_title'  => 1,
 		);
@@ -706,7 +706,7 @@ class WPZOOM_Blocks_Portfolio {
 			// Add in the All link
 			$posts_page = esc_url( str_ireplace( '%category%/', '', get_post_type_archive_link( 'portfolio_item' ) ) );
 			$output .= '<li class="wp-block-button cat-item-all current-cat">
-				<a href="' . $posts_page . '" class="wpz-portfolio-filter_link">' . esc_html__(  'All', 'portfolio-posts' ) . '</a>
+				<a href="' . $posts_page . '" class="wpz-portfolio-filter_link">' . esc_html__(  'All', 'wpzoom-portfolio' ) . '</a>
 			</li>';
 
 			// Filter the HTML output by the walk_category_tree() function to add needed CSS classes
@@ -803,7 +803,7 @@ class WPZOOM_Blocks_Portfolio {
 	 * @see    register_rest_route()
 	 */
 	public function rest_api_routes() {
-		// Register the 'portfolio-posts' REST API route
+		// Register the 'wpzoom-portfolio' REST API route
 		register_rest_route(
 			'wpzoom-blocks/v1',
 			'/portfolio-posts',
