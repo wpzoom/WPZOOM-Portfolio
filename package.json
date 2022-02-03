@@ -1,14 +1,12 @@
 {
-	"name": "wpzoom-blocks",
+	"name": "portfolio-posts",
 	"version": "1.0.0",
 	"description": "Custom Gutenberg blocks designed by WPZOOM.",
 	"keywords": [
 		"WordPress",
 		"Gutenberg",
 		"blocks",
-		"WPZOOM",
-		"custom",
-		"advanced"
+		"portfolio"
 	],
 	"scripts": {
 		"start": "wp-scripts start",

@@ -1,6 +1,6 @@
 <?php
 /**
- * WPZOOM Blocks - Custom Gutenberg blocks designed by WPZOOM.
+ * Portfolio Posts by WPZOOM
  *
  * @package   WPZOOM_Blocks
  * @author    WPZOOM
@@ -8,11 +8,11 @@
  * @license   GPL-2.0-or-later
  *
  * @wordpress-plugin
- * Plugin Name: WPZOOM Blocks
- * Plugin URI:  https://wpzoom.com/plugins/gutenberg-blocks/
- * Description: Custom Gutenberg blocks designed by WPZOOM.
+ * Plugin Name: Portfolio Posts
+ * Plugin URI:  https://www.wpzoom.com/plugins/portfolio-posts/
+ * Description: Just a simple plugin to create Portfolio posts and display them in a beautiful grid via Gutenberg. Includes isotope filtering effect.
  * Author:      WPZOOM
- * Author URI:  https://wpzoom.com
+ * Author URI:  https://www.wpzoom.com
  * Version:     1.0.0
  * License:     GPL2+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt

@@ -56,7 +56,7 @@ function dynamicSort( property ) {
 
 registerBlockType( 'wpzoom-blocks/portfolio', {
 	title: __( 'Portfolio', 'wpzoom-blocks' ),
-	description: __( 'Display a customizable list of portfolio items.', 'wpzoom-blocks' ),
+	description: __( 'Display a customizable grid of portfolio items.', 'wpzoom-blocks' ),
 	icon: 'images-alt2',
 	category: 'wpzoom-blocks',
 	supports: {
