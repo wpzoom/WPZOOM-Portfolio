@@ -397,7 +397,7 @@ class WPZOOM_Blocks_Portfolio {
 		$view_all_label = isset( $attr[ 'viewAllLabel' ] ) && ! empty( $attr[ 'viewAllLabel' ] ) ? $attr[ 'viewAllLabel' ] : esc_html__( 'View All', 'wpzoom-portfolio' );
 		$view_all_link = esc_url( ! empty( $attr[ 'viewAllLink' ] ) ? $attr[ 'viewAllLink' ] : site_url( '/portfolio/' ) );
 		$show_view_all = isset( $attr[ 'showViewAll' ] ) ? $attr[ 'showViewAll' ] : true;
-		$view_all = $show_view_all ? '<div class="' . $class . '_view-all wp-block-button">
+		$view_all = $show_view_all ? '<div class="' . $class . '_view-all">
 			<a href="' . $view_all_link . '" title="' . esc_attr( $view_all_label ) . '" class="wpz-portfolio-button__link">' . $view_all_label . '</a>
 		</div>' : '';
 
@@ -426,7 +426,7 @@ class WPZOOM_Blocks_Portfolio {
 		) );
 
 		// Show more button
-		$show_more = $this->result_pages > 1 ? '<div class="' . $class . '_show-more wp-block-button">
+		$show_more = $this->result_pages > 1 ? '<div class="' . $class . '_show-more">
 			<a href="#" title="' . esc_attr__( 'Show more portfolio items', 'wpzoom-portfolio' ) . '" class="wpz-portfolio-button__link">' . esc_html__( 'Load More...', 'wpzoom-portfolio' ) . '</a>
 		</div>' : '';
 
@@ -627,7 +627,7 @@ class WPZOOM_Blocks_Portfolio {
 						$readmore_title = esc_attr__( 'Continue reading this post...', 'wpzoom-portfolio' );
 
 						// Add the button to the output
-						$output .= "<div class='${class}_item-readmore-button wp-block-button'>
+						$output .= "<div class='${class}_item-readmore-button'>
 							<a href='$permalink' title='$readmore_title' class='wpz-portfolio-button__link'>$readmore</a>
 						</div>";
 					}
@@ -705,7 +705,7 @@ class WPZOOM_Blocks_Portfolio {
 		if ( ! empty( $categories ) ) {
 			// Add in the All link
 			$posts_page = esc_url( str_ireplace( '%category%/', '', get_post_type_archive_link( 'portfolio_item' ) ) );
-			$output .= '<li class="wp-block-button cat-item-all current-cat">
+			$output .= '<li class="cat-item-all current-cat">
 				<a href="' . $posts_page . '" class="wpz-portfolio-filter_link">' . esc_html__(  'All', 'wpzoom-portfolio' ) . '</a>
 			</li>';
 
@@ -908,7 +908,7 @@ class WPZOOM_Blocks_Portfolio {
 	 * @since  1.0.0
 	 */
 	public function category_css_class( $css_classes, $category, $depth, $args ) {
-		$css_classes[] = 'wp-block-button';
+		$css_classes[] = 'wpz-block-button';
 
 		return $css_classes;
 	}

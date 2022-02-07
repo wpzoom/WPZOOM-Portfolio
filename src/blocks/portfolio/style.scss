@@ -22,6 +22,7 @@ $primary_color: #0bb4aa;
         text-decoration: none;
         overflow-wrap: break-word;
         box-sizing: border-box;
+        text-decoration: none !important;
 
         &:hover {
             background: $primary_color;
