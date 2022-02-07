@@ -809,7 +809,8 @@ class WPZOOM_Blocks_Portfolio {
 			'/portfolio-posts',
 			array(
 				'methods' => WP_REST_Server::READABLE,
-				'callback' => array( $this, 'get_rest_portfolio_posts' )
+				'callback' => array( $this, 'get_rest_portfolio_posts' ),
+				'permission_callback' => function() { return ''; }
 			)
 		);
 	}
