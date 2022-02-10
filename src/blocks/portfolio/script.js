@@ -118,7 +118,8 @@ function portfolioShowMoreClick( event ) {
 	        show_date:      container.classList.contains( 'show-date' ),
 	        show_excerpt:   container.classList.contains( 'show-excerpt' ),
 	        excerpt_length: parseInt( extractClassValue( container, 'excerpt-length-' ) ) || 20,
-	        show_read_more: container.classList.contains( 'show-readmore' )
+	        show_read_more: container.classList.contains( 'show-readmore' ),
+			source: container.classList.contains( 'post_type-post' ) ? 'post' : 'portfolio_item'
 	    } ),
 	    fetchRequest = apiFetch( { path: '/wpzoom-blocks/v1/portfolio-posts?' + params.toString() } );
 

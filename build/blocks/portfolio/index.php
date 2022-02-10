@@ -363,6 +363,7 @@ class WPZOOM_Blocks_Portfolio {
 		$show_read_more = isset( $attr[ 'showReadMore' ] ) ? boolval( $attr[ 'showReadMore' ] ) : true;
 
 		// CSS classes for query parameters
+		$post_type_class = ' post_type-' . $source;
 		$order_class = ' order-' . $order;
 		$order_by_class = ' orderby-' . $order_by;
 		$per_page_class = ' perpage-' . $per_page;
@@ -403,7 +404,7 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Build a string with all the CSS classes
 		$classes = "$class$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
-		            $date_class$excerpt_class$excerpt_length_class$readmore_class$align$layout$columns$lightbox";
+		            $date_class$excerpt_class$excerpt_length_class$readmore_class$align$layout$columns$lightbox$post_type_class";
 
 		// Try to get portfolio items
 		$items_html = $this->items_html( array(
@@ -849,6 +850,7 @@ class WPZOOM_Blocks_Portfolio {
 				$show_excerpt = isset( $params[ 'show_excerpt' ] ) ? boolval( $params[ 'show_excerpt' ] ) : true;
 				$excerpt_length = isset( $params[ 'excerpt_length' ] ) ? intval( $params[ 'excerpt_length' ] ) : 20;
 				$show_read_more = isset( $params[ 'show_read_more' ] ) ? boolval( $params[ 'show_read_more' ] ) : true;
+				$source = isset( $params[ 'source' ] ) ? $params[ 'source' ] : 'portfolio_item';
 
 				// Build the HTML to return
 				$items = $this->items_html( array(
@@ -866,7 +868,8 @@ class WPZOOM_Blocks_Portfolio {
 					'show_date'             => $show_date,
 					'show_excerpt'          => $show_excerpt,
 					'excerpt_length'        => $excerpt_length,
-					'show_read_more'        => $show_read_more
+					'show_read_more'        => $show_read_more,
+					'source'                => $source
 				) );
 
 				// Assign the results to return
