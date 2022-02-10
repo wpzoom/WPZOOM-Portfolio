@@ -16,6 +16,7 @@ Just a simple plugin to create Portfolio posts and display them in a beautiful g
 
 Just a simple plugin to create Portfolio posts and display them in a beautiful grid via Gutenberg. Includes isotope filtering effect
 
+[**View Demo**](https://demo.wpzoom.com/inspiro-lite/portfolio/)
 
 = How it works? =
 
@@ -33,7 +34,7 @@ Just a simple plugin to create Portfolio posts and display them in a beautiful g
 * More features coming soon...
 
 
-== Recommended Themes & DEMO ==
+== Recommended Themes ==
 
 This plugin works great with any theme. If you're looking for a Portfolio Theme, check out our themes:
 [**Inspiro PRO**](https://www.wpzoom.com/themes/inspiro-pro/)
