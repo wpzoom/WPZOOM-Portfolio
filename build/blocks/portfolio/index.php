@@ -124,6 +124,10 @@ class WPZOOM_Blocks_Portfolio {
 		'viewAllLink' => [
 			'type'    => 'string',
 			'default' => ''
+		],
+		'primaryColor' => [
+			'type'    => 'string',
+			'default' => '#0bb4aa'
 		]
 	];
 
@@ -449,8 +453,23 @@ class WPZOOM_Blocks_Portfolio {
 			$output .= '<li class="' . $class . '_no-portfolio-items">' . esc_html__(  'No portfolio items.', 'wpzoom-portfolio' ) . '</li>';
 		}
 
+		$filter_color = '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li a:hover,
+                         .wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li.current-cat a,
+                         .wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li.current-cat a:hover {
+							color:' . $attr['primaryColor'] . ';
+		                 }';
+		$button_color = '.wpzoom-blocks_portfolio-block .wpz-portfolio-button__link {
+							background:' . $attr['primaryColor'] . ';
+						}';
+		$css = sprintf( 
+			'<style>%s</style>',
+			$filter_color .
+			$button_color
+		);
+		
+
 		// Return the final output
-		return "<div class=\"wpzoom-blocks $classes\">$cats_filter<ul class=\"{$class}_items-list\">$output</ul>$btns_wrap</div><!--.$class-->";
+		return "<div class=\"wpzoom-blocks $classes\">$cats_filter<ul class=\"{$class}_items-list\">$output</ul>$btns_wrap</div><!--.$class-->$css";
 	}
 
 	/**
@@ -546,7 +565,7 @@ class WPZOOM_Blocks_Portfolio {
 				$cover_class = $has_cover ? ' has-cover' : '';
 
 				// Open the list item for this portfolio item
-				$output .= "<li class='${class}_item ${class}_item-$id ${class}_category-$category$cover_class' data-category='$category'>";
+				$output .= "<li class='${class}_item ${class}_item-$id ${class}_category-$category$cover_class fade-in'  data-category='$category'>";
 
 				// Add a wrapper article around the entire portfolio item (including the thumbnail)
 				$output .= "<article class='${class}_item-wrap'>";
