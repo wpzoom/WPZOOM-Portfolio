@@ -127,8 +127,12 @@ class WPZOOM_Blocks_Portfolio {
 		],
 		'primaryColor' => [
 			'type'    => 'string',
-			'default' => '#0bb4aa'
-		]
+			'default' => '#0BB4AA'
+		],
+        'secondaryColor' => [
+            'type'    => 'string',
+            'default' => '#000'
+        ]
 	];
 
 	/**
@@ -453,18 +457,30 @@ class WPZOOM_Blocks_Portfolio {
 			$output .= '<li class="' . $class . '_no-portfolio-items">' . esc_html__(  'No portfolio items.', 'wpzoom-portfolio' ) . '</li>';
 		}
 
-		$filter_color = '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li a:hover,
+		$filter_color_hover = '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li a:hover,
                          .wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li.current-cat a,
                          .wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li.current-cat a:hover {
 							color:' . $attr['primaryColor'] . ';
 		                 }';
-		$button_color = '.wpzoom-blocks_portfolio-block .wpz-portfolio-button__link {
-							background:' . $attr['primaryColor'] . ';
+
+        $filter_color = '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li a {
+                                    color:' . $attr['secondaryColor'] . ';
+                                 }';
+		$button_color_hover = '.wpzoom-blocks_portfolio-block .wpz-portfolio-button__link {
+							background:' . $attr['secondaryColor'] . ';
 						}';
+
+        $button_color = '.wpzoom-blocks_portfolio-block .wpz-portfolio-button__link:hover,
+                        .wpzoom-blocks_portfolio-block .wpz-portfolio-button__link:focus,
+                        .wpzoom-blocks_portfolio-block .wpz-portfolio-button__link:active {
+                            background:' . $attr['primaryColor'] . ';
+                        }';
 		$css = sprintf( 
 			'<style>%s</style>',
 			$filter_color .
-			$button_color
+            $filter_color_hover .
+			$button_color .
+            $button_color_hover
 		);
 		
 

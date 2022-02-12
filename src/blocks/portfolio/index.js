@@ -12,6 +12,7 @@ import ServerSideRender from '@wordpress/server-side-render';
  * Internal dependencies
  */
 import { blockColors } from './colors-palette';
+import { secondaryColors } from './colors-palette';
 
 function buildTermsTree( flatTerms ) {
 	const flatTermsWithParentAndChildren = flatTerms.map( ( term ) => {
@@ -130,7 +131,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
 			const { amount, categories, columnsAmount, excerptLength, layout, lazyLoad, lightbox,
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, showDate,
-					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor } = attributes;
+					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor } = attributes;
 			const { imageSizes } = this.state;
 
 			if ( ! taxonomyList || ! imageSizes ) {
@@ -204,13 +205,20 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 				<>
 					<InspectorControls>
 						<PanelBody title={ __( 'Options', 'wpzoom-portfolio' ) } className="wpzb-settings-panel">
-							<PanelBody title={ __( 'Primary Color', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
+							<PanelBody title={ __( 'Accent Color', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
 									<ColorPalette
 									colors={ blockColors }
 									value={ primaryColor }
 									onChange={ ( color ) => setAttributes( { primaryColor: color } ) }
 								/>
 							</PanelBody>
+                            <PanelBody title={ __( 'Secondary Color', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
+                                    <ColorPalette
+                                    colors={ secondaryColors }
+                                    value={ secondaryColor }
+                                    onChange={ ( color ) => setAttributes( { secondaryColor: color } ) }
+                                />
+                            </PanelBody>
 							<PanelBody title={ __( 'Filtering', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
 								<SelectControl
 									label={ __( 'Portfolio Items Source', 'wpzoom-portfolio' ) }
