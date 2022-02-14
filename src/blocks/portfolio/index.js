@@ -11,8 +11,7 @@ import ServerSideRender from '@wordpress/server-side-render';
 /**
  * Internal dependencies
  */
-import { blockColors } from './colors-palette';
-import { secondaryColors } from './colors-palette';
+import { blockColors, secondaryColors } from './colors-palette';
 
 function buildTermsTree( flatTerms ) {
 	const flatTermsWithParentAndChildren = flatTerms.map( ( term ) => {
