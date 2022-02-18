@@ -129,7 +129,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 		render() {
 			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
 			const { amount, categories, columnsAmount, excerptLength, layout, lazyLoad, lightbox,
-					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, showDate,
+					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, loadCategoryDynamic, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor } = attributes;
 			const { imageSizes } = this.state;
 
@@ -327,8 +327,16 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									onChange={ ( value ) => setAttributes( { showCategoryFilter: value } ) }
 								/>
 
+								{ showCategoryFilter &&
+									<ToggleControl
+										label={ __('Load Dynamically New Posts in Each Category', 'wpzoom-portfolio' ) }
+										checked={ loadCategoryDynamic }
+										onChange={ ( value ) => setAttributes( { loadCategoryDynamic: value } ) } 
+									/>
+								}
+							
 								<HorizontalRule />
-
+								
 								<ToggleControl
 									label={ __( 'Show View All Button', 'wpzoom-portfolio' ) }
 									checked={ showViewAll }

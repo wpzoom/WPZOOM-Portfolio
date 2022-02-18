@@ -89,6 +89,10 @@ class WPZOOM_Blocks_Portfolio {
 			'type'    => 'boolean',
 			'default' => true
 		],
+		'loadCategoryDynamic' => [
+			'type'    => 'boolean',
+			'default' => true
+		],
 		'showDate' => [
 			'type'    => 'boolean',
 			'default' => true
@@ -369,6 +373,7 @@ class WPZOOM_Blocks_Portfolio {
 		$show_excerpt = isset( $attr[ 'showExcerpt' ] ) ? boolval( $attr[ 'showExcerpt' ] ) : true;
 		$excerpt_length = isset( $attr[ 'excerptLength' ] ) ? intval( $attr[ 'excerptLength' ] ) : 20;
 		$show_read_more = isset( $attr[ 'showReadMore' ] ) ? boolval( $attr[ 'showReadMore' ] ) : true;
+		$load_category_dynamic = isset( $attr[ 'loadCategoryDynamic' ] ) ? boolval( $attr[ 'loadCategoryDynamic' ] ) : true;
 
 		// CSS classes for query parameters
 		$post_type_class = ' post_type-' . $source;
@@ -383,6 +388,7 @@ class WPZOOM_Blocks_Portfolio {
 		$excerpt_class = $show_excerpt ? ' show-excerpt' : '';
 		$excerpt_length_class = ' excerpt-length-' . $excerpt_length;
 		$readmore_class = $show_read_more ? ' show-readmore' : '';
+		$load_category_dynamic_class = $load_category_dynamic ? ' load-category-dynamic': '';
 
 		// CSS classes for the layout type and columns amount
 		$layout = isset( $attr[ 'layout' ] ) && ! empty( $attr[ 'layout' ] ) ? $attr[ 'layout' ] : 'grid';
@@ -412,7 +418,7 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Build a string with all the CSS classes
 		$classes = "$class$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
-		            $date_class$excerpt_class$excerpt_length_class$readmore_class$align$layout$columns$lightbox$post_type_class";
+		            $date_class$excerpt_class$excerpt_length_class$readmore_class$align$layout$columns$lightbox$post_type_class$load_category_dynamic_class";
 
 		// Try to get portfolio items
 		$items_html = $this->items_html( array(
