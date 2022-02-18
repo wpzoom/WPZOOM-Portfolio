@@ -49,6 +49,10 @@ class WPZOOM_Blocks_Portfolio {
 			'type'    => 'number',
 			'default' => 3
 		],
+		'columnsGap' => [
+			'type'    => 'number',
+			'default' => 0
+		],
 		'excerptLength' => [
 			'type'    => 'number',
 			'default' => 20
@@ -481,12 +485,16 @@ class WPZOOM_Blocks_Portfolio {
                         .wpzoom-blocks_portfolio-block .wpz-portfolio-button__link:active {
                             background:' . $attr['primaryColor'] . ';
                         }';
+				
+		$columns_gap = isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ? '.wpzoom-blocks_portfolio-block_items-list { grid-gap:' . $attr['columnsGap'] . 'px; }' : '';
+
 		$css = sprintf( 
 			'<style>%s</style>',
 			$filter_color .
             $filter_color_hover .
 			$button_color .
-            $button_color_hover
+            $button_color_hover . 
+			$columns_gap
 		);
 		
 

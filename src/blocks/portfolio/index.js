@@ -128,7 +128,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 
 		render() {
 			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
-			const { amount, categories, columnsAmount, excerptLength, layout, lazyLoad, lightbox,
+			const { amount, categories, columnsAmount, columnsGap, excerptLength, layout, lazyLoad, lightbox,
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, loadCategoryDynamic, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor } = attributes;
 			const { imageSizes } = this.state;
@@ -318,6 +318,13 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										value={ columnsAmount }
 									/>
 								}
+								<RangeControl
+									label={ __( 'Columns Gap', 'wpzoom-portfolio' ) }
+									max={ 100 }
+									min={ 0 }
+									onChange={ ( value ) => setAttributes( { columnsGap: value } ) }
+									value={ columnsGap }
+								/>
 
 								<HorizontalRule />
 
