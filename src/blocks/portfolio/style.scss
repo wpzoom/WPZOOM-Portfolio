@@ -8,6 +8,10 @@ $primary_color: #0bb4aa;
 		font-size: inherit;
 	}
 
+    .wpzoom-blocks_portfolio-block_item-wrap {
+        overflow: hidden;
+        position: relative;
+    }
 
     .wpz-portfolio-button__link {
         color: #fff !important;
