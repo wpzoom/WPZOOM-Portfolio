@@ -369,6 +369,7 @@ class WPZOOM_Blocks_Portfolio {
 		$show_excerpt = isset( $attr[ 'showExcerpt' ] ) ? boolval( $attr[ 'showExcerpt' ] ) : true;
 		$excerpt_length = isset( $attr[ 'excerptLength' ] ) ? intval( $attr[ 'excerptLength' ] ) : 20;
 		$show_read_more = isset( $attr[ 'showReadMore' ] ) ? boolval( $attr[ 'showReadMore' ] ) : true;
+		$extra_class = isset( $attr['className'] ) ? ' ' . esc_attr( $attr['className'] ) : '';
 
 		// CSS classes for query parameters
 		$post_type_class = ' post_type-' . $source;
@@ -412,7 +413,7 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Build a string with all the CSS classes
 		$classes = "$class$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
-		            $date_class$excerpt_class$excerpt_length_class$readmore_class$align$layout$columns$lightbox$post_type_class";
+		            $date_class$excerpt_class$excerpt_length_class$readmore_class$align$layout$columns$lightbox$post_type_class$extra_class";
 
 		// Try to get portfolio items
 		$items_html = $this->items_html( array(
