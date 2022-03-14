@@ -14,13 +14,24 @@
  * Author:      WPZOOM
  * Author URI:  https://www.wpzoom.com
  * Text Domain: wpzoom-portfolio
- * Version:     1.0.5
+ * Version:     1.0.4
  * License:     GPL2+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
 // Exit if accessed directly
 defined( 'ABSPATH' ) || exit;
+
+if ( ! defined( 'WPZOOM_PORTFOLIO_VERSION' ) ) {
+	define( 'WPZOOM_PORTFOLIO_VERSION', '1.0.4' );
+}
+
+define( 'WPZOOM_PORTFOLIO__FILE__', __FILE__ );
+define( 'WPZOOM_PORTFOLIO_PLUGIN_BASE', plugin_basename( WPZOOM_PORTFOLIO__FILE__ ) );
+define( 'WPZOOM_PORTFOLIO_PLUGIN_DIR', dirname( WPZOOM_PORTFOLIO_PLUGIN_BASE ) );
+
+define( 'WPZOOM_PORTFOLIO_PATH', plugin_dir_path( WPZOOM_PORTFOLIO__FILE__ ) );
+define( 'WPZOOM_PORTFOLIO_URL', plugin_dir_url( WPZOOM_PORTFOLIO__FILE__ ) );
 
 // Instance the plugin
 $wpzoom_blocks = new WPZOOM_Blocks();
@@ -46,7 +57,7 @@ class WPZOOM_Blocks {
 	 * @access public
 	 * @since  1.0.0
 	 */
-	public const VERSION = '1.0.5';
+	public const VERSION = '1.0.4';
 
 	/**
 	 * Whether the plugin has been initialized.
@@ -393,4 +404,19 @@ class WPZOOM_Blocks {
 		// Return the array
 		return $featured_media_urls;
 	}
+}
+
+//Add Portfolio Shortcode
+require_once 'classes/class-wpzoom-portfolio-shortcode.php';
+
+require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
+require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
+//require_once 'classes/class-wpzoom-portfolio-settings-page.php';
+add_action( 'init', 'WPZOOM_Blocks_Portfolio_Shortcode::instance' );
+
+/**
+ * Check if the Elementor Page Builder is enabled load the widget
+ */
+if ( defined( 'ELEMENTOR_VERSION' ) && is_callable( 'Elementor\Plugin::instance' ) ) {
+	require_once 'elementor/wpzoom-portfolio-elementor.php';
 }

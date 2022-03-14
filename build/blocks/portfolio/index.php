@@ -157,135 +157,6 @@ class WPZOOM_Blocks_Portfolio {
         add_filter( 'manage_portfolio_item_posts_columns', array( $this, 'add_portfolio_item_img_column' ) );
         add_filter( 'manage_portfolio_item_posts_custom_column', array( $this, 'manage_portfolio_item_img_column' ), 10, 2 );
 
-
-		// Add the portfolio post type
-		register_post_type( 'portfolio_item', array(
-			'can_export'          => true,
-			'description'         => esc_html__( 'A portfolio type for featuring items in your portfolio.', 'wpzoom-portfolio' ),
-			'exclude_from_search' => false,
-			'has_archive'         => true,
-			'hierarchical'        => false,
-			'labels'              => array(
-				'add_new'                  => esc_html_x( 'Add New', 'portfolio_item', 'wpzoom-portfolio' ),
-				'add_new_item'             => esc_html__( 'Add New Portfolio Post', 'wpzoom-portfolio' ),
-				'all_items'                => esc_html__( 'All Portfolio Posts', 'wpzoom-portfolio' ),
-				'archives'                 => esc_html_x( 'Portfolio Archives', 'The post type archive label used in nav menus. Default "Post Archives". Added in 4.4', 'wpzoom-portfolio' ),
-				'attributes'               => esc_html__( 'Portfolio Post Attributes', 'wpzoom-portfolio' ),
-				'edit_item'                => esc_html__( 'Edit Portfolio Post', 'wpzoom-portfolio' ),
-				'filter_items_list'        => esc_html_x( 'Filter portfolio items list', 'Screen reader text for the filter links heading on the post type listing screen. Default "Filter posts list". Added in 4.4', 'wpzoom-portfolio' ),
-				'insert_into_item'         => esc_html_x( 'Insert into portfolio item', 'Overrides the "Insert into post" phrase (used when inserting media into a post). Added in 4.4', 'wpzoom-portfolio' ),
-				'items_list'               => esc_html_x( 'Portfolio Items list', 'Screen reader text for the items list heading on the post type listing screen. Default "Posts list". Added in 4.4', 'wpzoom-portfolio' ),
-				'items_list_navigation'    => esc_html_x( 'Portfolio Items list navigation', 'Screen reader text for the pagination heading on the post type listing screen. Default "Posts list navigation". Added in 4.4', 'wpzoom-portfolio' ),
-				'item_published'           => esc_html__( 'Portfolio Post published.', 'wpzoom-portfolio' ),
-				'item_published_privately' => esc_html__( 'Portfolio Post published privately.', 'wpzoom-portfolio' ),
-				'item_reverted_to_draft'   => esc_html__( 'Portfolio Post reverted to draft.', 'wpzoom-portfolio' ),
-				'item_scheduled'           => esc_html__( 'Portfolio Post scheduled.', 'wpzoom-portfolio' ),
-				'item_updated'             => esc_html__( 'Portfolio Post updated.', 'wpzoom-portfolio' ),
-				'menu_name'                => esc_html_x( 'Portfolio', 'Admin Menu text', 'wpzoom-portfolio' ),
-				'name'                     => esc_html_x( 'Portfolio', 'Post type general name', 'wpzoom-portfolio' ),
-				'name_admin_bar'           => esc_html_x( 'Portfolio Post', 'Add New on Toolbar', 'wpzoom-portfolio' ),
-				'new_item'                 => esc_html__( 'New Portfolio Post', 'wpzoom-portfolio' ),
-				'not_found'                => esc_html__( 'No portfolio posts found.', 'wpzoom-portfolio' ),
-				'not_found_in_trash'       => esc_html__( 'No portfolio posts found in Trash.', 'wpzoom-portfolio' ),
-				'parent_item_colon'        => esc_html__( 'Parent Portfolio Items:', 'wpzoom-portfolio' ),
-				'search_items'             => esc_html__( 'Search Portfolio Posts', 'wpzoom-portfolio' ),
-				'singular_name'            => esc_html_x( 'Portfolio Post', 'Post type singular name', 'wpzoom-portfolio' ),
-				'uploaded_to_this_item'    => esc_html_x( 'Uploaded to this portfolio item', 'Overrides the "Uploaded to this post" phrase (used when viewing media attached to a post). Added in 4.4', 'wpzoom-portfolio' ),
-				'view_item'                => esc_html__( 'View Portfolio Post', 'wpzoom-portfolio' ),
-				'view_items'               => esc_html__( 'View Portfolio Posts', 'wpzoom-portfolio' )
-			),
-			'menu_icon'           => 'dashicons-portfolio',
-			'menu_position'       => 26,
-			'public'              => true,
-            /* The rewrite handles the URL structure. */
-            'rewrite'             => array(
-                'slug'       => 'project',
-                'with_front' => false,
-                'pages'      => true,
-                'feeds'      => true,
-                'ep_mask'    => EP_PERMALINK,
-            ),
-			'show_in_rest'        => true,
-			'supports'            => array( 'author', 'custom-fields', 'editor', 'excerpt', 'revisions', 'thumbnail', 'title' ),
-		) );
-
-		// Add the portfolio categories taxonomy
-		register_taxonomy( 'portfolio', 'portfolio_item', array(
-			'description'       => esc_html__( 'Categories for portfolio items.', 'wpzoom-portfolio' ),
-			'hierarchical'      => true,
-			'labels'            => array(
-				'add_new_item'               => esc_html__( 'Add New Category', 'wpzoom-portfolio' ),
-				'add_or_remove_items'        => esc_html__( 'Add or remove categories', 'wpzoom-portfolio' ),
-				'all_items'                  => esc_html__( 'All Categories', 'wpzoom-portfolio' ),
-				'back_to_items'              => esc_html__( '&larr; Back to Categories', 'wpzoom-portfolio' ),
-				'choose_from_most_used'      => esc_html__( 'Choose from the most used categories', 'wpzoom-portfolio' ),
-				'edit_item'                  => esc_html__( 'Edit Category', 'wpzoom-portfolio' ),
-				'items_list'                 => esc_html__( 'Categories list', 'wpzoom-portfolio' ),
-				'items_list_navigation'      => esc_html__( 'Categories list navigation', 'wpzoom-portfolio' ),
-				'most_used'                  => esc_html_x( 'Most Used', 'categories', 'wpzoom-portfolio' ),
-				'name'                       => esc_html_x( 'Categories', 'taxonomy general name', 'wpzoom-portfolio' ),
-				'new_item_name'              => esc_html__( 'New Category Name', 'wpzoom-portfolio' ),
-				'no_terms'                   => esc_html__( 'No categories', 'wpzoom-portfolio' ),
-				'not_found'                  => esc_html__( 'No categories found.', 'wpzoom-portfolio' ),
-				'parent_item'                => esc_html__( 'Parent Category', 'wpzoom-portfolio' ),
-				'parent_item_colon'          => esc_html__( 'Parent Category:', 'wpzoom-portfolio' ),
-				'popular_items'              => esc_html__( 'Popular Categories', 'wpzoom-portfolio' ),
-				'search_items'               => esc_html__( 'Search Categories', 'wpzoom-portfolio' ),
-				'separate_items_with_commas' => esc_html__( 'Separate categories with commas', 'wpzoom-portfolio' ),
-				'singular_name'              => esc_html_x( 'Category', 'taxonomy singular name', 'wpzoom-portfolio' ),
-				'update_item'                => esc_html__( 'Update Category', 'wpzoom-portfolio' ),
-				'view_item'                  => esc_html__( 'View Category', 'wpzoom-portfolio' )
-			),
-			'public'            => true,
-            'rewrite'             => array(
-                'slug'       => 'portfolio',
-                'with_front' => false,
-                'pages'      => true,
-                'feeds'      => true,
-                'ep_mask'    => EP_PERMALINK,
-            ),
-
-			'show_admin_column' => true,
-			'show_in_rest'      => true
-		) );
-
-		// Register the post meta fields for storing a video for a portfolio item
-		register_post_meta( 'portfolio_item', '_wpzb_portfolio_video_type', array(
-			'show_in_rest'      => true,
-			'type'              => 'string',
-			'single'            => true,
-			'sanitize_callback' => 'sanitize_text_field',
-			'auth_callback'     => function () { return current_user_can( 'edit_posts' ); }
-		) );
-		register_post_meta( 'portfolio_item', '_wpzb_portfolio_video_id', array(
-			'show_in_rest'      => true,
-			'type'              => 'integer',
-			'single'            => true,
-			'sanitize_callback' => 'sanitize_text_field',
-			'auth_callback'     => function () { return current_user_can( 'edit_posts' ); }
-		) );
-		register_post_meta( 'portfolio_item', '_wpzb_portfolio_video_url', array(
-			'show_in_rest'      => true,
-			'type'              => 'string',
-			'single'            => true,
-			'sanitize_callback' => 'sanitize_text_field',
-			'auth_callback'     => function () { return current_user_can( 'edit_posts' ); }
-		) );
-
-		// Register a custom image size for use as the default image size
-		add_image_size( 'portfolio_item-thumbnail', 600, 400, true );
-
-		// Ensure there is a Uncategorized category for the portfolio post type
-		if ( is_null( term_exists( 'uncategorized', 'portfolio' ) ) ) {
-			wp_insert_term( esc_html__( 'Uncategorized', 'wpzoom-portfolio' ), 'portfolio', array( 'slug' => 'uncategorized' ) );
-		}
-
-		// Ensure the Uncategorized category is the default for the portfolio post type
-		$term = get_term_by( 'slug', 'uncategorized', 'portfolio' );
-		if ( false === get_option( 'default_portfolio', false ) && $term ) {
-			update_option( 'default_portfolio', $term->term_id );
-		}
-
 		// Use the Uncategorized category for any portfolio posts saved without a category selected
 		add_action( 'save_post', array( $this, 'set_default_object_terms' ), 10, 3 );
 
@@ -294,6 +165,65 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Hook into the REST API in order to add some custom things
 		add_action( 'rest_api_init', array( $this, 'rest_api_routes' ) );
+	}
+
+	/**
+	 * Add submenu for CPT Recipe Card.
+	 *
+	 * @since 1.0.5
+	 */
+	public function add_admin_menu_submenu() {
+
+		add_submenu_page( 
+			'wpzoom-portfolio-settings', 
+			esc_html__( 'Portfolio Items', 'wpzoom-portfolio' ),
+			esc_html__( 'Portfolio Items', 'wpzoom-portfolio' ),
+			'edit_pages',
+			'edit.php?post_type=portfolio_item'
+		);
+	
+	}
+
+	/**
+	 * Fixin issue with active submenu for CPT Recipe Card.
+	 *
+	 * @since 1.0.5
+	 */
+	public function fix_admin_parent_file( $parent_file ){
+    
+		global $submenu_file, $current_screen;
+
+		if( $this->get_current_post_type( 'portfolio_item' ) ) {
+
+			$submenu_file = 'edit.php?post_type=portfolio_item';
+			$parent_file = 'wpzoom-portfolio-settings';
+		
+		}
+		
+		return $parent_file;
+	
+	}
+
+	/**
+	 * Get current post type.
+	 *
+	 * @since 1.0.5
+	 */
+	public function get_current_post_type( $post_type = '' ) {
+		
+		$type = false;
+	
+		if( isset( $_GET['post'] ) ) {
+			$id = $_GET['post'];
+			$post = get_post( $id );
+			if( is_object( $post ) && $post->post_type == $post_type ) {
+				$type = true;
+			}
+		} elseif ( isset( $_GET['post_type'] ) && $_GET['post_type'] == $post_type ) {
+			$type = true;
+		}
+		
+		return $type;	
 	}
 
 
