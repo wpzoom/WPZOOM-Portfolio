@@ -144,7 +144,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 
 		render() {
 			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
-			const { amount, categories, columnsAmount, excerptLength, layout, lazyLoad, lightbox,
+			const { amount, categories, columnsAmount, layout, lazyLoad, lightbox,
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor } = attributes;
 			const { imageSizes } = this.state;
@@ -187,16 +187,6 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 					checked={ showExcerpt }
 					onChange={ ( value ) => setAttributes( { showExcerpt: value } ) }
 				/>
-
-				{ showExcerpt &&
-					<RangeControl
-						label={ __( 'Excerpt Length', 'wpzoom-portfolio' ) }
-						value={ excerptLength }
-						onChange={ ( value ) => setAttributes( { excerptLength: value } ) }
-						min={ 1 }
-						max={ 1000 }
-					/>
-				}
 
 				<HorizontalRule />
 
@@ -343,8 +333,8 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									label={ __( 'Layout Type', 'wpzoom-portfolio' ) }
 									onChange={ ( value ) => setAttributes( { layout: value } ) }
 									options={ [
-										{ value: 'list', label: __( 'List', 'wpzoom-portfolio' ) },
-										{ value: 'grid', label: __( 'Grid', 'wpzoom-portfolio' ) }
+										{ value: 'list', label: __( 'Columns', 'wpzoom-portfolio' ) },
+										{ value: 'grid', label: __( 'Overlay', 'wpzoom-portfolio' ) }
 									] }
 									selected={ layout }
 								/>

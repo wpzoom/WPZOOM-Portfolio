@@ -64,7 +64,6 @@ if ( ! class_exists( 'WPZOOM_Blocks_Portfolio_Shortcode' ) ) {
 					'alwaysPlayBackgroundVideo' => false,
 					'categories'                => '',
 					'columnsAmount'             => 3,
-					'excerptLength'             => 20,
 					'layout'                    => 'grid',
 					'lightbox'                  => true,
 					'lightboxCaption'           => false,

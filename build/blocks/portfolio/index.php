@@ -49,10 +49,6 @@ class WPZOOM_Blocks_Portfolio {
 			'type'    => 'number',
 			'default' => 3
 		],
-		'excerptLength' => [
-			'type'    => 'number',
-			'default' => 20
-		],
 		'layout' => [
 			'type'    => 'string',
 			'default' => 'grid'
@@ -297,7 +293,6 @@ class WPZOOM_Blocks_Portfolio {
 		$show_author = isset( $attr[ 'showAuthor' ] ) ? boolval( $attr[ 'showAuthor' ] ) : true;
 		$show_date = isset( $attr[ 'showDate' ] ) ? boolval( $attr[ 'showDate' ] ) : true;
 		$show_excerpt = isset( $attr[ 'showExcerpt' ] ) ? boolval( $attr[ 'showExcerpt' ] ) : true;
-		$excerpt_length = isset( $attr[ 'excerptLength' ] ) ? intval( $attr[ 'excerptLength' ] ) : 20;
 		$show_read_more = isset( $attr[ 'showReadMore' ] ) ? boolval( $attr[ 'showReadMore' ] ) : true;
 		$extra_class = isset( $attr['className'] ) ? ' ' . esc_attr( $attr['className'] ) : '';
 
@@ -312,7 +307,6 @@ class WPZOOM_Blocks_Portfolio {
 		$author_class = $show_author ? ' show-author' : '';
 		$date_class = $show_date ? ' show-date' : '';
 		$excerpt_class = $show_excerpt ? ' show-excerpt' : '';
-		$excerpt_length_class = ' excerpt-length-' . $excerpt_length;
 		$readmore_class = $show_read_more ? ' show-readmore' : '';
 
 		// CSS classes for the layout type and columns amount
@@ -343,13 +337,12 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Build a string with all the CSS classes
 		$classes = "$class$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
-		            $date_class$excerpt_class$excerpt_length_class$readmore_class$align$layout$columns$lightbox$post_type_class$extra_class";
+		            $date_class$excerpt_class$readmore_class$align$layout$columns$lightbox$post_type_class$extra_class";
 
 		// Try to get portfolio items
 		$items_html = $this->items_html( array(
 			'categories'            => $categories,
 			'class'                 => 'wpzoom-blocks_portfolio-block',
-			'excerpt_length'        => $excerpt_length,
 			'layout'                => $layout,
 			'order'                 => $order,
 			'order_by'              => $order_by,
@@ -390,11 +383,13 @@ class WPZOOM_Blocks_Portfolio {
 
 		$filter_color_hover = '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li a:hover,
                          .wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li.current-cat a,
-                         .wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li.current-cat a:hover {
+                         .wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li.current-cat a:hover,
+                         .wpzoom-blocks_portfolio-block.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a:hover {
 							color:' . $attr['primaryColor'] . ';
 		                 }';
 
-        $filter_color = '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li a {
+        $filter_color = '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li a,
+        .wpzoom-blocks_portfolio-block.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a {
                                     color:' . $attr['secondaryColor'] . ';
                                  }';
 		$button_color_hover = '.wpzoom-blocks_portfolio-block .wpz-portfolio-button__link {
@@ -432,7 +427,6 @@ class WPZOOM_Blocks_Portfolio {
 		$defaults = array(
 			'categories'            => array(),
 			'class'                 => 'wpzoom-blocks_portfolio-block',
-			'excerpt_length'        => 20,
 			'layout'                => 'grid',
 			'order'                 => 'desc',
 			'order_by'              => 'date',
@@ -528,21 +522,24 @@ class WPZOOM_Blocks_Portfolio {
 					$output .= "<div class='${class}_item-thumbnail'>
 						<div class='${class}_item-media'>
 							<a href='$permalink' title='$title_attr' rel='bookmark'>$thumbnail</a>
-						</div>
-					</div>";
+						</div>";
+
+                    // Add the lightbox icon
+                    $output .= "<span class='${class}_lightbox_icon'><svg enable-background='new 0 0 32 32' id='Layer_4' version='1.1' viewBox='0 0 32 32' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g><rect fill='none' height='30' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2' transform='matrix(6.123234e-17 -1 1 6.123234e-17 0 32)' width='30' x='1' y='1'/><line fill='none' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2' x1='27' x2='5' y1='5' y2='27'/><polyline fill='none' points='16,27 5,27 5,16     ' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2'/><polyline fill='none' points='16,5 27,5 27,16     ' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2'/></g></svg></span>";
+
+                    $output .= "</div>";
+
 				}
 
 				// Add a wrapper div around just the portfolio item details (excluding the thumbnail)
 				$output .= "<div class='${class}_item-details'>";
 
-                // Add the lightbox icon
-                $output .= "<span class='${class}_lightbox_icon'><svg enable-background='new 0 0 32 32' id='Layer_4' version='1.1' viewBox='0 0 32 32' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g><rect fill='none' height='30' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2' transform='matrix(6.123234e-17 -1 1 6.123234e-17 0 32)' width='30' x='1' y='1'/><line fill='none' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2' x1='27' x2='5' y1='5' y2='27'/><polyline fill='none' points='16,27 5,27 5,16     ' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2'/><polyline fill='none' points='16,5 27,5 27,16     ' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2'/></g></svg></span>";
 
 				// Add the portfolio item title to the output
 				$output .= "<h3 class='${class}_item-title'><a href='$permalink' title='$title_attr' rel='bookmark'>$title</a></h3>";
 
 				// If the layout type is set to list...
-				if ( 'list' == $args[ 'layout' ] ) {
+				if ( ' layout-list' == $args[ 'layout' ] ) {
 					// Add a wrapper div around just the portfolio item meta if needed
 					if ( $args[ 'show_author' ] || $args[ 'show_date' ] ) {
 						$output .= "<div class='${class}_item-meta'>";
@@ -579,12 +576,10 @@ class WPZOOM_Blocks_Portfolio {
 					// If the excerpt should be shown...
 					if ( $args[ 'show_excerpt' ] ) {
 						// Get the excerpt
-						$raw_cont = get_the_content( '', false, $post );
-						$cont = str_replace( ']]>', ']]&gt;', apply_filters( 'the_content', excerpt_remove_blocks( strip_shortcodes( $raw_cont ) ) ) );
-						$excerpt = force_balance_tags( html_entity_decode( wp_trim_words( htmlentities( $cont ), $args[ 'excerpt_length' ], null ) ) );
+						$raw_cont = get_the_excerpt( $post );
 
 						// Add the excerpt to the output
-						$output .= "<div class='${class}_item-content'>$excerpt</div>";
+						$output .= "<div class='${class}_item-content'>$raw_cont</div>";
 					}
 
 					// If the Read More button should be shown...
@@ -814,7 +809,6 @@ class WPZOOM_Blocks_Portfolio {
 				$show_author = isset( $params[ 'show_author' ] ) ? boolval( $params[ 'show_author' ] ) : true;
 				$show_date = isset( $params[ 'show_date' ] ) ? boolval( $params[ 'show_date' ] ) : true;
 				$show_excerpt = isset( $params[ 'show_excerpt' ] ) ? boolval( $params[ 'show_excerpt' ] ) : true;
-				$excerpt_length = isset( $params[ 'excerpt_length' ] ) ? intval( $params[ 'excerpt_length' ] ) : 20;
 				$show_read_more = isset( $params[ 'show_read_more' ] ) ? boolval( $params[ 'show_read_more' ] ) : true;
 				$source = isset( $params[ 'source' ] ) ? $params[ 'source' ] : 'portfolio_item';
 
@@ -833,7 +827,6 @@ class WPZOOM_Blocks_Portfolio {
 					'show_author'           => $show_author,
 					'show_date'             => $show_date,
 					'show_excerpt'          => $show_excerpt,
-					'excerpt_length'        => $excerpt_length,
 					'show_read_more'        => $show_read_more,
 					'source'                => $source
 				) );

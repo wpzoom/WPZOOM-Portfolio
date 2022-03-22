@@ -1,7 +1,7 @@
 $primary_color: #0bb4aa;
 
 .wpzoom-blocks_portfolio-block {
-	font-size: 1rem;
+	font-size: 16px;
     margin: 50px 0;
 
 	* {
@@ -84,13 +84,127 @@ $primary_color: #0bb4aa;
 		}
 	}
 
-	&.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item {
-		margin: 0 0 5em;
+	&.layout-list {
 
-		&:last-child {
-			margin-bottom: 0;
-		}
-	}
+        .wpzoom-blocks_portfolio-block_items-list {
+            margin: 0 auto;
+            max-width: 1200px;
+            padding: 0 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2%;
+        }
+
+        .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item {
+
+               display: flex;
+               margin: 0 0 50px;
+               max-width: 100%;
+               -webkit-flex-basis: 32%;
+               flex-basis: 32%;
+
+
+            .wpzoom-blocks_portfolio-block_item-thumbnail {
+                margin: 0 0 20px;
+            }
+
+
+            .wpzoom-blocks_portfolio-block_item-title {
+                padding: 0;
+                margin: 0 0 0.3em;
+                font-size: 22px;
+                font-weight: 600;
+
+                    a {
+                        color: #000;
+                        text-decoration: none;
+
+                        &:hover {
+                            color: $primary_color;
+                        }
+                    }
+            }
+
+
+    	}
+
+    }
+
+
+
+    .wpzoom-blocks_portfolio-block_item-thumbnail {
+
+        overflow: hidden;
+
+        img {
+            transition: all 0.2s;
+
+            width: 100%;
+            height: auto;
+            vertical-align: top;
+            margin: 0;
+            padding: 0;
+        }
+
+        .wpzoom-blocks_portfolio-block_lightbox_icon {
+            position: absolute;
+            top: 5%;
+            right: 2%;
+            content: '\2715';
+            cursor: pointer;
+            font-size: 24px;
+            line-height: 1;
+            color: #eee;
+            paint-order: stroke fill;
+            z-index: 80;
+
+            svg {
+                color: #fff;
+                path: #fff;
+                fill: #fff;
+                display: block;
+                width: 24px;
+                height: 24px;
+                border-radius: 3px;
+                opacity: 0;
+                transition: .2s ease all;
+            }
+
+            &:hover {
+                svg { opacity: 1 !important; }
+            }
+        }
+
+    }
+
+    .wpzoom-blocks_portfolio-block_item {
+
+        &.has-cover:not(.lightbox) {
+            &:hover {
+                .wpzoom-blocks_portfolio-block_item-thumbnail img,
+                .wpzoom-blocks_portfolio-block_item-bgvid {
+                    transform: scale(110%);
+                }
+
+                .wpzoom-blocks_portfolio-block_item-details {
+                    opacity: 1;
+                }
+
+
+                .wpzoom-blocks_portfolio-block_lightbox_icon {
+
+                    svg {
+                        opacity: 0.6;
+                    }
+                }
+
+
+            }
+
+        }
+    }
+
+
 
 	&.layout-grid .wpzoom-blocks_portfolio-block_items-list {
 		display: grid;
@@ -105,14 +219,6 @@ $primary_color: #0bb4aa;
 
 			.wpzoom-blocks_portfolio-block_item-thumbnail {
 				margin: 0;
-
-                img {
-                    width: 100%;
-                    height: auto;
-                    vertical-align: top;
-                    margin: 0;
-                    padding: 0;
-                }
 			}
 
 			.wpzoom-blocks_portfolio-block_item-details {
@@ -123,36 +229,6 @@ $primary_color: #0bb4aa;
 				bottom: 0;
 				background: rgba(0, 0, 0, 0.1);
 				transition: all 0.2s;
-
-
-                .wpzoom-blocks_portfolio-block_lightbox_icon {
-                    position: absolute;
-                    top: 5%;
-                    right: 2%;
-                    content: '\2715';
-                    cursor: pointer;
-                    font-size: 24px;
-                    line-height: 1;
-                    color: #eee;
-                    paint-order: stroke fill;
-
-                    svg {
-                        color: #fff;
-                        path: #fff;
-                        fill: #fff;
-                        display: block;
-                        width: 24px;
-                        height: 24px;
-                        border-radius: 3px;
-                        opacity: .3;
-                        transition: .2s ease all;
-
-                        &:hover {
-                            opacity: 1;
-                        }
-                    }
-
-                }
 
 
 				.wpzoom-blocks_portfolio-block_item-title {
@@ -178,32 +254,32 @@ $primary_color: #0bb4aa;
 				}
 			}
 
-			&.has-cover:not(.lightbox) {
-				&:hover {
-					.wpzoom-blocks_portfolio-block_item-thumbnail,
-					.wpzoom-blocks_portfolio-block_item-bgvid {
-						transform: scale(110%);
-					}
-	
-					.wpzoom-blocks_portfolio-block_item-details {
-						opacity: 1;
-					}
-				}
 
-				.wpzoom-blocks_portfolio-block_item-details {
-					background: rgba(0, 0, 0, 0.7);
-					opacity: 0;
+            &.has-cover:not(.lightbox) {
+                &:hover {
 
-					.wpzoom-blocks_portfolio-block_item-title {
-						a {
-							color: #fff;
+                    .wpzoom-blocks_portfolio-block_item-details {
+                        opacity: 1;
+                    }
+
+                }
+
+                .wpzoom-blocks_portfolio-block_item-details {
+                    background: rgba(0, 0, 0, 0.7);
+                    opacity: 0;
+
+                    .wpzoom-blocks_portfolio-block_item-title {
+                        a {
+                            color: #fff;
                             font-size: 20px;
                             font-weight: 500;
 
-						}
-					}
-				}
-			}
+                        }
+                    }
+                }
+            }
+
+
 		}
 	}
 
@@ -221,7 +297,6 @@ $primary_color: #0bb4aa;
 	.wpzoom-blocks_portfolio-block_items-list {
 		list-style: none;
 		padding: 0;
-		margin: 0;
 
 		.wpzoom-blocks_portfolio-block_item {
 			position: relative;
@@ -247,6 +322,7 @@ $primary_color: #0bb4aa;
 					margin: 0;
 				}
 			}
+
 
 			&.lightbox {
 				.wpzoom-blocks_portfolio-block_item-thumbnail,
@@ -320,15 +396,14 @@ $primary_color: #0bb4aa;
 			}
 
 			.wpzoom-blocks_portfolio-block_item-title {
-				font-size: 4em;
+                font-size: 4em;
 				padding: 0;
-				margin: 0 0 0.3em;
+				margin: 0 0 20px;
 			}
 
 			.wpzoom-blocks_portfolio-block_item-meta {
-				font-size: 1.6em;
 				padding: 0;
-				margin: 0 0 1em;
+				margin: 0 0 20px;
 
 				.wpzoom-blocks_portfolio-block_item-author,
 				.wpzoom-blocks_portfolio-block_item-date {
@@ -374,9 +449,10 @@ $primary_color: #0bb4aa;
 			}
 
 			.wpzoom-blocks_portfolio-block_item-content {
-				font-size: 2em;
 				padding: 0;
 				margin: 0;
+
+                .link-more { display: none; }
 
 				*:last-child {
 					margin-bottom: 0;
@@ -385,11 +461,8 @@ $primary_color: #0bb4aa;
 
 			.wpzoom-blocks_portfolio-block_item-readmore-button {
 				padding: 0;
-				margin: 2em 0 0;
+				margin: 20px 0 0;
 
-				a {
-					font-size: 1.5em;
-				}
 			}
 		}
 	}
@@ -488,6 +561,10 @@ $primary_color: #0bb4aa;
             flex-shrink: 0;
         }
     }
+
+    .wpzoom-blocks_portfolio-block.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item {
+        flex-basis: 48%;
+    }
 }
 
 
@@ -507,4 +584,11 @@ $primary_color: #0bb4aa;
         grid-template-columns: repeat(1, 1fr);
     }
 
+    .wpzoom-blocks_portfolio-block.layout-list .wpzoom-blocks_portfolio-block_items-list {
+        gap: 0;
+    }
+
+    .wpzoom-blocks_portfolio-block.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item {
+        flex-basis: 100%;
+    }
 }
