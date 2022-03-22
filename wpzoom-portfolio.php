@@ -408,15 +408,7 @@ class WPZOOM_Blocks {
 
 //Add Portfolio Shortcode
 require_once 'classes/class-wpzoom-portfolio-shortcode.php';
-
 require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
 require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
-//require_once 'classes/class-wpzoom-portfolio-settings-page.php';
-add_action( 'init', 'WPZOOM_Blocks_Portfolio_Shortcode::instance' );
 
-/**
- * Check if the Elementor Page Builder is enabled load the widget
- */
-if ( defined( 'ELEMENTOR_VERSION' ) && is_callable( 'Elementor\Plugin::instance' ) ) {
-	require_once 'elementor/wpzoom-portfolio-elementor.php';
-}
+add_action( 'init', 'WPZOOM_Blocks_Portfolio_Shortcode::instance' );
