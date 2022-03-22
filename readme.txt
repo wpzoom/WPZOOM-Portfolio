@@ -2,10 +2,10 @@
 Contributors:      WPZOOM, alexus450, ciorici, jick
 Donate link:       http://paypal.me/wpzm/10usd
 Author URI:        https://www.wpzoom.com/
-Requires at least: 5.2
-Requires PHP:      5.6
+Requires at least: 5.8
+Requires PHP:      7.2
 Tested up to:      5.9
-Stable tag:        1.0.5
+Stable tag:        1.1.0
 License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Tags:              portfolio, gutenberg, block, grid, wpzoom, inspiro
@@ -57,6 +57,11 @@ This plugin works great with any theme. If you're looking for a Portfolio Theme,
 
 
 == Changelog ==
+
+= 1.1.0 =
+* Added new Portfolio Layout section where you can create a reusable layout that can be inserted anywhere using a shortcode
+* Added new layout to display items in 3 columns with text below the thumbnail
+* Added new option to add spacing between items in the Overlay layout
 
 = 1.0.5 =
 * Minor bug fix with Custom CSS classes not used by the block
