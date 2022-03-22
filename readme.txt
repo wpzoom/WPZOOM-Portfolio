@@ -23,14 +23,23 @@ Just a simple plugin to create Portfolio posts and display them in a beautiful g
 * Add Portfolio posts in the "Portfolio" section
 * Display your portfolio posts using the "Portfolio" block
 
+= How to create a Portfolio Layout? =
+
+* Go to Portfolio > Portfolio Layouts page
+* Add a Title and configure the options of the Portfolio block as you want
+* Copy the Shortcode from the top in the Portfolio block settings
+* Insert the Shortcode anywhere you want on your website.
+
 
 = Features =
 
-* Create Portfolio Posts
+* Create Portfolio Posts & Layouts
 * Portfolio Block
+* Portfolio Layout Shortcode (Insert it in any page builder: Elementor, Beaver Builder, etc)
 * Supports Blog posts as well!
 * Isotope effect (category filter)
 * Image Lightbox
+* 2 Layouts: Grid with Overlay & Columns
 * More features coming soon...
 
 
