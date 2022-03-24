@@ -348,6 +348,8 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										value={ columnsAmount }
 									/>
 								}
+
+                                { layout == 'grid' &&
 								<RangeControl
 									label={ __( 'Columns Gap', 'wpzoom-portfolio' ) }
 									max={ 100 }
@@ -355,7 +357,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									onChange={ ( value ) => setAttributes( { columnsGap: value } ) }
 									value={ columnsGap }
 								/>
-
+                                }
 								<HorizontalRule />
 
 								<ToggleControl
