@@ -167,67 +167,6 @@ class WPZOOM_Blocks_Portfolio {
 		add_action( 'rest_api_init', array( $this, 'rest_api_routes' ) );
 	}
 
-	/**
-	 * Add submenu for CPT Recipe Card.
-	 *
-	 * @since 1.0.5
-	 */
-	public function add_admin_menu_submenu() {
-
-		add_submenu_page( 
-			'wpzoom-portfolio-settings', 
-			esc_html__( 'Portfolio Items', 'wpzoom-portfolio' ),
-			esc_html__( 'Portfolio Items', 'wpzoom-portfolio' ),
-			'edit_pages',
-			'edit.php?post_type=portfolio_item'
-		);
-	
-	}
-
-	/**
-	 * Fixin issue with active submenu for CPT Recipe Card.
-	 *
-	 * @since 1.0.5
-	 */
-	public function fix_admin_parent_file( $parent_file ){
-    
-		global $submenu_file, $current_screen;
-
-		if( $this->get_current_post_type( 'portfolio_item' ) ) {
-
-			$submenu_file = 'edit.php?post_type=portfolio_item';
-			$parent_file = 'wpzoom-portfolio-settings';
-		
-		}
-		
-		return $parent_file;
-	
-	}
-
-	/**
-	 * Get current post type.
-	 *
-	 * @since 1.0.5
-	 */
-	public function get_current_post_type( $post_type = '' ) {
-		
-		$type = false;
-	
-		if( isset( $_GET['post'] ) ) {
-			$id = $_GET['post'];
-			$post = get_post( $id );
-			if( is_object( $post ) && $post->post_type == $post_type ) {
-				$type = true;
-			}
-		} elseif ( isset( $_GET['post_type'] ) && $_GET['post_type'] == $post_type ) {
-			$type = true;
-		}
-		
-		return $type;	
-	}
-
-
-
     /**
       * Add featured image in portfolio list
       *
@@ -299,6 +238,7 @@ class WPZOOM_Blocks_Portfolio {
 		$show_excerpt = isset( $attr[ 'showExcerpt' ] ) ? boolval( $attr[ 'showExcerpt' ] ) : true;
 		$show_read_more = isset( $attr[ 'showReadMore' ] ) ? boolval( $attr[ 'showReadMore' ] ) : true;
 		$extra_class = isset( $attr['className'] ) ? ' ' . esc_attr( $attr['className'] ) : '';
+		$read_more_label = isset( $attr['readMoreLabel'] ) ? esc_html( $attr['readMoreLabel'] ) : esc_html__( 'Read More', 'wpzoom-portfolio' );
 
 		// CSS classes for query parameters
 		$post_type_class = ' post_type-' . $source;
@@ -315,7 +255,7 @@ class WPZOOM_Blocks_Portfolio {
 
 		// CSS classes for the layout type and columns amount
 		$layout = isset( $attr[ 'layout' ] ) && ! empty( $attr[ 'layout' ] ) ? $attr[ 'layout' ] : 'grid';
-		$layout = ' layout-' . $layout;
+		$layout_class = ' layout-' . $layout;
 		$columns = isset( $attr[ 'layout' ] ) && 'list' != $attr[ 'layout' ] &&
 		           isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ? ' columns-' . $attr[ 'columnsAmount' ] : '';
 
@@ -341,17 +281,18 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Build a string with all the CSS classes
 		$classes = "$class$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
-		            $date_class$excerpt_class$readmore_class$align$layout$columns$lightbox$post_type_class$extra_class";
+		            $date_class$excerpt_class$readmore_class$align$layout_class$columns$lightbox$post_type_class$extra_class";
 
 		// Try to get portfolio items
 		$items_html = $this->items_html( array(
 			'categories'            => $categories,
 			'class'                 => 'wpzoom-blocks_portfolio-block',
 			'layout'                => $layout,
+			'lightbox'              => $use_lightbox,
 			'order'                 => $order,
 			'order_by'              => $order_by,
 			'per_page'              => $per_page,
-			'read_more_label'       => esc_html__( 'Read More', 'wpzoom-portfolio' ),
+			'read_more_label'       => $read_more_label,
 			'show_author'           => $show_author,
 			'show_background_video' => $show_video,
 			'show_date'             => $show_date,
@@ -434,6 +375,7 @@ class WPZOOM_Blocks_Portfolio {
 			'categories'            => array(),
 			'class'                 => 'wpzoom-blocks_portfolio-block',
 			'layout'                => 'grid',
+			'lightbox'              => true,
 			'order'                 => 'desc',
 			'order_by'              => 'date',
 			'page'                  => 1,
@@ -530,8 +472,18 @@ class WPZOOM_Blocks_Portfolio {
 							<a href='$permalink' title='$title_attr' rel='bookmark'>$thumbnail</a>
 						</div>";
 
-                    // Add the lightbox icon
-                    $output .= "<span class='${class}_lightbox_icon'><svg enable-background='new 0 0 32 32' id='Layer_4' version='1.1' viewBox='0 0 32 32' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><g><rect fill='none' height='30' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2' transform='matrix(6.123234e-17 -1 1 6.123234e-17 0 32)' width='30' x='1' y='1'/><line fill='none' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2' x1='27' x2='5' y1='5' y2='27'/><polyline fill='none' points='16,27 5,27 5,16     ' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2'/><polyline fill='none' points='16,5 27,5 27,16     ' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2'/></g></svg></span>";
+					if( $args[ 'lightbox' ] ) {
+						// Add the lightbox icon
+						$output .= "<span class='${class}_lightbox_icon'>
+										<svg enable-background='new 0 0 32 32' id='Layer_4' version='1.1' viewBox='0 0 32 32' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
+											<g>
+												<rect fill='none' height='30' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2' transform='matrix(6.123234e-17 -1 1 6.123234e-17 0 32)' width='30' x='1' y='1'/>
+													<line fill='none' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2' x1='27' x2='5' y1='5' y2='27'/><polyline fill='none' points='16,27 5,27 5,16' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2'/>
+													<polyline fill='none' points='16,5 27,5 27,16' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2'/>
+											</g>
+										</svg>
+									</span>";
+						};
 
                     $output .= "</div>";
 
@@ -545,7 +497,7 @@ class WPZOOM_Blocks_Portfolio {
 				$output .= "<h3 class='${class}_item-title'><a href='$permalink' title='$title_attr' rel='bookmark'>$title</a></h3>";
 
 				// If the layout type is set to list...
-				if ( ' layout-list' == $args[ 'layout' ] ) {
+				if ( 'list' == $args[ 'layout' ] ) {
 					// Add a wrapper div around just the portfolio item meta if needed
 					if ( $args[ 'show_author' ] || $args[ 'show_date' ] ) {
 						$output .= "<div class='${class}_item-meta'>";
@@ -591,7 +543,7 @@ class WPZOOM_Blocks_Portfolio {
 					// If the Read More button should be shown...
 					if ( $args[ 'show_read_more' ] ) {
 						// Get the label for the button
-						$readmore = $args[ 'read_more_label' ] ? $args[ 'read_more_label' ] : esc_html__( 'Read More', 'wpzoom-portfolio' );
+						$readmore = $args[ 'read_more_label' ] ? esc_html( $args[ 'read_more_label' ] ) : esc_html__( 'Read More', 'wpzoom-portfolio' );
 						$readmore_title = esc_attr__( 'Continue reading this post...', 'wpzoom-portfolio' );
 
 						// Add the button to the output
@@ -599,7 +551,10 @@ class WPZOOM_Blocks_Portfolio {
 							<a href='$permalink' title='$readmore_title' class='wpz-portfolio-button__link'>$readmore</a>
 						</div>";
 					}
+
 				}
+
+				
 
 				// Close the portfolio item details wrapper div
 				$output .= '</div>';
