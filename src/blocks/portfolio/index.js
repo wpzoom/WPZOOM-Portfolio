@@ -126,12 +126,30 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 			this.isStillMounted = false;
 		}
 
+		// eslint-disable-next-line class-methods-use-this
+		onShortcodeClick( event ) {
+			window.getSelection().selectAllChildren( event.target );
+		}
+
+		// fix the problem with Gutenberg shortcode transform (allowed only plain text pasted).
+		// eslint-disable-next-line class-methods-use-this
+		onShortcodeCopy( event ) {
+			// fix the problem with Gutenberg shortcode transform (allowed only plain text pasted).
+			const copyText = window.getSelection().toString().replace( /[\n\r]+/g, '' );
+
+			event.clipboardData.setData( 'text/plain', copyText );
+			event.preventDefault();
+		}
+
 		render() {
 			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
 			const { amount, categories, columnsAmount, columnsGap, excerptLength, layout, lazyLoad, lightbox,
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, loadCategoryDynamic, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor } = attributes;
 			const { imageSizes } = this.state;
+
+			const post_type = wp.data.select( 'core/editor' ).getCurrentPostType();
+			const post_id   = wp.data.select('core/editor').getCurrentPost().id;
 
 			if ( ! taxonomyList || ! imageSizes ) {
 				return (
@@ -204,6 +222,27 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 				<>
 					<InspectorControls>
 						<PanelBody title={ __( 'Options', 'wpzoom-portfolio' ) } className="wpzb-settings-panel">
+							{ 'portfolio_layout' == post_type && (
+							<PanelBody title={ __( 'Shortcode', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
+								<p>{ __( 'To output this custom layout you can use the following shortcodes:', 'wpzoom-portfolio' ) }</p>
+								<p>
+									{ __( 'Layout:', 'wpzoom-portfolio' ) }
+									<br />
+									<code
+										role="button"
+										tabIndex="0"
+										aria-hidden="true"
+										onClick={ this.onShortcodeClick }
+										onCopy={ this.onShortcodeCopy }
+										onCut={ this.onShortcodeCopy }
+									>
+										[wpzoom_portfolio_layout id=&quot;
+										{ post_id }
+										&quot;]
+									</code>
+								</p>
+							</PanelBody>						
+							)}
 							<PanelBody title={ __( 'Accent Color', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
 									<ColorPalette
 									colors={ blockColors }
