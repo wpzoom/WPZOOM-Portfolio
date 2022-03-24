@@ -11,8 +11,7 @@ import ServerSideRender from '@wordpress/server-side-render';
 /**
  * Internal dependencies
  */
-import { blockColors } from './colors-palette';
-import { secondaryColors } from './colors-palette';
+import { blockColors, secondaryColors } from './colors-palette';
 
 function buildTermsTree( flatTerms ) {
 	const flatTermsWithParentAndChildren = flatTerms.map( ( term ) => {
@@ -127,30 +126,12 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 			this.isStillMounted = false;
 		}
 
-		// eslint-disable-next-line class-methods-use-this
-		onShortcodeClick( event ) {
-			window.getSelection().selectAllChildren( event.target );
-		}
-
-		// fix the problem with Gutenberg shortcode transform (allowed only plain text pasted).
-		// eslint-disable-next-line class-methods-use-this
-		onShortcodeCopy( event ) {
-			// fix the problem with Gutenberg shortcode transform (allowed only plain text pasted).
-			const copyText = window.getSelection().toString().replace( /[\n\r]+/g, '' );
-
-			event.clipboardData.setData( 'text/plain', copyText );
-			event.preventDefault();
-		}
-
 		render() {
 			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
-			const { amount, categories, columnsAmount, columnsGap, layout, lazyLoad, lightbox,
-					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, showDate,
+			const { amount, categories, columnsAmount, columnsGap, excerptLength, layout, lazyLoad, lightbox,
+					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, loadCategoryDynamic, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor } = attributes;
 			const { imageSizes } = this.state;
-
-			const post_type = wp.data.select( 'core/editor' ).getCurrentPostType();
-			const post_id   = wp.data.select('core/editor').getCurrentPost().id;
 
 			if ( ! taxonomyList || ! imageSizes ) {
 				return (
@@ -188,6 +169,16 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 					onChange={ ( value ) => setAttributes( { showExcerpt: value } ) }
 				/>
 
+				{ showExcerpt &&
+					<RangeControl
+						label={ __( 'Excerpt Length', 'wpzoom-portfolio' ) }
+						value={ excerptLength }
+						onChange={ ( value ) => setAttributes( { excerptLength: value } ) }
+						min={ 1 }
+						max={ 1000 }
+					/>
+				}
+
 				<HorizontalRule />
 
 				<ToggleControl
@@ -213,27 +204,6 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 				<>
 					<InspectorControls>
 						<PanelBody title={ __( 'Options', 'wpzoom-portfolio' ) } className="wpzb-settings-panel">
-							{ 'portfolio_layout' == post_type && (
-							<PanelBody title={ __( 'Shortcode', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
-								<p>{ __( 'To output this custom layout you can use the following shortcodes:', 'wpzoom-portfolio' ) }</p>
-								<p>
-									{ __( 'Layout:', 'wpzoom-portfolio' ) }
-									<br />
-									<code
-										role="button"
-										tabIndex="0"
-										aria-hidden="true"
-										onClick={ this.onShortcodeClick }
-										onCopy={ this.onShortcodeCopy }
-										onCut={ this.onShortcodeCopy }
-									>
-										[wpzoom_portfolio_layout id=&quot;
-										{ post_id }
-										&quot;]
-									</code>
-								</p>
-							</PanelBody>						
-							)}
 							<PanelBody title={ __( 'Accent Color', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
 									<ColorPalette
 									colors={ blockColors }
@@ -333,8 +303,8 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									label={ __( 'Layout Type', 'wpzoom-portfolio' ) }
 									onChange={ ( value ) => setAttributes( { layout: value } ) }
 									options={ [
-										{ value: 'list', label: __( 'Columns', 'wpzoom-portfolio' ) },
-										{ value: 'grid', label: __( 'Overlay', 'wpzoom-portfolio' ) }
+										{ value: 'list', label: __( 'List', 'wpzoom-portfolio' ) },
+										{ value: 'grid', label: __( 'Grid', 'wpzoom-portfolio' ) }
 									] }
 									selected={ layout }
 								/>
@@ -348,8 +318,6 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										value={ columnsAmount }
 									/>
 								}
-
-                                { layout == 'grid' &&
 								<RangeControl
 									label={ __( 'Columns Gap', 'wpzoom-portfolio' ) }
 									max={ 100 }
@@ -357,7 +325,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									onChange={ ( value ) => setAttributes( { columnsGap: value } ) }
 									value={ columnsGap }
 								/>
-                                }
+
 								<HorizontalRule />
 
 								<ToggleControl
@@ -366,8 +334,16 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									onChange={ ( value ) => setAttributes( { showCategoryFilter: value } ) }
 								/>
 
+								{ showCategoryFilter &&
+									<ToggleControl
+										label={ __('Load Dynamically New Posts in Each Category', 'wpzoom-portfolio' ) }
+										checked={ loadCategoryDynamic }
+										onChange={ ( value ) => setAttributes( { loadCategoryDynamic: value } ) } 
+									/>
+								}
+							
 								<HorizontalRule />
-
+								
 								<ToggleControl
 									label={ __( 'Show View All Button', 'wpzoom-portfolio' ) }
 									checked={ showViewAll }
