@@ -9,10 +9,7 @@ import { delegate, extractClassValue } from '../../utility';
  * @this  {Element}
  */
 function filterButtonClick( event ) {
-
 	event.preventDefault();
-	let container = this.closest( '.wpzoom-blocks_portfolio-block' );
-	let loadDynamic = container.classList.contains( 'load-category-dynamic' ) ? true : false;
 
 	let item = this.parentElement;
 
@@ -28,10 +25,6 @@ function filterButtonClick( event ) {
 				filterBtn.classList.remove( 'current-cat' );
 			} );
 			item.classList.add( 'current-cat' );
-
-			if( 0 === show.length && loadDynamic ) {
-				document.getElementsByClassName("wpz-portfolio-button__link")[0].click();
-			}
 
 			show.forEach( theItem => {
 				let classList = theItem.classList;
@@ -91,7 +84,6 @@ function portfolioItemClick( event ) {
  * @this  {Element}
  */
 function portfolioItemLightboxClose( event ) {
-	
 	let item = this.closest( '.wpzoom-blocks_portfolio-block_item' );
 
 	if ( item.classList.contains( 'lightbox' ) && event.target.matches( '.wpzoom-blocks_portfolio-block_item-bgvid, .wpzoom-blocks_portfolio-block_item-thumbnail' ) ) {
@@ -125,7 +117,6 @@ function portfolioShowMoreClick( event ) {
 	        show_author:    container.classList.contains( 'show-author' ),
 	        show_date:      container.classList.contains( 'show-date' ),
 	        show_excerpt:   container.classList.contains( 'show-excerpt' ),
-	        excerpt_length: parseInt( extractClassValue( container, 'excerpt-length-' ) ) || 20,
 	        show_read_more: container.classList.contains( 'show-readmore' ),
 			source: container.classList.contains( 'post_type-post' ) ? 'post' : 'portfolio_item'
 	    } ),
@@ -182,7 +173,7 @@ domReady( () => {
 		'.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_show-more a',
 		portfolioShowMoreClick
 	);
-
+	
 	document.onkeydown = function( evt ) {
 		evt = evt || window.event;
 		var isEscape = false;
