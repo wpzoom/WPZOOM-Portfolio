@@ -1,7 +1,7 @@
 import apiFetch from '@wordpress/api-fetch';
 import { InspectorControls } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
-import { Disabled, HorizontalRule, PanelBody, Placeholder, RadioControl, RangeControl, SelectControl, Spinner, TextControl, ToggleControl, TreeSelect , ColorPalette } from '@wordpress/components';
+import { BaseControl, Disabled, HorizontalRule, PanelBody, Placeholder, RadioControl, RangeControl, SelectControl, Spinner, TextControl, ToggleControl, TreeSelect , ColorPalette } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { Component, Fragment } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
@@ -212,12 +212,12 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 			return (
 				<>
 					<InspectorControls>
-						<PanelBody title={ __( 'Options', 'wpzoom-portfolio' ) } className="wpzb-settings-panel">
-							{ 'portfolio_layout' == post_type && (
-							<PanelBody title={ __( 'Shortcode', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
-								<p>{ __( 'To output this custom layout you can use the following shortcodes:', 'wpzoom-portfolio' ) }</p>
+						{ 'portfolio_layout' == post_type && (
+							<PanelBody title={ __( 'Shortcode', 'wpzoom-portfolio' ) } className="wpzb-settings-panel">
+								<p>{ __( 'To output this custom layout you can use the following shortcode:', 'wpzoom-portfolio' ) }</p>
 								<p>
 									{ __( 'Layout:', 'wpzoom-portfolio' ) }
+									<br />
 									<br />
 									<code
 										role="button"
@@ -232,23 +232,25 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										&quot;]
 									</code>
 								</p>
-							</PanelBody>						
-							)}
-							<PanelBody title={ __( 'Accent Color', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
-									<ColorPalette
+							</PanelBody>
+						)}
+						<PanelBody title={ __( 'Colors', 'wpzoom-portfolio' ) } className="wpzb-settings-panel">
+							<BaseControl label={ __( 'Accent Color', 'wpzoom-portfolio' ) } >
+								<ColorPalette
 									colors={ blockColors }
 									value={ primaryColor }
 									onChange={ ( color ) => setAttributes( { primaryColor: color } ) }
 								/>
-							</PanelBody>
-                            <PanelBody title={ __( 'Secondary Color', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
-                                    <ColorPalette
+							</BaseControl>
+							<BaseControl label={ __( 'Secondary Color', 'wpzoom-portfolio' ) } >
+                                <ColorPalette
                                     colors={ secondaryColors }
                                     value={ secondaryColor }
                                     onChange={ ( color ) => setAttributes( { secondaryColor: color } ) }
                                 />
-                            </PanelBody>
-							<PanelBody title={ __( 'Filtering', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
+							</BaseControl>
+						</PanelBody>
+						<PanelBody title={ __( 'Filtering', 'wpzoom-portfolio' ) } className="wpzb-settings-panel">
 								<SelectControl
 									label={ __( 'Portfolio Items Source', 'wpzoom-portfolio' ) }
 									value={ source }
@@ -326,8 +328,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									required
 								/>
 							</PanelBody>
-
-							<PanelBody title={ __( 'Layout', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
+							<PanelBody title={ __( 'Layout', 'wpzoom-portfolio' ) } className="wpzb-settings-panel">
 								<RadioControl
 									className="wpzb-button-select wpzb-button-select-icons"
 									label={ __( 'Layout Type', 'wpzoom-portfolio' ) }
@@ -358,16 +359,11 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									value={ columnsGap }
 								/>
                                 }
-								<HorizontalRule />
-
 								<ToggleControl
 									label={ __( 'Show Category Filter at the Top', 'wpzoom-portfolio' ) }
 									checked={ showCategoryFilter }
 									onChange={ ( value ) => setAttributes( { showCategoryFilter: value } ) }
 								/>
-
-								<HorizontalRule />
-
 								<ToggleControl
 									label={ __( 'Show View All Button', 'wpzoom-portfolio' ) }
 									checked={ showViewAll }
@@ -391,14 +387,12 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									/>
 								}
 							</PanelBody>
-
-							<PanelBody title={ __( 'Fields', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
+							<PanelBody title={ __( 'Fields', 'wpzoom-portfolio' ) } className="wpzb-settings-panel">
 								<ToggleControl
 									label={ __( 'Show Thumbnail', 'wpzoom-portfolio' ) }
 									checked={ showThumbnail }
 									onChange={ ( value ) => setAttributes( { showThumbnail: value } ) }
 								/>
-
 								{ showThumbnail &&
 									<SelectControl
 										label={ __( 'Thumbnail Size', 'wpzoom-portfolio' ) }
@@ -407,20 +401,15 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										onChange={ ( value ) => setAttributes( { thumbnailSize: value } ) }
 									/>
 								}
-
 								<HorizontalRule />
-
-
 								{ fields }
 							</PanelBody>
-
-							<PanelBody title={ __( 'Other', 'wpzoom-portfolio' ) } className="wpzb-sub-panel">
+							<PanelBody title={ __( 'Other', 'wpzoom-portfolio' ) } className="wpzb-settings-panel">
 								<ToggleControl
 									label={ __( 'Open Portfolio Items in a Lightbox', 'wpzoom-portfolio' ) }
 									checked={ lightbox }
 									onChange={ ( value ) => setAttributes( { lightbox: value } ) }
 								/>
-
 								{ lightbox &&
 									<ToggleControl
 										label={ __( 'Show Lightbox Caption', 'wpzoom-portfolio' ) }
@@ -429,7 +418,6 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									/>
 								}
 							</PanelBody>
-						</PanelBody>
 					</InspectorControls>
 
 					<Fragment>
