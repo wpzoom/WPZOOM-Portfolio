@@ -18,6 +18,9 @@
 		"> 1%",
 		"last 2 versions"
 	],
+	"dependencies": {
+		"react-select": "1.2.1"
+	},
 	"devDependencies": {
 		"@babel/helper-compilation-targets": "^7.16.7",
 		"@wordpress/api-fetch": "^3.9.0",
