@@ -26,6 +26,9 @@ if ( ! defined( 'WPZOOM_PORTFOLIO_VERSION' ) ) {
 	define( 'WPZOOM_PORTFOLIO_VERSION', '1.1.0' );
 }
 
+// settings page url attribute
+define( 'WPZOOM_PORTFOLIO_SETTINGS_PAGE', 'wpzoom-portfolio-settings' );
+
 define( 'WPZOOM_PORTFOLIO__FILE__', __FILE__ );
 define( 'WPZOOM_PORTFOLIO_PLUGIN_BASE', plugin_basename( WPZOOM_PORTFOLIO__FILE__ ) );
 define( 'WPZOOM_PORTFOLIO_PLUGIN_DIR', dirname( WPZOOM_PORTFOLIO_PLUGIN_BASE ) );
@@ -155,7 +158,7 @@ class WPZOOM_Blocks {
 			$this->load_assets();
 
 			// Enqueue the main/root scripts and styles in the Gutenberg editor
-			add_action( 'enqueue_block_editor_assets', function() { wp_enqueue_script( 'wpzoom-blocks-js-index-main' ); wp_enqueue_style( 'wpzoom-blocks-css-editor-main' ); } );
+			add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_portfolio_block_editor_assets' ) );
 			add_action( 'enqueue_block_assets', function() { wp_enqueue_script( 'wpzoom-blocks-js-script-main' ); wp_enqueue_style( 'wpzoom-blocks-css-style-main' ); } );
 
 			// Hook into the REST API in order to add some custom things
@@ -166,7 +169,29 @@ class WPZOOM_Blocks {
 
 			// Mark the plugin as initialized
 			$this->initialized = true;
+
 		}
+
+	}
+
+	public function enqueue_portfolio_block_editor_assets() {
+
+		$options = get_option( 'wpzoom-portfolio-settings' );
+
+		wp_enqueue_script( 'wpzoom-blocks-js-index-main' ); 
+
+		wp_localize_script(
+			'wpzoom-blocks-js-index-main',
+			'wpzoomPortfolioBlock',
+			array(
+				'setting_options' => ( !empty( $options ) ? $options : array() )
+			)
+		);
+
+		wp_enqueue_style( 'wpzoom-blocks-css-editor-main' );
+
+
+
 	}
 
 	/**
@@ -289,7 +314,7 @@ class WPZOOM_Blocks {
 			array(
 				array(
 					'slug' => 'wpzoom-portfolio',
-					'title' => esc_html__( 'WPZOOM - Blocks', 'wpzoom-portfolio' ),
+					'title' => esc_html__( 'WPZOOM - Portfolio', 'wpzoom-portfolio' ),
 					'icon' => 'wordpress'
 				)
 			)
@@ -406,9 +431,20 @@ class WPZOOM_Blocks {
 	}
 }
 
-//Add Portfolio Shortcode
-require_once 'classes/class-wpzoom-portfolio-shortcode.php';
-require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
-require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
+function load_files() {
+	//Add Portfolio Shortcode
+	require_once 'classes/class-wpzoom-portfolio-shortcode.php';
+	require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
+	require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
 
+	//Load Settings Panel
+	require_once 'classes/class-wpzoom-settings-fields.php';
+	require_once 'classes/class-wpzoom-portfolio-settings-page.php';
+
+	//Load Archive template
+	require_once 'classes/class-wpzoom-portfolio-template.php';
+
+}
+
+add_action( 'plugin_loaded', 'load_files' );
 add_action( 'init', 'WPZOOM_Blocks_Portfolio_Shortcode::instance' );

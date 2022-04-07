@@ -162,6 +162,21 @@
 	}
 }
 
+.wpzb-settings-panel {
+	.components-panel__body-toggle {
+		&.components-button {
+			display:flex;
+			flex-direction:row-reverse;
+			justify-content:flex-end;
+		}
+		svg.components-panel__icon {
+			width:20px;
+			height:20px;
+			margin:0 10px 0 0;
+		}
+	}	
+}
+
 
 .wpzoom-blocks_portfolio-block.layout-grid .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item.has-cover:not(.lightbox) .wpzoom-blocks_portfolio-block_item-details .wpzoom-blocks_portfolio-block_item-title a {
     pointer-events: none;
