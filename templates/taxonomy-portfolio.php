@@ -25,7 +25,7 @@ $showAuthor    = ( '1' === $taxonomy_options['wpzoom_portfolio_settings_show_aut
 $showDate      = ( '1' === $taxonomy_options['wpzoom_portfolio_settings_show_date'] ? true : false );
 $showExcerpt   = ( '1' === $taxonomy_options['wpzoom_portfolio_settings_show_excerpt'] ? true : false );
 $showReadMore  = ( '1' === $taxonomy_options['wpzoom_portfolio_settings_show_read_more'] ? true : false );
-$readMoreLabel = !empty( $taxonomy_options['wpzoom_portfolio_settings_readmore_label'] ) ? esc_html( $taxonomy_options['wpzoom_portfolio_settings_readmore_label'] ) : esc_html__( 'Read More', 'portfolio-blocks-by-wpzoom' );
+$readMoreLabel = !empty( $taxonomy_options['wpzoom_portfolio_settings_readmore_label'] ) ? esc_html( $taxonomy_options['wpzoom_portfolio_settings_readmore_label'] ) : esc_html__( 'Read More', 'wpzoom-portfolio' );
 
 $lightbox        = ( '1' === $taxonomy_options['wpzoom_portfolio_settings_lightbox'] ? true : false );
 $lightboxCaption = ( '1' === $taxonomy_options['wpzoom_portfolio_settings_lightbox_caption'] ? true : false );

@@ -113,7 +113,7 @@ class WPZOOM_Portfolio_Settings_Fields {
 						'<span class="wpzoom-pb-field-preview dashicons dashicons-visibility" data-preview-position="%s" data-preview-thumbnail="%s" title="%s"></span>',
 						$preview_position,
 						$preview_thumbnail_url,
-						esc_html__( 'Preview', 'portfolio-blocks-by-wpzoom' )
+						esc_html__( 'Preview', 'wpzoom-portfolio' )
 					);
 				}
 				?>
@@ -162,7 +162,7 @@ class WPZOOM_Portfolio_Settings_Fields {
 	 * @return void
 	 */
 	public function button( $args ) {
-		$text        = isset( $args['text'] ) ? $args['text'] : __( 'Save Changes', 'portfolio-blocks-by-wpzoom' );
+		$text        = isset( $args['text'] ) ? $args['text'] : __( 'Save Changes', 'wpzoom-portfolio' );
 		$type        = isset( $args['type'] ) ? $args['type'] : 'submit';
 		$button_type = isset( $args['button_type'] ) ? $args['button_type'] : 'primary large';
 		$name        = isset( $args['label_for'] ) ? $args['label_for'] : 'wpzoom_rcb_button_field_submit';
@@ -219,7 +219,7 @@ class WPZOOM_Portfolio_Settings_Fields {
 	 * @return void
 	 */
 	public function scan_button( $args ) {
-		$text 			= isset( $args['text'] ) ? $args['text'] : __( 'Recipe Search', 'portfolio-blocks-by-wpzoom' );
+		$text 			= isset( $args['text'] ) ? $args['text'] : __( 'Recipe Search', 'wpzoom-portfolio' );
 		$type 			= isset( $args['type'] ) ? $args['type'] : 'submit';
 		$button_type 	= isset( $args['button_type'] ) ? $args['button_type'] : 'primary large';
 		$name 			= isset( $args['label_for'] ) ? $args['label_for'] : 'wpzoom_rcb_button_field_submit';
@@ -262,11 +262,11 @@ class WPZOOM_Portfolio_Settings_Fields {
 		?>
 		<span class="wpzoom-portfolio-search-note" style="line-height:30px;margin-left:10px;display:none;">
 			<strong id="wpzoom_recipe_cards_result_amount">0</strong>
-			<?php esc_html_e( 'Recipe Cards found! You can manage them', 'portfolio-blocks-by-wpzoom' ) ?> 
-			<a href="<?php echo admin_url( 'edit.php?post_type=wpzoom_rcb' ) ?>"><?php esc_html_e( 'here', 'portfolio-blocks-by-wpzoom' ) ?></a>
+			<?php esc_html_e( 'Recipe Cards found! You can manage them', 'wpzoom-portfolio' ) ?>
+			<a href="<?php echo admin_url( 'edit.php?post_type=wpzoom_rcb' ) ?>"><?php esc_html_e( 'here', 'wpzoom-portfolio' ) ?></a>
 		</span>
 		<p id="wpzoom_search_result" class="description" style="display:<?php echo $style_display ?>;margin-bottom:20px;">
-			<small><?php esc_html_e( 'Last Search: ', 'portfolio-blocks-by-wpzoom' ); ?><span><?php echo $search_time; ?></span></small>
+			<small><?php esc_html_e( 'Last Search: ', 'wpzoom-portfolio' ); ?><span><?php echo $search_time; ?></span></small>
 		</p>
 
 

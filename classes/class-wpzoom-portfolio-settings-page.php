@@ -221,30 +221,30 @@ class WPZOOM_Portfolio_Settings {
 	 * Initilize all settings
 	 */
 	public function settings_init() {
-		$premium_badge = '<span class="wpzoom-pb-badge wpzoom-pb-field-is_premium">' . __( 'Premium', 'portfolio-blocks-by-wpzoom' ) . '</span>';
-		$soon_badge    = '<span class="wpzoom-pb-badge wpzoom-pb-field-is_coming_soon">' . __( 'Coming Soon', 'portfolio-blocks-by-wpzoom' ) . '</span>';
+		$premium_badge = '<span class="wpzoom-pb-badge wpzoom-pb-field-is_premium">' . __( 'Premium', 'wpzoom-portfolio' ) . '</span>';
+		$soon_badge    = '<span class="wpzoom-pb-badge wpzoom-pb-field-is_coming_soon">' . __( 'Coming Soon', 'wpzoom-portfolio' ) . '</span>';
 
 		self::$settings = array(
 			'general'     => array(
 				'tab_id'       => 'tab-general',
-				'tab_title'    => __( 'General', 'portfolio-blocks-by-wpzoom' ),
+				'tab_title'    => __( 'General', 'wpzoom-portfolio' ),
 				'option_group' => 'wpzoom-portfolio-settings-general',
 				'option_name'  => self::$option,
 				'sections'     => array(
 					array(
 						'id'       => 'wpzoom_section_general',
-						'title'    => __( 'Portfolio Settings', 'portfolio-blocks-by-wpzoom' ),
+						'title'    => __( 'Portfolio Settings', 'wpzoom-portfolio' ),
 						'page'     => 'wpzoom-portfolio-settings-general',
 						'callback' => array( $this, 'section_general_cb' ),
 						'fields'   => array(
 							array(
 								'id'    => 'wpzoom_portfolio_root',
-								'title' => esc_html__( 'Slug', 'portfolio-blocks-by-wpzoom' ),
+								'title' => esc_html__( 'Slug', 'wpzoom-portfolio' ),
 								'type'  => 'input',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_root',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'The slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings - Permalinks screen after changing this setting', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'The slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings - Permalinks screen after changing this setting', 'wpzoom-portfolio' ),
 									'default'     => '',
 									'type'        => 'text',
 									'id_only'     => true
@@ -252,12 +252,12 @@ class WPZOOM_Portfolio_Settings {
 							),
 							array(
 								'id'    => 'wpzoom_portfolio_base',
-								'title' => esc_html__( 'Taxonomy Slug', 'portfolio-blocks-by-wpzoom' ),
+								'title' => esc_html__( 'Taxonomy Slug', 'wpzoom-portfolio' ),
 								'type'  => 'input',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_base',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'The taxonomy slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings - Permalinks screen after changing this setting', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'The taxonomy slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings - Permalinks screen after changing this setting', 'wpzoom-portfolio' ),
 									'default'     => '',
 									'type'        => 'text',
 									'id_only'     => true
@@ -267,18 +267,18 @@ class WPZOOM_Portfolio_Settings {
 					),
 					array(
 						'id'       => 'wpzoom_section_recipe_miscellaneous',
-						'title'    => __( 'Miscellaneous', 'portfolio-blocks-by-wpzoom' ),
+						'title'    => __( 'Miscellaneous', 'wpzoom-portfolio' ),
 						'page'     => 'wpzoom-portfolio-settings-general',
 						'callback' => '__return_false',
 						'fields'   => array(
 							array(
 								'id'    => 'wpzoom_portfolio_settings_sections_expanded',
-								'title' => __( 'Show Option\'s Sections Expanded?', 'portfolio-blocks-by-wpzoom' ),
+								'title' => __( 'Show Block Sections Expanded?', 'wpzoom-portfolio' ),
 								'type'  => 'checkbox',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_sections_expanded',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Expand the block\'s settings on initial load', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Expand the portfolio block settings on initial load', 'wpzoom-portfolio' ),
 									'default'     => false,
 									'preview'     => false,
 								),
@@ -289,63 +289,64 @@ class WPZOOM_Portfolio_Settings {
 			),
 			'portfolio-taxonomy' => array(
 				'tab_id'       => 'portfolio-taxonomy',
-				'tab_title'    => __( 'Taxonomy', 'portfolio-blocks-by-wpzoom' ),
+				'tab_title'    => __( 'Taxonomy', 'wpzoom-portfolio' ),
 				'option_group' => 'wpzoom-portfolio-settings-taxonomy',
 				'option_name'  => self::$option,
 				'sections'     => array(
 					array(
 						'id'       => 'wpzoom_section_taxonomy_template',
-						'title'    => __( 'Taxonomy Template', 'portfolio-blocks-by-wpzoom' ),
+						'title'    => __( 'Taxonomy Template', 'wpzoom-portfolio' ),
 						'page'     => 'wpzoom-portfolio-settings-taxonomy',
 						'callback' => array( $this, 'section_taxonomy_template_cb' ),
 						'fields'   => array(
 							array(
 								'id' => 'wpzoom_portfolio_settings_use_template',
-								'title' => __( 'Use Plugin\'s Template?', 'portfolio-blocks-by-wpzoom' ),
+								'title' => __( 'Use the template provided by the plugin', 'wpzoom-portfolio' ),
 								'type'  => 'checkbox',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_use_template',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Use the template provided by the plugin', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Use the template provided by the plugin', 'wpzoom-portfolio' ),
 									'default'     => true,
 									'preview'     => false,
 								),
 							),
 							array(
 								'id'    => 'wpzoom_portfolio_settings_taxonomy_layout',
-								'title' => esc_html__( 'Layout', 'portfolio-blocks-by-wpzoom' ),
+								'title' => esc_html__( 'Layout', 'wpzoom-portfolio' ),
 								'type'  => 'select',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_taxonomy_layout',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Portfolio Layout', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Portfolio Layout', 'wpzoom-portfolio' ),
 									'default'     => 'grid',
 									'options'     => array(
-										'list'    => esc_html__( 'Columns', 'portfolio-blocks-by-wpzoom' ),
-										'grid'    => esc_html__( 'Overlay', 'portfolio-blocks-by-wpzoom' ),
+										'list'    => esc_html__( 'Columns', 'wpzoom-portfolio' ),
+										'grid'    => esc_html__( 'Overlay', 'wpzoom-portfolio' ),
+                                        'masonry'    => esc_html__( 'Masonry', 'wpzoom-portfolio' ),
 									),
 								),
 							),
 							array(
 								'id'    => 'wpzoom_portfolio_settings_number_columns',
-								'title' => __( 'Columns', 'portfolio-blocks-by-wpzoom' ),
+								'title' => __( 'Columns', 'wpzoom-portfolio' ),
 								'type'  => 'input',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_number_columns',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Amount of Columns', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Amount of Columns', 'wpzoom-portfolio' ),
 									'default'     => 3,
 									'type'        => 'number',
 								),
 							),
 							array(
 								'id'    => 'wpzoom_portfolio_settings_columns_gap',
-								'title' => __( 'Columns Gap', 'portfolio-blocks-by-wpzoom' ),
+								'title' => __( 'Columns Gap', 'wpzoom-portfolio' ),
 								'type'  => 'input',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_columns_gap',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Set Columns Gap', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Set Columns Gap', 'wpzoom-portfolio' ),
 									'default'     => 0,
 									'type'        => 'number',
 								),
@@ -354,13 +355,13 @@ class WPZOOM_Portfolio_Settings {
 					),
 					array(
 						'id'       => 'wpzoom_section_taxonomy_colors',
-						'title'    => __( 'Colors', 'portfolio-blocks-by-wpzoom' ),
+						'title'    => __( 'Colors', 'wpzoom-portfolio' ),
 						'page'     => 'wpzoom-portfolio-settings-taxonomy',
 						'callback' => '__return_false',
 						'fields'   => array(
 							array(
 								'id'    => 'wpzoom_portfolio_settings_primary_color',
-								'title' => __( 'Primary Color', 'portfolio-blocks-by-wpzoom' ),
+								'title' => __( 'Primary Color', 'wpzoom-portfolio' ),
 								'type'  => 'colorpicker',
 								'args'  => array(
 									'label_for' => 'wpzoom_portfolio_settings_primary_color',
@@ -370,7 +371,7 @@ class WPZOOM_Portfolio_Settings {
 							),
 							array(
 								'id'    => 'wpzoom_portfolio_settings_secondary_color',
-								'title' => __( 'Secondary Color', 'portfolio-blocks-by-wpzoom' ),
+								'title' => __( 'Secondary Color', 'wpzoom-portfolio' ),
 								'type'  => 'colorpicker',
 								'args'  => array(
 									'label_for' => 'wpzoom_portfolio_settings_secondary_color',
@@ -382,90 +383,90 @@ class WPZOOM_Portfolio_Settings {
 					),
 					array(
 						'id'       => 'wpzoom_section_taxonomy_fields',
-						'title'    => __( 'Fields', 'portfolio-blocks-by-wpzoom' ),
+						'title'    => __( 'Fields', 'wpzoom-portfolio' ),
 						'page'     => 'wpzoom-portfolio-settings-taxonomy',
 						'callback' => '__return_false',
 						'fields'   => array(
 							array(
 								'id' => 'wpzoom_portfolio_settings_show_thumbnail',
-								'title' => esc_html__( 'Show Thumbnail', 'portfolio-blocks-by-wpzoom' ),
+								'title' => esc_html__( 'Show Thumbnail', 'wpzoom-portfolio' ),
 								'type'  => 'checkbox',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_show_thumbnail',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Show Featured Image of the porfolio item', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Show Featured Image of the porfolio item', 'wpzoom-portfolio' ),
 									'default'     => true,
 									'preview'     => false,
 								),
 							),
 							array(
 								'id'    => 'wpzoom_portfolio_settings_taxonomy_img_size',
-								'title' => esc_html__( 'Thumbnail Size', 'portfolio-blocks-by-wpzoom' ),
+								'title' => esc_html__( 'Thumbnail Size', 'wpzoom-portfolio' ),
 								'type'  => 'select',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_taxonomy_img_size',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Select size for the featured image', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Select size for the featured image', 'wpzoom-portfolio' ),
 									'default'     => 'portfolio_item-thumbnail',
 									'options'     => self::get_image_sizes(),
 								),
 							),
 							array(
 								'id' => 'wpzoom_portfolio_settings_show_author',
-								'title' => esc_html__( 'Show Author', 'portfolio-blocks-by-wpzoom' ),
+								'title' => esc_html__( 'Show Author', 'wpzoom-portfolio' ),
 								'type'  => 'checkbox',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_show_author',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Show author of the portfolio item', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Show author of the portfolio item', 'wpzoom-portfolio' ),
 									'default'     => true,
 									'preview'     => false,
 								),
 							),
 							array(
 								'id' => 'wpzoom_portfolio_settings_show_date',
-								'title' => esc_html__( 'Show Date', 'portfolio-blocks-by-wpzoom' ),
+								'title' => esc_html__( 'Show Date', 'wpzoom-portfolio' ),
 								'type'  => 'checkbox',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_show_date',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Show date of the portfolio item', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Show date of the portfolio item', 'wpzoom-portfolio' ),
 									'default'     => true,
 									'preview'     => false,
 								),
 							),
 							array(
 								'id' => 'wpzoom_portfolio_settings_show_excerpt',
-								'title' => esc_html__( 'Show Excerpt', 'portfolio-blocks-by-wpzoom' ),
+								'title' => esc_html__( 'Show Excerpt', 'wpzoom-portfolio' ),
 								'type'  => 'checkbox',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_show_excerpt',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Show excerpt of the portfolio item', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Show excerpt of the portfolio item', 'wpzoom-portfolio' ),
 									'default'     => true,
 									'preview'     => false,
 								),
 							),
 							array(
 								'id' => 'wpzoom_portfolio_settings_show_read_more',
-								'title' => esc_html__( 'Show Read More Button', 'portfolio-blocks-by-wpzoom' ),
+								'title' => esc_html__( 'Show Read More Button', 'wpzoom-portfolio' ),
 								'type'  => 'checkbox',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_show_read_more',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Show read more button', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Show read more button', 'wpzoom-portfolio' ),
 									'default'     => true,
 									'preview'     => false,
 								),
 							),
 							array(
 								'id'    => 'wpzoom_portfolio_settings_readmore_label',
-								'title' => __( 'Read More Button Label', 'portfolio-blocks-by-wpzoom' ),
+								'title' => __( 'Read More Button Label', 'wpzoom-portfolio' ),
 								'type'  => 'input',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_readmore_label',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Read More button label to display', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Read More button label to display', 'wpzoom-portfolio' ),
 									'default'     => '',
 									'type'        => 'text',
 								),
@@ -474,30 +475,30 @@ class WPZOOM_Portfolio_Settings {
 					),
 					array(
 						'id'       => 'wpzoom_section_taxonomy_other',
-						'title'    => esc_html__( 'Lightbox', 'portfolio-blocks-by-wpzoom' ),
+						'title'    => esc_html__( 'Lightbox', 'wpzoom-portfolio' ),
 						'page'     => 'wpzoom-portfolio-settings-taxonomy',
 						'callback' => '__return_false',
 						'fields'   => array(
 							array(
 								'id' => 'wpzoom_portfolio_settings_lightbox',
-								'title' => esc_html__( 'Open Portfolio Items in a Lightbox', 'portfolio-blocks-by-wpzoom' ),
+								'title' => esc_html__( 'Open Portfolio Items in a Lightbox', 'wpzoom-portfolio' ),
 								'type'  => 'checkbox',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_lightbox',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Enable lightbox', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Enable lightbox', 'wpzoom-portfolio' ),
 									'default'     => true,
 									'preview'     => false,
 								),
 							),
 							array(
 								'id' => 'wpzoom_portfolio_settings_lightbox_caption',
-								'title' => esc_html__( 'Show Lightbox Caption', 'portfolio-blocks-by-wpzoom' ),
+								'title' => esc_html__( 'Show Lightbox Caption', 'wpzoom-portfolio' ),
 								'type'  => 'checkbox',
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_settings_lightbox_caption',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'Show Lightbox Caption', 'portfolio-blocks-by-wpzoom' ),
+									'description' => esc_html__( 'Show Lightbox Caption', 'wpzoom-portfolio' ),
 									'default'     => false,
 									'preview'     => false,
 								),
@@ -723,12 +724,12 @@ class WPZOOM_Portfolio_Settings {
 	// the values are defined at the add_settings_section() function.
 	public function section_general_cb( $args ) {
 		?>
-		 <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'General configurations for portfolio plugin', 'portfolio-blocks-by-wpzoom' ); ?></p>
+		 <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'General configurations for portfolio plugin', 'wpzoom-portfolio' ); ?></p>
 		<?php
 	}
 	public function section_taxonomy_template_cb( $args ) {
 		?>
-		 <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Style the portfolio taxonomy archive page', 'portfolio-blocks-by-wpzoom' ); ?></p>
+		 <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Style the portfolio taxonomy archive page', 'wpzoom-portfolio' ); ?></p>
 		<?php
 	}
 }
