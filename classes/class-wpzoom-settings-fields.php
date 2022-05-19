@@ -49,8 +49,12 @@ class WPZOOM_Portfolio_Settings_Fields {
 	 * @return void
 	 */
 	public function input( $args ) {
+		
 		$value = self::parse_text_field( $args );
 		$type  = isset( $args['type'] ) ? $args['type'] : 'text';
+		$is_id_only = isset( $args['id_only'] ) ? true : false;
+		$name = !$is_id_only ? 'wpzoom-portfolio-settings[' . esc_attr( $args['label_for'] ) . ']' : esc_attr( $args['label_for'] );
+		
 		?>
 		<fieldset class="wpzoom-pb-field-input">
 			<?php
@@ -59,7 +63,7 @@ class WPZOOM_Portfolio_Settings_Fields {
 				$this->create_nonce_field( $args );
 			?>
 
-			<input name="wpzoom-portfolio-settings[<?php echo esc_attr( $args['label_for'] ); ?>]" type="<?php echo esc_attr( $type ); ?>" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="<?php echo esc_attr( $value ); ?>" class="regular-text" <?php echo ( self::is_disabled( $args ) ? 'disabled' : '' ); ?>/>
+			<input name="<?php echo $name; ?>" type="<?php echo esc_attr( $type ); ?>" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="<?php echo esc_attr( $value ); ?>" class="regular-text" <?php echo ( self::is_disabled( $args ) ? 'disabled' : '' ); ?>/>
 
 			<?php if ( isset( $args['description'] ) ) : ?>
 				<p class="description">
@@ -335,9 +339,15 @@ class WPZOOM_Portfolio_Settings_Fields {
 	 * @return boolean|string
 	 */
 	public static function parse_text_field( $args ) {
+
 		$default_value = WPZOOM_Portfolio_Settings::get_default_option_value( $args['label_for'] );
 
-		$value = isset( self::$options[ $args['label_for'] ] ) ? self::$options[ $args['label_for'] ] : $args['default'];
+		if( isset( $args['id_only'] ) ) {
+			$value = !empty( get_option( $args['label_for'] ) ) ? get_option( $args['label_for'] ) : $args['default'];
+		}
+		else {
+			$value = isset( self::$options[ $args['label_for'] ] ) ? self::$options[ $args['label_for'] ] : $args['default'];
+		}
 
 		if ( self::is_disabled( $args ) ) {
 			self::$options[ $args['label_for'] ] = $default_value;

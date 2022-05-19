@@ -203,9 +203,8 @@ $primary_color: #0bb4aa;
         }
     }
 
-
-
-	&.layout-grid .wpzoom-blocks_portfolio-block_items-list {
+	&.layout-grid .wpzoom-blocks_portfolio-block_items-list,
+	&.layout-masonry .wpzoom-blocks_portfolio-block_items-list {
 		display: grid;
 		/*gap: 2em;*/
         margin: 0;
@@ -282,11 +281,23 @@ $primary_color: #0bb4aa;
 		}
 	}
 
-	&.layout-grid.columns-1 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(1, 1fr); }
-	&.layout-grid.columns-2 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(2, 1fr); }
+	&.layout-masonry .wpzoom-blocks_portfolio-block_items-list {
+		display: block;
+	}
+	&.layout-masonry .wpzoom-blocks_portfolio-block_filter {
+		display: none;
+	}
+
+	&.layout-grid.columns-1 .wpzoom-blocks_portfolio-block_items-list,
+	&.layout-masonry.columns-1 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(1, 1fr); }
+	&.layout-grid.columns-2 .wpzoom-blocks_portfolio-block_items-list,
+	&.layout-masonry.columns-2 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(2, 1fr); }
 	&.layout-grid.columns-3 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(3, 1fr); }
-	&.layout-grid.columns-4 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(4, 1fr); }
-	&.layout-grid.columns-5 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(5, 1fr); }
+	&.layout-masonry.columns-3 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item{ width:33%; display:inline-block; }
+	&.layout-grid.columns-4 .wpzoom-blocks_portfolio-block_items-list,
+	&.layout-masonry.columns-4 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(4, 1fr); }
+	&.layout-grid.columns-5 .wpzoom-blocks_portfolio-block_items-list,
+	&.layout-masonry.columns-5 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(5, 1fr); }
 	&.layout-grid.columns-6 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(6, 1fr); }
 	&.layout-grid.columns-7 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(7, 1fr); }
 	&.layout-grid.columns-8 .wpzoom-blocks_portfolio-block_items-list { grid-template-columns: repeat(8, 1fr); }

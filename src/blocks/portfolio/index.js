@@ -370,8 +370,9 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									label={ __( 'Layout Type', 'wpzoom-portfolio' ) }
 									onChange={ ( value ) => setAttributes( { layout: value } ) }
 									options={ [
-										{ value: 'list', label: __( 'Columns', 'wpzoom-portfolio' ) },
-										{ value: 'grid', label: __( 'Overlay', 'wpzoom-portfolio' ) }
+										{ value: 'list',    label: __( 'Columns', 'wpzoom-portfolio' ) },
+										{ value: 'grid',    label: __( 'Overlay', 'wpzoom-portfolio' ) },
+										{ value: 'masonry', label: __( 'Masonry', 'wpzoom-portfolio' ) }
 									] }
 									selected={ layout }
 								/>
@@ -395,11 +396,13 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									value={ columnsGap }
 								/>
                                 }
+								{ layout !== 'masonry' &&
 								<ToggleControl
 									label={ __( 'Show Category Filter at the Top', 'wpzoom-portfolio' ) }
 									checked={ showCategoryFilter }
 									onChange={ ( value ) => setAttributes( { showCategoryFilter: value } ) }
 								/>
+								}
 								<ToggleControl
 									label={ __( 'Show View All Button', 'wpzoom-portfolio' ) }
 									checked={ showViewAll }
@@ -424,12 +427,14 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								}
 							</PanelBody>
 							<PanelBody icon={ fieldsIcon } title={ __( 'Fields', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">
-								<ToggleControl
-									label={ __( 'Show Thumbnail', 'wpzoom-portfolio' ) }
-									checked={ showThumbnail }
-									onChange={ ( value ) => setAttributes( { showThumbnail: value } ) }
-								/>
-								{ showThumbnail &&
+								{ layout !== 'masonry' &&
+									<ToggleControl
+										label={ __( 'Show Thumbnail', 'wpzoom-portfolio' ) }
+										checked={ showThumbnail }
+										onChange={ ( value ) => setAttributes( { showThumbnail: value } ) }
+									/>
+								}
+								{ showThumbnail && layout !== 'masonry' &&
 									<SelectControl
 										label={ __( 'Thumbnail Size', 'wpzoom-portfolio' ) }
 										value={ thumbnailSize }

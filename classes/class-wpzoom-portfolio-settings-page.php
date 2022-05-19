@@ -238,27 +238,29 @@ class WPZOOM_Portfolio_Settings {
 						'callback' => array( $this, 'section_general_cb' ),
 						'fields'   => array(
 							array(
-								'id'    => 'wpzoom_portfolio_settings_slug',
-								'title' => __( 'Slug', 'portfolio-blocks-by-wpzoom' ),
+								'id'    => 'wpzoom_portfolio_root',
+								'title' => esc_html__( 'Slug', 'portfolio-blocks-by-wpzoom' ),
 								'type'  => 'input',
 								'args'  => array(
-									'label_for'   => 'wpzoom_portfolio_settings_slug',
+									'label_for'   => 'wpzoom_portfolio_root',
 									'class'       => 'wpzoom-pb-field',
 									'description' => esc_html__( 'The slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings - Permalinks screen after changing this setting', 'portfolio-blocks-by-wpzoom' ),
 									'default'     => '',
 									'type'        => 'text',
+									'id_only'     => true
 								),
 							),
 							array(
-								'id'    => 'wpzoom_portfolio_settings_tax_slug',
-								'title' => __( 'Taxonomy Slug', 'portfolio-blocks-by-wpzoom' ),
+								'id'    => 'wpzoom_portfolio_base',
+								'title' => esc_html__( 'Taxonomy Slug', 'portfolio-blocks-by-wpzoom' ),
 								'type'  => 'input',
 								'args'  => array(
-									'label_for'   => 'wpzoom_portfolio_settings_tax_slug',
+									'label_for'   => 'wpzoom_portfolio_base',
 									'class'       => 'wpzoom-pb-field',
 									'description' => esc_html__( 'The taxonomy slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings - Permalinks screen after changing this setting', 'portfolio-blocks-by-wpzoom' ),
 									'default'     => '',
 									'type'        => 'text',
+									'id_only'     => true
 								),
 							),
 						),

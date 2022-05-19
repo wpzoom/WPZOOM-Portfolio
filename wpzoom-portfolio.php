@@ -159,7 +159,7 @@ class WPZOOM_Blocks {
 
 			// Enqueue the main/root scripts and styles in the Gutenberg editor
 			add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_portfolio_block_editor_assets' ) );
-			add_action( 'enqueue_block_assets', function() { wp_enqueue_script( 'wpzoom-blocks-js-script-main' ); wp_enqueue_style( 'wpzoom-blocks-css-style-main' ); } );
+			add_action( 'enqueue_block_assets', array( $this, 'enqueue_portfolio_block_assets' ) );
 
 			// Hook into the REST API in order to add some custom things
 			add_action( 'rest_api_init', array( $this, 'rest_api_routes' ) );
@@ -174,7 +174,17 @@ class WPZOOM_Blocks {
 
 	}
 
+
+	/**
+	 * Runs once during the activation of the plugin to run some one-time setup functions.
+	 *
+	 * @access public
+	 * @return void
+	 * @since  1.0.0
+	 */
 	public function enqueue_portfolio_block_editor_assets() {
+
+		wp_enqueue_script( 'masonry' );
 
 		$options = get_option( 'wpzoom-portfolio-settings' );
 
@@ -190,9 +200,25 @@ class WPZOOM_Blocks {
 
 		wp_enqueue_style( 'wpzoom-blocks-css-editor-main' );
 
+	}
+
+	/**
+	 * Runs once during the activation of the plugin to run some one-time setup functions.
+	 *
+	 * @access public
+	 * @return void
+	 * @since  1.0.0
+	 */
+	public function enqueue_portfolio_block_assets() {
+
+		wp_enqueue_script( 'masonry' );
+
+		wp_enqueue_script( 'wpzoom-blocks-js-script-main' ); 
+		wp_enqueue_style( 'wpzoom-blocks-css-style-main' );
 
 
 	}
+
 
 	/**
 	 * Runs once during the activation of the plugin to run some one-time setup functions.

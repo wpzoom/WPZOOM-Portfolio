@@ -53,6 +53,35 @@ function filterButtonClick( event ) {
 	}
 }
 
+function portfolioMasonry( event ) {
+
+	let container = document.getElementsByClassName('wpzoom-blocks_portfolio-block');
+
+	[].forEach.call(container, function(el) {
+
+		if( el.classList.contains( 'layout-masonry' ) ) {
+
+			var elem = el.querySelector('.wpzoom-blocks_portfolio-block_items-list');
+			var msnry = new Masonry( elem, {
+				// options
+				itemSelector: '.wpzoom-blocks_portfolio-block_item',
+				//columnWidth: 200
+			});
+
+			// element
+			imagesLoaded( el ).on( 'progress', function() {
+				msnry.layout();
+			});
+
+			// layout Masonry after each image loads
+			// elem.imagesLoaded().progress( function() {
+			// 	$grid.masonry('layout');
+			// });
+		}
+	});
+
+}
+
 /**
  * Called when one of the portfolio items is clicked.
  *
@@ -129,8 +158,10 @@ function portfolioShowMoreClick( event ) {
 
 			if ( items ) {
 				itemsContainer.insertAdjacentHTML( 'beforeend', items );
-
-				container.querySelector( '.wpzoom-blocks_portfolio-block_filter .current-cat a' ).click();
+				if( !container.classList.contains( 'layout-masonry' ) ) {
+					container.querySelector( '.wpzoom-blocks_portfolio-block_filter .current-cat a' ).click();
+				}
+				portfolioMasonry();
 
 				if ( container.classList.contains( 'page-' + page ) ) {
 					container.classList.replace( 'page-' + page, 'page-' + ( page + 1 ) );
@@ -173,7 +204,13 @@ domReady( () => {
 		'.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_show-more a',
 		portfolioShowMoreClick
 	);
-	
+
+	delegate(
+		'load',
+		document,
+		portfolioMasonry()
+	);
+
 	document.onkeydown = function( evt ) {
 		evt = evt || window.event;
 		var isEscape = false;
@@ -191,3 +228,55 @@ domReady( () => {
 	};
 
 } );
+
+// document.addEventListener('DOMContentLoaded', function(event) {
+// 	portfolioMasonry();
+// });
+
+// wrapped into IIFE - to leave global space clean.
+( function( window, wp ){
+
+	//console.log( wp.hooks );
+    // just to keep it cleaner - we refer to our link by id for speed of lookup on DOM.
+
+    // check if gutenberg's editor root element is present.
+    var editorEl = document.getElementById( 'editor' );
+    if( !editorEl ){ // do nothing if there's no gutenberg root element on page.
+        return;
+    }
+
+	//console.log( wp.data );
+
+    var unsubscribe = wp.data.subscribe( function () {
+
+        setTimeout( function () {
+
+			var container = document.getElementsByClassName('wpzoom-blocks_portfolio-block');
+
+			[].forEach.call(container, function(el) {
+
+				if( el.classList.contains( 'layout-masonry' ) ) {
+		
+					var elem = el.querySelector('.wpzoom-blocks_portfolio-block_items-list');
+					var msnry = new Masonry( elem, {
+						// options
+						itemSelector: '.wpzoom-blocks_portfolio-block_item',
+						//columnWidth: 200
+					});
+		
+					// element
+					imagesLoaded( el ).on( 'progress', function() {
+						msnry.layout();
+					});
+		
+					// layout Masonry after each image loads
+					// elem.imagesLoaded().progress( function() {
+					// 	$grid.masonry('layout');
+					// });
+				}
+			});
+
+			
+        }, 1 )
+    });
+})( window, wp );
