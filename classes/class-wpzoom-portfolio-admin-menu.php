@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Class for admin menu.
  */
-class WPZOOM_Porfolio_Admin_Menu {
+class WPZOOM_Portfolio_Admin_Menu {
 
 	/**
 	 * The Constructor.
@@ -35,15 +35,15 @@ class WPZOOM_Porfolio_Admin_Menu {
         // Remove Add New submenu item.
         remove_submenu_page( 'edit.php?post_type=portfolio_item', 'post-new.php?post_type=portfolio_item' );
 
-		// WPZOOM Portfolio sub menu item.
-		// add_submenu_page(
-		// 	'edit.php?post_type=portfolio_item',
-		// 	$page_title,
-		// 	esc_html__( 'Settings', 'wpzoom-portfolio' ),
-		// 	'manage_options',
-		// 	'wpzoom-portfolio-settings',
-		// 	array( $this, 'admin_page' )
-		// );
+		//WPZOOM Portfolio sub menu item.
+		add_submenu_page(
+			'edit.php?post_type=portfolio_item',
+			$page_title,
+			esc_html__( 'Settings', 'wpzoom-portfolio' ),
+			'manage_options',
+			'wpzoom-portfolio-settings',
+			array( $this, 'admin_page' )
+		);
 
 	}
 
@@ -58,4 +58,4 @@ class WPZOOM_Porfolio_Admin_Menu {
 
 }
 
-new WPZOOM_Porfolio_Admin_Menu();
+new WPZOOM_Portfolio_Admin_Menu();

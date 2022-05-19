@@ -226,12 +226,25 @@ class WPZOOM_Blocks_Portfolio {
 		// Might need to align the block
 		$align = isset( $attr[ 'align' ] ) && ! empty( $attr[ 'align' ] ) ? ' align' . $attr[ 'align' ] : '';
 
-		// Query parameters
+		// CSS classes for the layout type and columns amount
+		$layout = isset( $attr[ 'layout' ] ) && ! empty( $attr[ 'layout' ] ) ? $attr[ 'layout' ] : 'grid';
+		$layout_class = ' layout-' . $layout;
+		$columns = isset( $attr[ 'layout' ] ) && 'list' != $attr[ 'layout' ] &&
+		           isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ? ' columns-' . $attr[ 'columnsAmount' ] : '';
+
+				   // Query parameters
 		$order = isset( $attr[ 'order' ] ) ? $attr[ 'order' ] : 'desc';
 		$order_by = isset( $attr[ 'orderBy' ] ) ? $attr[ 'orderBy' ] : 'date';
 		$per_page = isset( $attr[ 'amount' ] ) ? intval( $attr[ 'amount' ] ) : 6;
 		$show_thumbnail = isset( $attr[ 'showThumbnail' ] ) ? boolval( $attr[ 'showThumbnail' ] ) : true;
-		$thumbnail_size = isset( $attr[ 'thumbnailSize' ] ) ? $attr[ 'thumbnailSize' ] : 'thumbnail';
+
+		if( 'masonry' !== $layout ) {
+			$thumbnail_size = isset( $attr[ 'thumbnailSize' ] ) ? $attr[ 'thumbnailSize' ] : 'thumbnail';
+		}
+		else {
+			$thumbnail_size = 'portfolio_item-masonry';
+		}
+		
 		$show_video = isset( $attr[ 'showBackgroundVideo' ] ) ? boolval( $attr[ 'showBackgroundVideo' ] ) : true;
 		$show_author = isset( $attr[ 'showAuthor' ] ) ? boolval( $attr[ 'showAuthor' ] ) : true;
 		$show_date = isset( $attr[ 'showDate' ] ) ? boolval( $attr[ 'showDate' ] ) : true;
@@ -252,12 +265,6 @@ class WPZOOM_Blocks_Portfolio {
 		$date_class = $show_date ? ' show-date' : '';
 		$excerpt_class = $show_excerpt ? ' show-excerpt' : '';
 		$readmore_class = $show_read_more ? ' show-readmore' : '';
-
-		// CSS classes for the layout type and columns amount
-		$layout = isset( $attr[ 'layout' ] ) && ! empty( $attr[ 'layout' ] ) ? $attr[ 'layout' ] : 'grid';
-		$layout_class = ' layout-' . $layout;
-		$columns = isset( $attr[ 'layout' ] ) && 'list' != $attr[ 'layout' ] &&
-		           isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ? ' columns-' . $attr[ 'columnsAmount' ] : '';
 
 		// Build the category filter buttons, if enabled
 		$categories = isset( $attr[ 'categories' ] ) && is_array( $attr[ 'categories' ] ) ? array_filter( $attr[ 'categories' ] ) : array();
@@ -453,8 +460,15 @@ class WPZOOM_Blocks_Portfolio {
 				$has_cover = ( $args[ 'show_background_video' ] && ! empty( $video ) ) || ( $args[ 'show_thumbnail' ] && ! empty( $thumbnail ) );
 				$cover_class = $has_cover ? ' has-cover' : '';
 
-				// Open the list item for this portfolio item
-				$output .= "<li class='${class}_item ${class}_item-$id ${class}_category-$category$cover_class fade-in'  data-category='$category'>";
+				if( 'masonry' !== $args['layout'] ) {
+					// Open the list item for this portfolio item
+					$output .= "<li class='${class}_item ${class}_item-$id ${class}_category-$category$cover_class fade-in'  data-category='$category'>";
+				}
+				else {
+					// Open the list item for this portfolio item
+					$output .= "<li class='${class}_item ${class}_item-$id ${class}_category-$category$cover_class'  data-category='$category'>";
+				}
+
 
 				// Add a wrapper article around the entire portfolio item (including the thumbnail)
 				$output .= "<article class='${class}_item-wrap'>";
