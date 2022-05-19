@@ -377,7 +377,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									selected={ layout }
 								/>
 
-								{ layout == 'grid' &&
+								{ ( layout == 'grid' || layout == 'masonry' ) &&
 									<RangeControl
 										label={ __( 'Amount of Columns', 'wpzoom-portfolio' ) }
 										max={ 6 }
