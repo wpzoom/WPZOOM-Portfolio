@@ -15,6 +15,7 @@ $primaryColor   = !empty( $taxonomy_options['wpzoom_portfolio_settings_primary_c
 $secondaryColor = !empty( $taxonomy_options['wpzoom_portfolio_settings_secondary_color'] ) ? $taxonomy_options['wpzoom_portfolio_settings_secondary_color'] : '#000';
 
 $layout        = isset( $taxonomy_options['wpzoom_portfolio_settings_taxonomy_layout'] ) ? $taxonomy_options['wpzoom_portfolio_settings_taxonomy_layout'] : 'grid';
+$postsAmount = isset( $taxonomy_options['wpzoom_portfolio_settings_number_posts'] ) ? $taxonomy_options['wpzoom_portfolio_settings_number_posts'] : 9;
 $columnsAmount = isset( $taxonomy_options['wpzoom_portfolio_settings_number_columns'] ) ? $taxonomy_options['wpzoom_portfolio_settings_number_columns'] : 3;
 $columnsGap    = isset( $taxonomy_options['wpzoom_portfolio_settings_columns_gap'] ) ? $taxonomy_options['wpzoom_portfolio_settings_columns_gap'] : 0;
 
@@ -32,7 +33,7 @@ $lightboxCaption = ( '1' === $taxonomy_options['wpzoom_portfolio_settings_lightb
 
 $atts = array(
 	'align'                     => '',
-	'amount'                    => 2,
+	'amount'                    => $postsAmount,
 	'alwaysPlayBackgroundVideo' => false,
 	'categories'                => array($current_term->term_id),
 	'columnsAmount'             => $columnsAmount,

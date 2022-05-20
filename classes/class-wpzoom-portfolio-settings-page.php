@@ -327,6 +327,18 @@ class WPZOOM_Portfolio_Settings {
 									),
 								),
 							),
+                            array(
+                                'id'    => 'wpzoom_portfolio_settings_number_posts',
+                                'title' => __( 'Number of posts', 'wpzoom-portfolio' ),
+                                'type'  => 'input',
+                                'args'  => array(
+                                    'label_for'   => 'wpzoom_portfolio_settings_number_posts',
+                                    'class'       => 'wpzoom-pb-field',
+                                    'description' => esc_html__( 'Number of posts per page', 'wpzoom-portfolio' ),
+                                    'default'     => 9,
+                                    'type'        => 'number',
+                                ),
+                            ),
 							array(
 								'id'    => 'wpzoom_portfolio_settings_number_columns',
 								'title' => __( 'Columns', 'wpzoom-portfolio' ),
