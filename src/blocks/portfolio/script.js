@@ -132,6 +132,7 @@ function portfolioShowMoreClick( event ) {
 	event.preventDefault();
 
 	let container = this.closest( '.wpzoom-blocks_portfolio-block' ),
+		moreBtn = container.querySelector( '.wpzoom-blocks_portfolio-block_show-more' ),
 	    itemsContainer = container.querySelector( '.wpzoom-blocks_portfolio-block_items-list' ),
 	    page = parseInt( extractClassValue( container, 'page-' ) ) || 2,
 	    params = new URLSearchParams( {
@@ -139,6 +140,7 @@ function portfolioShowMoreClick( event ) {
 	        order:          extractClassValue( container, 'order-' ),
 	        order_by:       extractClassValue( container, 'orderby-' ),
 	        per_page:       parseInt( extractClassValue( container, 'perpage-' ) ) || 6,
+			cats:           extractClassValue( container, 'category-' ),
 	        page:           page,
 	        show_thumbnail: container.classList.contains( 'show-thumbnail' ),
 	        thumbnail_size: extractClassValue( container, 'thumbnail-size-' ),
@@ -151,6 +153,8 @@ function portfolioShowMoreClick( event ) {
 	    } ),
 	    fetchRequest = apiFetch( { path: '/wpzoom-blocks/v1/portfolio-posts?' + params.toString() } );
 
+		moreBtn.children[0].textContent = 'Loading...';
+
 	fetchRequest.then( response => {
 		if ( response ) {
 			let items = 'items' in response ? response.items : [],
@@ -158,8 +162,10 @@ function portfolioShowMoreClick( event ) {
 
 			if ( items ) {
 				itemsContainer.insertAdjacentHTML( 'beforeend', items );
-				if( !container.classList.contains( 'layout-masonry' ) ) {
-					container.querySelector( '.wpzoom-blocks_portfolio-block_filter .current-cat a' ).click();
+				moreBtn.children[0].textContent = 'Load More...';
+				let filterTrigger = container.querySelector( '.wpzoom-blocks_portfolio-block_filter .current-cat a' );
+				if( !container.classList.contains( 'layout-masonry' ) && typeof(filterTrigger) != 'undefined' && filterTrigger != null ) {
+					filterTrigger.click();
 				}
 				portfolioMasonry();
 
@@ -170,7 +176,6 @@ function portfolioShowMoreClick( event ) {
 				}
 
 				if ( ! hasMore ) {
-					let moreBtn = container.querySelector( '.wpzoom-blocks_portfolio-block_show-more' );
 					moreBtn.style.display = 'none';
 					moreBtn.parentElement.classList.add( 'single-button' );
 				}

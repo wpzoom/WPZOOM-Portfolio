@@ -119,8 +119,8 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Custom_Posts' ) ) {
 					'portfolio',
                 ),
 				/* The rewrite handles the URL structure. */
-				'rewrite'             => array(
-					'slug'       => 'project',
+				'rewrite' => array(
+					'slug'       => get_option( 'wpzoom_portfolio_root', 'project' ),
 					'with_front' => false,
 					'pages'      => true,
 					'feeds'      => true,
@@ -161,9 +161,9 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Custom_Posts' ) ) {
 					'update_item'                => esc_html__( 'Update Category', 'wpzoom-portfolio' ),
 					'view_item'                  => esc_html__( 'View Category', 'wpzoom-portfolio' )
 				),
-				'public'            => true,
-				'rewrite'             => array(
-					'slug'       => 'portfolio',
+				'public'  => true,
+				'rewrite' => array(
+					'slug'       => get_option( 'wpzoom_portfolio_base', 'portfolio' ),
 					'with_front' => false,
 					'pages'      => true,
 					'feeds'      => true,

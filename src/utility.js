@@ -30,6 +30,7 @@ export function delegate( eventName, elementSelector, handler ) {
  */
 export function extractClassValue( element, searchPrefix ) {
 	let result = '';
+	let collect = [];
 
 	if ( element && element instanceof Element && searchPrefix && searchPrefix.length > 0 ) {
 		let classes = element.className.split( /\s/ );
@@ -37,19 +38,33 @@ export function extractClassValue( element, searchPrefix ) {
 		if ( classes.length > 0 ) {
 			let filteredClasses = classes.filter( cn => { return cn.indexOf( searchPrefix ) === 0 } );
 
-			if ( filteredClasses.length > 0 ) {
-				let matchedClass = filteredClasses[ 0 ];
-
-				if ( matchedClass ) {
-					let value = matchedClass.replace( searchPrefix, '' );
-
-					if ( value && value.length > 0 ) {
-						result = value;
-					}
-				}
+			if ( filteredClasses.length > 0 && filteredClasses.length < 2 ) {
+				result = extractValue( filteredClasses[ 0 ], searchPrefix );
 			}
+			if ( filteredClasses.length > 1 ) {
+				filteredClasses.forEach( el => {
+					collect.push( extractValue( el, searchPrefix ) );
+				});
+				result = collect.join(",");
+			}
+
 		}
 	}
 
 	return result;
+}
+
+export function extractValue( el, searchPrefix )  {
+
+	let matchedClass = el;
+
+	if ( matchedClass ) {
+
+		let value = matchedClass.replace( searchPrefix, '' );
+
+		if ( value && value.length > 0 ) {
+			return value;
+		}
+	}
+
 }

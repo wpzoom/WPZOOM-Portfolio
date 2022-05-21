@@ -265,9 +265,12 @@ class WPZOOM_Blocks_Portfolio {
 		$date_class = $show_date ? ' show-date' : '';
 		$excerpt_class = $show_excerpt ? ' show-excerpt' : '';
 		$readmore_class = $show_read_more ? ' show-readmore' : '';
-
+		$category_class = '';
 		// Build the category filter buttons, if enabled
 		$categories = isset( $attr[ 'categories' ] ) && is_array( $attr[ 'categories' ] ) ? array_filter( $attr[ 'categories' ] ) : array();
+		foreach( $categories as $category ) {
+			$category_class .= ' category-' . $category;
+		}
 		$categories_without_all = ! empty( $categories ) ? array_filter( $categories, function( $v ) { return '-1' != $v; } ) : array();
 		$enough_cats = count( $categories_without_all ) > 1 || empty( $categories ) || in_array( '-1', $categories );
 		$cats = $this->list_categories( $categories_without_all, $source );
@@ -288,7 +291,7 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Build a string with all the CSS classes
 		$classes = "$class$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
-		            $date_class$excerpt_class$readmore_class$align$layout_class$columns$lightbox$post_type_class$extra_class";
+		            $date_class$excerpt_class$readmore_class$align$layout_class$columns$lightbox$post_type_class$extra_class$category_class";
 
 		// Try to get portfolio items
 		$items_html = $this->items_html( array(
@@ -777,7 +780,7 @@ class WPZOOM_Blocks_Portfolio {
 				$order_by = isset( $params[ 'order_by' ] ) ? $params[ 'order_by' ] : 'date';
 				$per_page = isset( $params[ 'per_page' ] ) ? intval( $params[ 'per_page' ] ) : 6;
 				$page = isset( $params[ 'page' ] ) ? intval( $params[ 'page' ] ) : 1;
-				$categories = isset( $params[ 'cats' ] ) && !empty( $params[ 'cats' ] ) ? json_decode( $params[ 'cats' ] ) : array();
+				$categories = isset( $params[ 'cats' ] ) && !empty( $params[ 'cats' ] ) ? explode( ',', $params[ 'cats' ] )  : array();
 				$show_thumbnail = isset( $params[ 'show_thumbnail' ] ) ? boolval( $params[ 'show_thumbnail' ] ) : true;
 				$thumbnail_size = isset( $params[ 'thumbnail_size' ] ) ? $params[ 'thumbnail_size' ] : 'portfolio_item-thumbnail';
 				$show_background_video = isset( $params[ 'show_background_video' ] ) ? boolval( $params[ 'show_background_video' ] ) : true;
