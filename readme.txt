@@ -5,7 +5,7 @@ Author URI:        https://www.wpzoom.com/
 Requires at least: 5.8
 Requires PHP:      7.2
 Tested up to:      6.0
-Stable tag:        1.2.0
+Stable tag:        1.2.1
 License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Tags:              portfolio, gutenberg, block, grid, wpzoom, inspiro
@@ -68,6 +68,9 @@ This plugin works great with any theme. If you're looking for a Portfolio Theme,
 
 
 == Changelog ==
+
+= 1.2.1 =
+* Bug fix wih the popup closing icon
 
 = 1.2.0 =
 * New Masonry layout
