@@ -144,61 +144,62 @@ $primary_color: #0bb4aa;
             padding: 0;
         }
 
-        .wpzoom-blocks_portfolio-block_lightbox_icon {
-            position: absolute;
-            top: 5%;
-            right: 2%;
-            content: '\2715';
-            cursor: pointer;
-            font-size: 24px;
-            line-height: 1;
-            color: #eee;
-            paint-order: stroke fill;
-            z-index: 80;
-
-            svg {
-                color: #fff;
-                path: #fff;
-                fill: #fff;
-                display: block;
-                width: 24px;
-                height: 24px;
-                border-radius: 3px;
-                opacity: 0;
-                transition: .2s ease all;
-            }
-
-            &:hover {
-                svg { opacity: 1 !important; }
-            }
-        }
-
     }
 
     .wpzoom-blocks_portfolio-block_item {
 
         &.has-cover:not(.lightbox) {
+
+			.wpzoom-blocks_portfolio-block_lightbox_icon {
+				position: absolute;
+				top: 5%;
+				right: 2%;
+				content: '\2715';
+				cursor: pointer;
+				font-size: 24px;
+				line-height: 1;
+				color: #eee;
+				paint-order: stroke fill;
+				z-index: 80;
+	
+				svg {
+					color: #fff;
+					path: #fff;
+					fill: #fff;
+					display: block;
+					width: 24px;
+					height: 24px;
+					border-radius: 3px;
+					opacity: 0;
+					transition: .2s ease all;
+				}
+			}
+
             &:hover {
                 .wpzoom-blocks_portfolio-block_item-thumbnail img,
                 .wpzoom-blocks_portfolio-block_item-bgvid {
                     transform: scale(110%);
                 }
-
                 .wpzoom-blocks_portfolio-block_item-details {
                     opacity: 1;
                 }
-
-
                 .wpzoom-blocks_portfolio-block_lightbox_icon {
-
                     svg {
                         opacity: 0.6;
                     }
+					&:hover {
+						svg { opacity: 1 !important; }
+					}
                 }
-
-
             }
 
+        }
+    }
+    .wpzoom-blocks_portfolio-block_item {
+        &.has-cover.lightbox {
+			.wpzoom-blocks_portfolio-block_lightbox_icon {
+				display: none;
+			}
         }
     }
 
