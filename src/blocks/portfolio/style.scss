@@ -202,6 +202,11 @@ $primary_color: #0bb4aa;
 			}
         }
     }
+	&:not(.use-lightbox) {
+		.wpzoom-blocks_portfolio-block_lightbox_icon {
+			display: none;
+		}
+	}
 
 	&.layout-grid .wpzoom-blocks_portfolio-block_items-list,
 	&.layout-masonry .wpzoom-blocks_portfolio-block_items-list {
