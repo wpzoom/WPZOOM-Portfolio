@@ -58,7 +58,7 @@ if ( ! class_exists( 'WPZOOM_Blocks_Portfolio_Shortcode' ) ) {
 
 			if( !empty( $atts ) && is_array( $atts ) ) {
 				foreach( $atts as $key => $att ) {
-					$atts[ $key ] = esc_html( $att );
+					$atts[ $key ] = esc_attr( $att );
 				}
 			}
 
