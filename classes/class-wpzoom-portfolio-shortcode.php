@@ -56,6 +56,12 @@ if ( ! class_exists( 'WPZOOM_Blocks_Portfolio_Shortcode' ) ) {
 		 */
 		public static function render_shortcode( $atts, $content = '' ) {
 
+			if( !empty( $atts ) && is_array( $atts ) ) {
+				foreach( $atts as $key => $att ) {
+					$atts[ $key ] = esc_html( $att );
+				}
+			}
+
 			// Defining Shortcode's Attributes
 			$shortcode_args = shortcode_atts(
 				array(
