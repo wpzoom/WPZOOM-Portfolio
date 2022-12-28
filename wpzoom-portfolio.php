@@ -9,12 +9,12 @@
  *
  * @wordpress-plugin
  * Plugin Name: WPZOOM Portfolio
- * Plugin URI:  https://www.wpzoom.com/plugins/portfolio-posts/
+ * Plugin URI:  https://www.wpzoom.com/plugins/wpzoom-portfolio/
  * Description: Just a simple plugin to create Portfolio posts and display them in a beautiful grid via Gutenberg. Includes isotope filtering effect.
  * Author:      WPZOOM
  * Author URI:  https://www.wpzoom.com
  * Text Domain: wpzoom-portfolio
- * Version:     1.2.1
+ * Version:     1.2.2
  * License:     GPL2+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
@@ -23,7 +23,7 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'WPZOOM_PORTFOLIO_VERSION' ) ) {
-	define( 'WPZOOM_PORTFOLIO_VERSION', '1.2.1' );
+	define( 'WPZOOM_PORTFOLIO_VERSION', '1.2.2' );
 }
 
 // settings page url attribute
@@ -60,7 +60,7 @@ class WPZOOM_Blocks {
 	 * @access public
 	 * @since  1.0.0
 	 */
-	public const VERSION = '1.2.1';
+	public const VERSION = '1.2.2';
 
 	/**
 	 * Whether the plugin has been initialized.
