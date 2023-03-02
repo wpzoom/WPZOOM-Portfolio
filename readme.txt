@@ -62,6 +62,20 @@ This plugin works great with any theme. If you're looking for a Portfolio Theme,
 
 1. Install the WPZOOM Portfolio Posts plugin either via the WordPress plugin directory or by uploading the files to your server.
 
+
+== Frequently Asked Questions ==
+
+= I'm getting a 404 error  =
+
+Sometimes you may see a 404 error on single portfolio pages. You can fix this easily by flushing permalinks in **Dashboard → Settings → Permalinks**. Just hit the “Save Changes” button on that page.
+
+= Is there a Documentation available? =
+
+Yes, you can find the documentation for this plugin with more instructions on our website.
+
+[View Documentation](https://www.wpzoom.com/documentation/wpzoom-portfolio-grid/)
+
+
 == Screenshots ==
 
 1. Portfolio Block
