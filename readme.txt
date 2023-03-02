@@ -65,9 +65,9 @@ This plugin works great with any theme. If you're looking for a Portfolio Theme,
 
 == Frequently Asked Questions ==
 
-= I'm getting a 404 error  =
+= I'm getting a 404 error!  =
 
-Sometimes you may see a 404 error on single portfolio pages. You can fix this easily by flushing permalinks in **Dashboard → Settings → Permalinks**. Just hit the “Save Changes” button on that page.
+Sometimes you may see a 404 error on single portfolio pages. You can fix this easily by flushing your permalinks. Simply go to the  **Dashboard → Settings → Permalinks** and hit the “Save Changes” button on that page. This should fix the problem, as it's a known WordPress issue with Custom Post Types.
 
 = Is there a Documentation available? =
 
