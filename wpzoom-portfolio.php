@@ -14,7 +14,7 @@
  * Author:      WPZOOM
  * Author URI:  https://www.wpzoom.com
  * Text Domain: wpzoom-portfolio
- * Version:     1.2.4
+ * Version:     1.2.5
  * License:     GPL2+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
@@ -23,7 +23,7 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'WPZOOM_PORTFOLIO_VERSION' ) ) {
-	define( 'WPZOOM_PORTFOLIO_VERSION', '1.2.4' );
+	define( 'WPZOOM_PORTFOLIO_VERSION', '1.2.5' );
 }
 
 // settings page url attribute
@@ -60,7 +60,7 @@ class WPZOOM_Blocks {
 	 * @access public
 	 * @since  1.0.0
 	 */
-	public const VERSION = '1.2.4';
+	public const VERSION = '1.2.5';
 
 	/**
 	 * Whether the plugin has been initialized.
