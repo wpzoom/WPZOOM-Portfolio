@@ -61,16 +61,28 @@ class WPZOOM_Blocks_Portfolio_Layouts {
 
 		$layout_id = isset( $attributes['layoutId'] ) ? $attributes['layoutId'] : null;
 		$align = isset( $attributes['align'] ) ? ' align' . $attributes['align'] : '';
+		
+		$blocks = array();
 
 		if( ! $layout_id ) {
 			return '';	
 		}
 
-		$layout = get_post_field( 'post_content', intval( $layout_id ), 'display' );
+		$layout = get_post( intval( $layout_id ) );
+
+		if ( has_blocks( $layout->post_content ) ) {
+			$blocks = parse_blocks( $layout->post_content );
+		}
+		
+		$output = '';
+
+		foreach( $blocks as $block ) {
+			$output .= render_block( $block );
+		}
 
 		return sprintf( 
 			'<div class="wpzoom-portfolio-layout%3$s" id="wpzoom-portfolio-layout-%2$d">%1$s</div>',
-			apply_filters( 'the_content', $layout ),
+			$output,
 			intval( $layout_id ),
 			$align
 		);
