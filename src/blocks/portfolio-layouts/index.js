@@ -25,8 +25,8 @@ function getPostEditURL( layoutId ) {
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-registration/
  */
 registerBlockType( 'wpzoom-blocks/portfolio-layouts', {
-    title:       __( 'Portfolio Layouts', 'recipe-card-blocks-by-wpzoom' ),
-    description: __( 'Select and display one of your portfolio layouts', 'recipe-card-blocks-by-wpzoom' ),
+    title:       __( 'Portfolio Layouts', 'wpzoom-portfolio' ),
+    description: __( 'Select and display one of your portfolio layouts', 'wpzoom-portfolio' ),
     icon: 'images-alt2',
     category:    'wpzoom-portfolio',
     supports:    { align: true, html: false },
@@ -61,13 +61,13 @@ registerBlockType( 'wpzoom-blocks/portfolio-layouts', {
         );
 		
 		const getCPTEditURL = getPostEditURL( _layoutId );
-		const editCPT = <p class="wpzoom-edit-link-description">{ __( 'Edit the layout', 'recipe-card-blocks-by-wpzoom' ) } <a href={getCPTEditURL}>{__( 'here', 'recipe-card-blocks-by-wpzoom' ) }</a></p>;
+		const editCPT = <p class="wpzoom-edit-link-description">{ __( 'Edit the layout', 'wpzoom-portfolio' ) } <a href={getCPTEditURL}>{__( 'here', 'wpzoom-portfolio' ) }</a></p>;
 
         return (
             // eslint-disable-next-line react/jsx-no-undef
             <React.Fragment>
                 <InspectorControls>
-                    <PanelBody title={ __( 'Options', 'recipe-card-blocks-by-wpzoom' ) }>
+                    <PanelBody title={ __( 'Options', 'wpzoom-portfolio' ) }>
                         { recipeReactSelectPosts.length > 0 ? postReactSelect : <Disabled>{ postReactSelect }</Disabled> }
 						{ editCPT }
                     </PanelBody>
@@ -75,7 +75,7 @@ registerBlockType( 'wpzoom-blocks/portfolio-layouts', {
                 <Fragment>
                     { '-1' != _layoutId ?
                         <ServerSideRender block="wpzoom-blocks/portfolio-layouts" attributes={ attributes } /> :
-                        <Placeholder label={ __( 'Portfolio Layout', 'recipe-card-blocks-by-wpzoom' ) }>
+                        <Placeholder label={ __( 'Portfolio Layout', 'wpzoom-portfolio' ) }>
                             { recipeReactSelectPosts.length > 0 ? postReactSelect : <Disabled>{ postReactSelect }</Disabled> }
                         </Placeholder>
 					}

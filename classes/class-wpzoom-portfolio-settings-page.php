@@ -244,7 +244,7 @@ class WPZOOM_Portfolio_Settings {
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_root',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'The slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings - Permalinks screen after changing this setting', 'wpzoom-portfolio' ),
+									'description' => esc_html__( 'The slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings -> Permalinks page after changing this setting to flush permalinks.', 'wpzoom-portfolio' ),
 									'default'     => '',
 									'type'        => 'text',
 									'id_only'     => true
@@ -257,7 +257,7 @@ class WPZOOM_Portfolio_Settings {
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_base',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'The taxonomy slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings - Permalinks screen after changing this setting', 'wpzoom-portfolio' ),
+									'description' => esc_html__( 'The taxonomy slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings -> Permalinks page after changing this setting to flush permalinks.', 'wpzoom-portfolio' ),
 									'default'     => '',
 									'type'        => 'text',
 									'id_only'     => true
