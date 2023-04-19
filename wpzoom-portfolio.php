@@ -23,7 +23,7 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! defined( 'WPZOOM_PORTFOLIO_VERSION' ) ) {
-	define( 'WPZOOM_PORTFOLIO_VERSION', '1.2.4' );
+	define( 'WPZOOM_PORTFOLIO_VERSION', get_file_data( __FILE__, [ 'Version' ] )[0] ); // phpcs:ignore
 }
 
 // settings page url attribute
@@ -53,14 +53,6 @@ add_action( 'init', array( $wpzoom_blocks, 'init' ) );
  * @since 1.0.0
  */
 class WPZOOM_Blocks {
-	/**
-	 * The version of this plugin.
-	 *
-	 * @var    string
-	 * @access public
-	 * @since  1.0.0
-	 */
-	public const VERSION = '1.2.4';
 
 	/**
 	 * Whether the plugin has been initialized.
