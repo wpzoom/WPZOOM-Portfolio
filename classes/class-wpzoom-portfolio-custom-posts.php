@@ -111,7 +111,7 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Custom_Posts' ) ) {
 						'view_items'               => esc_html__( 'View Portfolio Posts', 'wpzoom-portfolio' )
 					),
 				'show_in_menu'        => true,
-				'menu_icon'           => 'dashicons-portfolio',
+				'menu_icon'           => 'dashicons-layout',
 				'public'              => true,
 				'publicly_queryable'  => true,
 				'show_ui'             => true,

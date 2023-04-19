@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Portfolio Posts\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-03 11:47+0000\n"
+"POT-Creation-Date: 2023-04-19 10:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -16,83 +16,136 @@ msgstr ""
 "X-Loco-Version: 2.5.7; wp-5.9.1-alpha-52643\n"
 "X-Domain: portfolio-posts"
 
-#: build/blocks/portfolio/index.php:212
+#: classes/class-wpzoom-portfolio-custom-posts.php:145
 msgid "&larr; Back to Categories"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:156
+#: classes/class-wpzoom-portfolio-custom-posts.php:81
 msgid "A portfolio type for featuring items in your portfolio."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:209
+#: classes/class-wpzoom-portfolio-custom-posts.php:231
+msgid "Add New"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:142
 msgid "Add New Category"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:178
+#: classes/class-wpzoom-portfolio-custom-posts.php:102
 msgctxt "Add New on Toolbar"
 msgid "Portfolio Post"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:162
+#: classes/class-wpzoom-portfolio-custom-posts.php:230
+msgid "Add New Portfolio Layout"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:86
 msgid "Add New Portfolio Post"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:210
+#: classes/class-wpzoom-portfolio-custom-posts.php:143
 msgid "Add or remove categories"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:176
+#: classes/class-wpzoom-portfolio-custom-posts.php:100
 msgctxt "Admin Menu text"
 msgid "Portfolio"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:681 build/blocks/portfolio/index.php:709
+#: build/blocks/portfolio/index.php:621 build/blocks/portfolio/index.php:649
 msgid "All"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:211
+#: classes/class-wpzoom-portfolio-custom-posts.php:144
 msgid "All Categories"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:163
-msgid "All Portfolio Posts"
+#: classes/class-wpzoom-portfolio-settings-page.php:349
+msgid "Amount of Columns"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:217
+#: classes/class-wpzoom-portfolio-custom-posts.php:150
 msgctxt "categories"
 msgid "Most Used"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:206
+#: classes/class-wpzoom-portfolio-custom-posts.php:138
 msgid "Categories for portfolio items."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:215
+#: classes/class-wpzoom-portfolio-custom-posts.php:148
 msgid "Categories list"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:216
+#: classes/class-wpzoom-portfolio-custom-posts.php:149
 msgid "Categories list navigation"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:213
+#: classes/class-wpzoom-portfolio-custom-posts.php:146
 msgid "Choose from the most used categories"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:627
+#: classes/class-wpzoom-portfolio-settings-page.php:370
+msgid "Colors"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:324
+#: classes/class-wpzoom-portfolio-settings-page.php:344
+msgid "Columns"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:356
+msgid "Columns Gap"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:225
+msgid "Coming Soon"
+msgstr ""
+
+#: build/blocks/portfolio/index.php:564
 msgid "Continue reading this post..."
 msgstr ""
 
-#: wpzoom-portfolio.php:320
+#: classes/class-wpzoom-portfolio-custom-posts.php:362
+msgid "Date"
+msgstr ""
+
+#: wpzoom-portfolio.php:382
 msgid "Different sized featured images"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:214
+#: classes/class-wpzoom-portfolio-custom-posts.php:147
 msgid "Edit Category"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:166
+#: classes/class-wpzoom-portfolio-custom-posts.php:232
+msgid "Edit Portfolio Layout"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:90
 msgid "Edit Portfolio Post"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:501
+msgid "Enable lightbox"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:281
+msgid "Expand the portfolio block settings on initial load"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:398
+msgid "Fields"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:230
+msgid "General"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:739
+msgid "General configurations for portfolio plugin"
 msgstr ""
 
 #. Author URI of the plugin
@@ -100,7 +153,7 @@ msgid "https://www.wpzoom.com"
 msgstr ""
 
 #. URI of the plugin
-msgid "https://www.wpzoom.com/plugins/portfolio-posts/"
+msgid "https://www.wpzoom.com/plugins/wpzoom-portfolio/"
 msgstr ""
 
 #. Description of the plugin
@@ -109,201 +162,432 @@ msgid ""
 "beautiful grid via Gutenberg. Includes isotope filtering effect."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:430
+#: classes/class-wpzoom-portfolio-settings-page.php:316
+msgid "Layout"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:490
+msgid "Lightbox"
+msgstr ""
+
+#: build/blocks/portfolio/index.php:318
 msgid "Load More..."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:219
+#: classes/class-wpzoom-portfolio-settings-page.php:326
+msgid "Masonry"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:270
+msgid "Miscellaneous"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:152
 msgid "New Category Name"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:179
+#: classes/class-wpzoom-portfolio-custom-posts.php:103
 msgid "New Portfolio Post"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:220
+#: classes/class-wpzoom-portfolio-custom-posts.php:153
 msgid "No categories"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:221
+#: classes/class-wpzoom-portfolio-custom-posts.php:154
 msgid "No categories found."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:448
+#: build/blocks/portfolio/index.php:336
 msgid "No portfolio items."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:181
+#: classes/class-wpzoom-portfolio-custom-posts.php:105
 msgid "No portfolio posts found in Trash."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:180
+#: classes/class-wpzoom-portfolio-custom-posts.php:104
 msgid "No portfolio posts found."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:168
+#: classes/class-wpzoom-portfolio-custom-posts.php:235
+msgid "Not Found"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:236
+msgid "Not found in Trash"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:332
+msgid "Number of posts"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:337
+msgid "Number of posts per page"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:496
+msgid "Open Portfolio Items in a Lightbox"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:325
+msgid "Overlay"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:92
 msgctxt ""
 "Overrides the \"Insert into post\" phrase (used when inserting media into a "
 "post). Added in 4.4"
 msgid "Insert into portfolio item"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:185
+#: classes/class-wpzoom-portfolio-custom-posts.php:109
 msgctxt ""
 "Overrides the \"Uploaded to this post\" phrase (used when viewing media "
 "attached to a post). Added in 4.4"
 msgid "Uploaded to this portfolio item"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:222
+#: classes/class-wpzoom-portfolio-custom-posts.php:155
 msgid "Parent Category"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:223
+#: classes/class-wpzoom-portfolio-custom-posts.php:156
 msgid "Parent Category:"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:182
+#: classes/class-wpzoom-portfolio-custom-posts.php:227
+msgid "Parent Portfolio Item"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:106
 msgid "Parent Portfolio Items:"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:224
+#: classes/class-wpzoom-portfolio-custom-posts.php:157
 msgid "Popular Categories"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:165
+#: classes/class-wpzoom-portfolio-custom-posts.php:87
+msgid "Portfolio Items"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:321
+msgid "Portfolio Layout"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:360
+msgid "Portfolio Layout Title"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:228
+msgid "Portfolio Layouts"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:89
 msgid "Portfolio Post Attributes"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:172
+#: classes/class-wpzoom-portfolio-custom-posts.php:96
 msgid "Portfolio Post published privately."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:171
+#: classes/class-wpzoom-portfolio-custom-posts.php:95
 msgid "Portfolio Post published."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:173
+#: classes/class-wpzoom-portfolio-custom-posts.php:97
 msgid "Portfolio Post reverted to draft."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:174
+#: classes/class-wpzoom-portfolio-custom-posts.php:98
 msgid "Portfolio Post scheduled."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:175
+#: classes/class-wpzoom-portfolio-custom-posts.php:99
 msgid "Portfolio Post updated."
 msgstr ""
 
-#: build/blocks/portfolio/index.php:161
+#: classes/class-wpzoom-portfolio-settings-page.php:236
+msgid "Portfolio Settings"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:85
 msgctxt "portfolio_item"
 msgid "Add New"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:177
+#: classes/class-wpzoom-portfolio-custom-posts.php:101
 msgctxt "Post type general name"
 msgid "Portfolio"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:184
+#: classes/class-wpzoom-portfolio-custom-posts.php:224
+#: classes/class-wpzoom-portfolio-custom-posts.php:226
+msgctxt "Post Type General Name"
+msgid "Portfolio Layouts"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:225
+msgctxt "Post Type Singular Name"
+msgid "Portfolio Layout"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:108
 msgctxt "Post type singular name"
 msgid "Portfolio Post"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:601
+#: build/blocks/portfolio/index.php:540
 #, php-format
 msgid "Posted on %s"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:589
+#: build/blocks/portfolio/index.php:528
 #, php-format
 msgid "Posts by %s"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:417 build/blocks/portfolio/index.php:474
-#: build/blocks/portfolio/index.php:626
+#: classes/class-wpzoom-portfolio-settings-page.php:224
+msgid "Premium"
+msgstr ""
+
+#: classes/class-wpzoom-settings-fields.php:116
+msgid "Preview"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:376
+msgid "Primary Color"
+msgstr ""
+
+#: templates/taxonomy-portfolio.php:29 build/blocks/portfolio/index.php:254
+#: build/blocks/portfolio/index.php:393 build/blocks/portfolio/index.php:563
 msgid "Read More"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:167
+#: classes/class-wpzoom-portfolio-settings-page.php:476
+msgid "Read More Button Label"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:481
+msgid "Read More button label to display"
+msgstr ""
+
+#: classes/class-wpzoom-settings-fields.php:165
+msgid "Save Changes"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:91
 msgctxt ""
 "Screen reader text for the filter links heading on the post type listing "
 "screen. Default \"Filter posts list\". Added in 4.4"
 msgid "Filter portfolio items list"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:169
+#: classes/class-wpzoom-portfolio-custom-posts.php:93
 msgctxt ""
 "Screen reader text for the items list heading on the post type listing "
 "screen. Default \"Posts list\". Added in 4.4"
 msgid "Portfolio Items list"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:170
+#: classes/class-wpzoom-portfolio-custom-posts.php:94
 msgctxt ""
 "Screen reader text for the pagination heading on the post type listing "
 "screen. Default \"Posts list navigation\". Added in 4.4"
 msgid "Portfolio Items list navigation"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:225
+#: classes/class-wpzoom-portfolio-custom-posts.php:158
 msgid "Search Categories"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:183
+#: classes/class-wpzoom-portfolio-custom-posts.php:234
+msgid "Search Portfolio Layout"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:107
 msgid "Search Portfolio Posts"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:226
+#: classes/class-wpzoom-portfolio-settings-page.php:386
+msgid "Secondary Color"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:421
+msgid "Select size for the featured image"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:159
 msgid "Separate categories with commas"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:430
+#: classes/class-wpzoom-portfolio-settings-page.php:361
+msgid "Set Columns Gap"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-admin-menu.php:42
+msgid "Settings"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:361
+msgid "Shortcode"
+msgstr ""
+
+#. %s - taxonomy name.
+#: classes/class-wpzoom-portfolio-custom-posts.php:309
+#, php-format
+msgid "Show All %s"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:428
+msgid "Show Author"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:433
+msgid "Show author of the portfolio item"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:276
+msgid "Show Block Sections Expanded?"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:440
+msgid "Show Date"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:445
+msgid "Show date of the portfolio item"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:452
+msgid "Show Excerpt"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:457
+msgid "Show excerpt of the portfolio item"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:409
+msgid "Show Featured Image of the porfolio item"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:508
+#: classes/class-wpzoom-portfolio-settings-page.php:513
+msgid "Show Lightbox Caption"
+msgstr ""
+
+#: build/blocks/portfolio/index.php:318
 msgid "Show more portfolio items"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:218
+#: classes/class-wpzoom-portfolio-settings-page.php:464
+msgid "Show Read More Button"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:469
+msgid "Show read more button"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:404
+msgid "Show Thumbnail"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:242
+msgid "Slug"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:744
+msgid "Style the portfolio taxonomy archive page"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:292
+msgid "Taxonomy"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:151
 msgctxt "taxonomy general name"
 msgid "Categories"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:227
+#: classes/class-wpzoom-portfolio-custom-posts.php:160
 msgctxt "taxonomy singular name"
 msgid "Category"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:164
+#: classes/class-wpzoom-portfolio-settings-page.php:255
+msgid "Taxonomy Slug"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:298
+msgid "Taxonomy Template"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:88
 msgctxt ""
 "The post type archive label used in nav menus. Default \"Post Archives\". "
 "Added in 4.4"
 msgid "Portfolio Archives"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:302
+#: classes/class-wpzoom-portfolio-settings-page.php:247
+msgid ""
+"The slug name cannot be the same name as your portfolio page or the layout "
+"will break. This option changes the permalink when you use the permalink "
+"type as %postname%. Visit the Settings -> Permalinks page after changing "
+"this setting to flush permalinks."
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:260
+msgid ""
+"The taxonomy slug name cannot be the same name as your portfolio page or the "
+"layout will break. This option changes the permalink when you use the "
+"permalink type as %postname%. Visit the Settings -> Permalinks page after "
+"changing this setting to flush permalinks."
+msgstr ""
+
+#: build/blocks/portfolio/index.php:179
 msgid "Thumbnail"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:272
+#: classes/class-wpzoom-portfolio-settings-page.php:416
+msgid "Thumbnail Size"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:210
 msgid "Uncategorized"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:228
+#: classes/class-wpzoom-portfolio-custom-posts.php:161
 msgid "Update Category"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:397
+#: classes/class-wpzoom-portfolio-custom-posts.php:233
+msgid "Update Portfolio Layout"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-settings-page.php:304
+#: classes/class-wpzoom-portfolio-settings-page.php:309
+msgid "Use the template provided by the plugin"
+msgstr ""
+
+#: build/blocks/portfolio/index.php:285
 msgid "View All"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:229
+#: classes/class-wpzoom-portfolio-custom-posts.php:162
 msgid "View Category"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:186
+#: classes/class-wpzoom-portfolio-custom-posts.php:229
+msgid "View Portfolio Layout"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-custom-posts.php:110
 msgid "View Portfolio Post"
 msgstr ""
 
-#: build/blocks/portfolio/index.php:187
+#: classes/class-wpzoom-portfolio-custom-posts.php:111
 msgid "View Portfolio Posts"
 msgstr ""
 
@@ -311,10 +595,14 @@ msgstr ""
 msgid "WPZOOM"
 msgstr ""
 
-#: wpzoom-portfolio.php:281
-msgid "WPZOOM - Blocks"
+#: wpzoom-portfolio.php:343
+msgid "WPZOOM - Portfolio"
 msgstr ""
 
 #. Name of the plugin
 msgid "WPZOOM Portfolio"
+msgstr ""
+
+#: classes/class-wpzoom-portfolio-admin-menu.php:33
+msgid "WPZOOM Portfolio Settings Page"
 msgstr ""
