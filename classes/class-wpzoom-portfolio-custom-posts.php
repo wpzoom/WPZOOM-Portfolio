@@ -65,7 +65,31 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Custom_Posts' ) ) {
 			// Update the columns shown on the custom post type edit.php view - so we also have custom columns
 			add_filter( 'manage_portfolio_layout_posts_columns' , array( $this, 'portfolio_layouts_columns' ) );
 			add_action( 'manage_portfolio_layout_posts_custom_column' , array( $this,'fill_portfolio_layouts_columns' ), 10, 2 );
+
+			add_action( 'admin_notices', array( $this, 'notice_to_use_gutenberg_editor' ) );
 		
+		}
+
+		/**
+		 * Add admin notice if there is no Gutenberg Editor
+		 */
+		public function notice_to_use_gutenberg_editor() {
+
+			global $post; 
+			$screen = get_current_screen();
+	
+			//Check if it is CPT
+			if( 'portfolio_item' !== $screen->id && 'portfolio_layout' !== $screen->id ) {
+				return;
+			}
+
+			$is_editor = defined( 'REST_REQUEST' ) && true === REST_REQUEST && 'edit' === filter_input( INPUT_GET, 'context', FILTER_SANITIZE_SPECIAL_CHARS );
+			if( $is_editor ) { 
+				return;
+			};
+		
+			echo '<div class="notice notice-error"><p>Oops, we are sorry but it seems that you are using Classic Editor. WPZOOM Portfolio works only with <a href="https://wordpress.org/gutenberg/" target="_blank">Gutenberg Editor</a>, please check <a href="https://www.wpzoom.com/documentation/wpzoom-portfolio-grid/wpzoom-portfolio-how-to-create-a-portfolio-section/" target="_blank">WPZOOM Portfolio - How to Create a Portfolio Section</a></p></div>';
+
 		}
 
 		/**
