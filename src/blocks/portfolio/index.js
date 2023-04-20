@@ -308,6 +308,10 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									value={ `${ orderBy }/${ order }` }
 									options={ [
 										{
+											label: __( 'Default', 'wpzoom-portfolio' ),
+											value: 'menu_order date/desc'
+										},
+										{
 											label: __( 'Newest to Oldest', 'wpzoom-portfolio' ),
 											value: 'date/desc'
 										},

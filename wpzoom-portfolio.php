@@ -465,4 +465,17 @@ function load_files() {
 }
 
 add_action( 'plugin_loaded', 'load_files' );
+
+function load_reorder_portfolio_items() {
+
+	if( ! current_user_can( 'edit_posts' ) ) {
+		return;
+	}
+
+	//Load Re-Order feature
+	require_once 'classes/featured-posts/class-wpzoom-portfolio-featured-posts.php';
+
+}
+add_action( 'init', 'load_reorder_portfolio_items' );
+
 add_action( 'init', 'WPZOOM_Blocks_Portfolio_Shortcode::instance' );

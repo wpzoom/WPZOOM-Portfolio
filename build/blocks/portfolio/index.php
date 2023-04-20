@@ -71,7 +71,7 @@ class WPZOOM_Blocks_Portfolio {
 		],
 		'orderBy' => [
 			'type'    => 'string',
-			'default' => 'date'
+			'default' => 'menu_order date'
 		],
 		'readMoreLabel' => [
 			'type'    => 'string',
