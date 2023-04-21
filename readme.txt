@@ -5,7 +5,7 @@ Author URI:        https://www.wpzoom.com/
 Requires at least: 5.8
 Requires PHP:      7.2
 Tested up to:      6.2
-Stable tag:        1.2.5
+Stable tag:        1.3.0
 License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Tags:              portfolio, gutenberg, block, grid, wpzoom, inspiro
@@ -128,6 +128,11 @@ Yes, you can find the documentation for this plugin with more instructions on ou
 
 
 == Changelog ==
+
+= 1.3.0 =
+* New Feature: Re-order Portfolio Items from the Portfolio > Re-order page
+* Add notice when Classic Editor is enabled
+* Multiple fixes and improvements
 
 = 1.2.5 =
 * Fixed a bug with the Portfolio Layout block
