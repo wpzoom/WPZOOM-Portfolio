@@ -474,6 +474,20 @@ function load_reorder_portfolio_items() {
 
 	//Load Re-Order feature
 	require_once 'classes/featured-posts/class-wpzoom-portfolio-featured-posts.php';
+	
+	$wpzoom_portfrolio_reorder_settings = array(
+		//Unique Id that is used to add the new column in posts list table.
+		'id'          => 'wpzoom_is_featured_id',
+		//Label that appears in the submenu of post types
+		'menu_title'  => __( 'Re-order', 'wpzoom-portfolio' ),
+		//Post type in which this feature will be added.
+		'post_type'   => 'portfolio_item',
+	);
+
+	$featured_posts_plugin_uri         = WPZOOM_PORTFOLIO_URL . '/classes/featured-posts/';
+	$list_table_checkbox_directory_uri = WPZOOM_PORTFOLIO_URL . '/classes/featured-posts/list-table-checkbox';
+
+	new WPZOOM_Featured_Posts( $wpzoom_portfrolio_reorder_settings, $featured_posts_plugin_uri );
 
 }
 add_action( 'init', 'load_reorder_portfolio_items' );

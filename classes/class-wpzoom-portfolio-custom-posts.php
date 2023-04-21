@@ -67,7 +67,25 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Custom_Posts' ) ) {
 			add_action( 'manage_portfolio_layout_posts_custom_column' , array( $this,'fill_portfolio_layouts_columns' ), 10, 2 );
 
 			add_action( 'admin_notices', array( $this, 'notice_to_use_gutenberg_editor' ) );
+			add_action( 'pre_get_posts', array( $this, 'set_column_orderby' ), 10 );
 		
+		}
+
+		public function set_column_orderby( $query ) { 
+
+			//Return if not in wp-admin
+			if( ! is_admin() )
+				return;
+			
+			//Order by what?
+			$orderby = $query->get( 'orderby' );
+			$order   = $query->get( 'order' );
+			
+			if( 'menu_order title' == $orderby ) {
+				$query->set( 'orderby', 'date' );
+				$query->set( 'order', 'desc' );
+			}
+
 		}
 
 		/**

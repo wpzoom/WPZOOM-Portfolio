@@ -1,7 +1,4 @@
 <?php
-
-require_once WPZOOM_PORTFOLIO_PATH . '/classes/featured-posts/list-table-checkbox/list-table-checkbox.php';
-
 if( ! class_exists( 'WPZOOM_Featured_Posts' ) ) {
 
 	class WPZOOM_Featured_Posts {
@@ -22,9 +19,7 @@ if( ! class_exists( 'WPZOOM_Featured_Posts' ) ) {
 			$this->posts_limit      = isset( $args['posts_limit'] ) ? $args['posts_limit'] : '';
 
 			add_action( 'current_screen', array( $this, 'check_current_screen' ) );
-
 			add_action( 'admin_menu', array( $this, 'add_featured_page_in_menu' ) );
-
 			add_filter( 'wp_insert_post_data', array( $this, 'insert_post_data' ), 10, 2 );
 
 			add_action(
@@ -577,20 +572,5 @@ if( ! class_exists( 'WPZOOM_Featured_Posts' ) ) {
 			printf( '<div id="wpzoom-featured-posts-wrapper"></div>' );
 		}
 	}
-
-	$wpzoom_portfrolio_reorder_settings = array(
-		//Unique Id that is used to add the new column in posts list table.
-		'id'          => 'wpzoom_is_featured_id',
-		//Label that appears in the submenu of post types
-		'menu_title'  => __( 'Re-order', 'wpzoom-portfolio' ),
-		//Post type in which this feature will be added.
-		'post_type'   => 'portfolio_item',
-	);
-
-	$featured_posts_plugin_uri      = WPZOOM_PORTFOLIO_URL . '/classes/featured-posts/';
-	$list_table_checkbox_directory_uri = WPZOOM_PORTFOLIO_URL . '/classes/featured-posts/list-table-checkbox';
-
-	new WPZOOM_List_Table_Checkbox_Option_Type( $wpzoom_portfrolio_reorder_settings, $list_table_checkbox_directory_uri );
-	new WPZOOM_Featured_Posts( $wpzoom_portfrolio_reorder_settings, $featured_posts_plugin_uri );
 
 }
