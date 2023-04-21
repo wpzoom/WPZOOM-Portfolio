@@ -88,7 +88,7 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Custom_Posts' ) ) {
 				return;
 			};
 		
-			echo '<div class="notice notice-error"><p>Oops, we are sorry but it seems that you are using Classic Editor. WPZOOM Portfolio works only with <a href="https://wordpress.org/gutenberg/" target="_blank">Gutenberg Editor</a>, please check <a href="https://www.wpzoom.com/documentation/wpzoom-portfolio-grid/wpzoom-portfolio-how-to-create-a-portfolio-section/" target="_blank">WPZOOM Portfolio - How to Create a Portfolio Section</a></p></div>';
+			echo '<div class="notice notice-error"><h3>Oops, Classic Editor Detected!</h3><p><strong>WPZOOM Portfolio</strong> plugin is not compatible with the <strong>Classic Editor</strong>. <br/>Please disable the <strong>Classic Editor</strong> or go to <a href="'.admin_url( 'options-writing.php' ).'" target="_blank">Settings → Writing</a> and change the default editor to Block editor. <br/>For more information, please check this tutorial: <a href="https://www.wpzoom.com/documentation/wpzoom-portfolio-grid/wpzoom-portfolio-how-to-create-a-portfolio-section/" target="_blank">How to Create a Portfolio Section</a></p><p><a href="'.admin_url( 'options-writing.php' ).'" class="button" target="_blank">Go to Settings → Writing</a></p></div>';
 
 		}
 
