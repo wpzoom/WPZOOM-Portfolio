@@ -10,7 +10,7 @@
  * @wordpress-plugin
  * Plugin Name: WPZOOM Portfolio
  * Plugin URI:  https://www.wpzoom.com/plugins/wpzoom-portfolio/
- * Description: Just a simple plugin to create Portfolio posts and display them in a beautiful grid via Gutenberg. Includes isotope filtering effect.
+ * Description: Tthe ultimate solution for creatives, designers, photographers, and businesses looking to showcase their work in an elegant, professional, and fully customizable way.
  * Author:      WPZOOM
  * Author URI:  https://www.wpzoom.com
  * Text Domain: wpzoom-portfolio
