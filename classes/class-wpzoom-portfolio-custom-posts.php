@@ -87,8 +87,20 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Custom_Posts' ) ) {
 			if( $is_editor ) { 
 				return;
 			};
-		
-			echo '<div class="notice notice-error"><h3>Oops, Classic Editor Detected!</h3><p><strong>WPZOOM Portfolio</strong> is not compatible with the <strong>Classic Editor</strong>. <br/>Please disable the <strong>Classic Editor</strong> or go to <a href="'.admin_url( 'options-writing.php' ).'" target="_blank">Settings → Writing</a> and change the default editor to Block editor. <br/>For more information, please check this tutorial: <a href="https://www.wpzoom.com/documentation/wpzoom-portfolio-grid/wpzoom-portfolio-how-to-create-a-portfolio-section/" target="_blank">How to Create a Portfolio Section</a></p><p><a href="'.admin_url( 'options-writing.php' ).'" class="button" target="_blank">Go to Settings → Writing</a></p></div>';
+			
+			$heading = esc_html__( 'Oops, Classic Editor Detected!', 'wpzoom-portfolio' );
+			$message = sprintf(
+				__( '<strong>WPZOOM Portfolio</strong> is not compatible with the <strong>Classic Editor</strong>. <br/>Please disable the <strong>Classic Editor</strong> or go to <a href="%s" target="_blank">Settings → Writing</a> and change the default editor to Block editor. <br/>For more information, please check this tutorial: <a href="%s" target="_blank">How to Create a Portfolio Section</a></p><p><a href="%s" class="button" target="_blank">Go to Settings → Writing</a>', 'wpzoom-portfolio' ),
+				admin_url( 'options-writing.php' ),
+				'https://www.wpzoom.com/documentation/wpzoom-portfolio-grid/wpzoom-portfolio-how-to-create-a-portfolio-section/',
+				admin_url( 'options-writing.php' ),
+			);
+
+			printf(
+				'<div class="notice notice-error"><h3>%1$s</h3><p>%2$s</p></div>',
+				$heading,
+				$message
+			);
 
 		}
 
