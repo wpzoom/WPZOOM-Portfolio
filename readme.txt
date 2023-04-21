@@ -10,7 +10,7 @@ License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Tags:              portfolio, gutenberg, block, grid, wpzoom, inspiro
 
-WPZOOM Portfolio plugin for WordPress is the ultimate solution for creatives, designers, photographers, and businesses looking to showcase their work in an elegant, professional, and fully customizable way.
+The ultimate solution for creatives, designers, photographers, and businesses looking to showcase their work in an elegant, professional, and fully customizable way.
 
 == Description ==
 
@@ -19,7 +19,7 @@ WPZOOM Portfolio plugin for WordPress is the ultimate solution for creatives, de
 **Showcase your work in a sleek and elegant portfolio layout!**
 
 
-WPZOOM Portfolio plugin for WordPress is the perfect tool for showcasing your work and creating beautiful, responsive, and highly customizable portfolio layouts. Whether you prefer a grid, masonry, or a simple gallery, WPZOOM Portfolio plugin has got you covered.
+WPZOOM Portfolio is the perfect tool for showcasing your work and creating beautiful, responsive, and highly customizable portfolio layouts. Whether you prefer a grid, masonry, or a simple gallery, WPZOOM Portfolio has got you covered.
 
 > Did you find this plugin helpful? Please consider [leaving a 5-star review](https://wordpress.org/support/view/plugin-reviews/wpzoom-portfolio).
 
