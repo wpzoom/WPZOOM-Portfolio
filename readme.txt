@@ -10,46 +10,75 @@ License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Tags:              portfolio, gutenberg, block, grid, wpzoom, inspiro
 
-Just a simple plugin to create Portfolio posts and display them in a beautiful grid via Gutenberg. Includes isotope filtering effect
+WPZOOM Portfolio plugin for WordPress is the ultimate solution for creatives, designers, photographers, and businesses looking to showcase their work in an elegant, professional, and fully customizable way.
 
 == Description ==
 
-Just a simple plugin to create Portfolio posts and display them in a beautiful grid via Gutenberg. Includes isotope filtering effect
+⭐️ **[WPZOOM Portfolio PRO](https://www.wpzoom.com/plugins/portfolio-grid/?utm_source=wporg&utm_medium=website&utm_campaign=free_description)** **with 🎬 Video Integration NOW AVAILABLE!** ⭐️
+
+**Showcase your work in a sleek and elegant portfolio layout!**
+
+
+WPZOOM Portfolio plugin for WordPress is the perfect tool for showcasing your work and creating beautiful, responsive, and highly customizable portfolio layouts. Whether you prefer a grid, masonry, or a simple gallery, WPZOOM Portfolio plugin has got you covered.
+
+> Did you find this plugin helpful? Please consider [leaving a 5-star review](https://wordpress.org/support/view/plugin-reviews/wpzoom-portfolio).
+
+
+With advanced filtering and sorting options, lightbox and video support, and fully responsive and mobile-friendly design, WPZOOM Portfolio plugin is the ultimate portfolio solution for WordPress.
+
+Create and display Portfolio posts in a beautiful grid using Gutenberg blocks. Includes isotope filtering effect
+
 Works with blog posts too!
 
 [**View Demo**](https://demo.wpzoom.com/inspiro-lite/portfolio/)
 
-= How it works? =
+= 🛟 How it works? =
 
-* Create Portfolio posts in the "Portfolio" section
-* Display your portfolio posts using the "Portfolio" block
+* Create Portfolio posts in the **Portfolio** section
+* Display your portfolio posts using the **Portfolio** block
+* Or you can create a new Portfolio Layout and insert it anywhere you want using shortcodes
 
-= How to create a Portfolio Layout? =
+= 💡 How to create a Portfolio Layout? =
 
-* Go to Portfolio > Portfolio Layouts page
+* Go to **Portfolio > Portfolio Layouts** page
 * Add a Title and configure the options of the Portfolio block as you want
-* Copy the Shortcode from the top in the Portfolio block settings
-* Insert the Shortcode anywhere you want on your website. Or you can insert the Portfolio Layout block using the block editor.
+* Copy the **Shortcode** from the top in the Portfolio block settings
+* Insert the Shortcode anywhere you want on your website. Or you can insert the **Portfolio Layout** block using the block editor.
 
 
-= Features =
+= 📌 FEATURES =
 
 * Create Portfolio Posts & Reusable Portfolio Layouts
 * Portfolio Block
 * Portfolio Layout Block & Shortcode (Insert it in any page builder: Elementor, Beaver Builder, etc)
-* Supports Blog posts as well!
-* Isotope effect (category filter)
+* Portfolio Shortcode
+* Supports **Blog posts** as well!
+* **Isotope effect** (category filter)
 * Image Lightbox
 * 3 Layouts: Grid with Overlay, Masonry & Columns
+* Different image aspect ratio
 * More features coming soon...
 
+= ⭐️ PRO FEATURES ⭐️ =
+* **🎥 Video Integration - 🆕**
+* **▶️ Video Lightbox with YouTube, Vimeo & MP4 support - 🆕**
+* **Video Background on Hover - 🆕**
+* **Portfolio Re-order - 🆕**
+* **Customize Colors - 🆕**
+* Premium Support
+* and many new features coming soon!
 
-== Recommended Themes ==
+⭐️ **[Get the PRO version!](https://www.wpzoom.com/plugins/portfolio-grid/?utm_source=wporg&utm_medium=website&utm_campaign=free_description)** ⭐️
+
+
+== 📌 Recommended Themes ==
 
 This plugin works great with any theme. If you're looking for a Portfolio Theme, check out our themes:
 [**Inspiro PRO**](https://www.wpzoom.com/themes/inspiro-pro/)
-[**Inspiro Classic**](https://www.wpzoom.com/themes/inspiro/)
+[**Inspiro Premium**](https://www.wpzoom.com/themes/inspiro/)
 [**Inspiro Lite**](https://wordpress.org/themes/inspiro/)
+[**Inspiro Blocks**](https://wordpress.org/themes/inspiro-blocks/) 🆕
+[**Inspiro Blocks PRO**](https://www.wpzoom.com/themes/inspiro-blocks-pro/) 🆕
 
 
 = Additional Resources =
@@ -58,12 +87,29 @@ This plugin works great with any theme. If you're looking for a Portfolio Theme,
 * [Github repository](https://github.com/wpzoom/WPZOOM-Portfolio)
 
 
+= 🙌 FOLLOW US =
+
+* 🐦 [Twitter](https://twitter.com/wpzoom)
+* 📘 [Facebook](https://facebook.com/wpzoom)
+* 📘 [Facebook Group](https://www.facebook.com/groups/wpzoom)
+* 🌄 [Instagram](https://instagram.com/wpzoom)
+
+
+= 100% GDPR COMPLIANT =
+
+This plugin is **100% GDPR compliant**. It doesn't integrate any Google Fonts.
+WPZOOM Portfolio does not collect any information outside your WordPress installation, therefore it’s **100% GDPR compliant**.
+
 == Installation ==
 
-1. Install the WPZOOM Portfolio Posts plugin either via the WordPress plugin directory or by uploading the files to your server.
+Simply search for the plugin name "WPZOOM Portfolio" via the **Plugins -> Add New** page in the Dashboard of your WordPress website and click the install button. Once installed, click on the blue Activate button.
 
 
 == Frequently Asked Questions ==
+
+= I just installed the plugin and can't find the Portfolio blocks =
+
+Make sure you haven't disabled the new block editor using the Classic Editor plugin, as these blocks work only with the new editor. **If you have the Classic Editor plugin - disable it**!
 
 = I'm getting a 404 error!  =
 
