@@ -22,7 +22,7 @@ class WPZOOM_Portfolio_Admin_Menu {
 	public function __construct() {
 
 		// Let's add menu item with subitems
-		add_action( 'admin_menu', array( $this, 'register_menus' ) );
+		add_action( 'admin_menu', array( $this, 'register_menus' ), 15 );
 	}
 
 	/**
@@ -42,7 +42,8 @@ class WPZOOM_Portfolio_Admin_Menu {
 			esc_html__( 'Settings', 'wpzoom-portfolio' ),
 			'manage_options',
 			'wpzoom-portfolio-settings',
-			array( $this, 'admin_page' )
+			array( $this, 'admin_page' ),
+			5
 		);
 
 	}
