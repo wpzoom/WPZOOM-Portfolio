@@ -582,7 +582,7 @@ if( ! class_exists( 'WPZOOM_Featured_Posts' ) ) {
 		//Unique Id that is used to add the new column in posts list table.
 		'id'          => 'wpzoom_is_featured_id',
 		//Label that appears in the submenu of post types
-		'menu_title'  => __( 'Re-order', 'wpzoom-portfolio' ),
+		'menu_title'  => __( 'Re-order Items', 'wpzoom-portfolio' ),
 		//Post type in which this feature will be added.
 		'post_type'   => 'portfolio_item',
 	);
