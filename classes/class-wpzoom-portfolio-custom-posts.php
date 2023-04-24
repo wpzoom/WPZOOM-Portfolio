@@ -111,7 +111,7 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Custom_Posts' ) ) {
 				__( '<strong>WPZOOM Portfolio</strong> is not compatible with the <strong>Classic Editor</strong>. <br/>Please disable the <strong>Classic Editor</strong> or go to <a href="%s" target="_blank">Settings → Writing</a> and change the default editor to Block editor. <br/>For more information, please check this tutorial: <a href="%s" target="_blank">How to Create a Portfolio Section</a></p><p><a href="%s" class="button" target="_blank">Go to Settings → Writing</a>', 'wpzoom-portfolio' ),
 				admin_url( 'options-writing.php' ),
 				'https://www.wpzoom.com/documentation/wpzoom-portfolio-grid/wpzoom-portfolio-how-to-create-a-portfolio-section/',
-				admin_url( 'options-writing.php' ),
+				admin_url( 'options-writing.php' )
 			);
 
 			printf(
