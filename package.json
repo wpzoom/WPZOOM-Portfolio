@@ -19,6 +19,7 @@
 		"last 2 versions"
 	],
 	"dependencies": {
+		"isotope-layout": "^3.0.6",
 		"react-select": "1.2.1"
 	},
 	"devDependencies": {

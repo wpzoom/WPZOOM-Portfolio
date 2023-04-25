@@ -1,6 +1,7 @@
 import apiFetch from '@wordpress/api-fetch';
 import domReady from '@wordpress/dom-ready';
 import { delegate, extractClassValue } from '../../utility';
+import Isotope from 'isotope-layout';
 
 /**
  * Called when one of the portfolio category filter buttons is clicked.
@@ -11,7 +12,27 @@ import { delegate, extractClassValue } from '../../utility';
 function filterButtonClick( event ) {
 	event.preventDefault();
 
-	let item = this.parentElement;
+	const item = this.parentElement;
+
+	if ( item ) {
+		const cat = extractClassValue( item, 'cat-item-' );
+
+		if ( cat && cat.length > 0 ) {
+			const wrap = item.closest( '.wpzoom-blocks_portfolio-block' ).querySelector( '.wpzoom-blocks_portfolio-block_items-list' ),
+			      iso = Isotope.data( wrap );
+
+			item.parentNode.querySelectorAll( 'li' ).forEach( filterBtn => {
+				filterBtn.classList.remove( 'current-cat' );
+			} );
+			item.classList.add( 'current-cat' );
+
+			iso.arrange( {
+				filter: 'all' == cat ? '*' : ( '.wpzoom-blocks_portfolio-block_category-' + cat )
+			} );
+		}
+	}
+
+	/*let item = this.parentElement;
 
 	if ( item ) {
 		let cat = extractClassValue( item, 'cat-item-' );
@@ -50,7 +71,25 @@ function filterButtonClick( event ) {
 				}
 			} );
 		}
-	}
+	}*/
+}
+
+function portfolioIsotope( event ) {
+	let container = document.getElementsByClassName( 'wpzoom-blocks_portfolio-block' );
+
+	[].forEach.call( container, function( el ) {
+		if ( el.classList.contains( 'layout-grid' ) ) {
+			const elem = el.querySelector( '.wpzoom-blocks_portfolio-block_items-list' ),
+			      iso = new Isotope( elem, {
+			          itemSelector: '.wpzoom-blocks_portfolio-block_item',
+			          layoutMode: 'fitRows'
+			      } );
+
+			imagesLoaded( el ).on( 'progress', function() {
+				iso.layout();
+			} );
+		}
+	} );
 }
 
 function portfolioMasonry( event ) {
@@ -208,6 +247,12 @@ domReady( () => {
 		'click',
 		'.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_show-more a',
 		portfolioShowMoreClick
+	);
+
+	delegate(
+		'load',
+		document,
+		portfolioIsotope()
 	);
 
 	delegate(

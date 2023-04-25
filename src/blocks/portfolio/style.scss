@@ -298,6 +298,26 @@ $primary_color: #0bb4aa;
         }
     }
 
+	&.layout-grid .wpzoom-blocks_portfolio-block_items-list {
+		display: block !important;
+	}
+
+	&.layout-grid .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item {
+		position: relative;
+		float: left;
+	}
+
+	&.layout-grid.columns-1 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: 100%; }
+	&.layout-grid.columns-2 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: 50%; }
+	&.layout-grid.columns-3 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: 33.33%; }
+	&.layout-grid.columns-4 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: 25%; }
+	&.layout-grid.columns-5 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: 20%; }
+	&.layout-grid.columns-6 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: 16.66%; }
+	&.layout-grid.columns-7 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: 14.28%; }
+	&.layout-grid.columns-8 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: 12.5%; }
+	&.layout-grid.columns-9 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: 11.11%; }
+	&.layout-grid.columns-10 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: 10%; }
+
     &.layout-masonry .wpzoom-blocks_portfolio-block_items-list {
         display: block;
     }
