@@ -253,10 +253,13 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Custom_Posts' ) ) {
 
 			// Register a custom image size for use as the default image size
 			add_image_size( 'portfolio_item-thumbnail', 600, 400, true );
+            add_image_size( 'portfolio_item-thumbnail@2x', 1200, 800, true );
             add_image_size( 'portfolio_item-masonry', 600 );
+            add_image_size( 'portfolio_item-masonry@2x', 1200 );
 
             add_image_size( 'portfolio_item-thumbnail_cinema', 800, 335, true );
             add_image_size( 'portfolio_item-thumbnail_portrait', 600, 900, true );
+            add_image_size( 'portfolio_item-thumbnail_portrait@2x', 1200, 1800, true );
             add_image_size( 'portfolio_item-thumbnail_square', 800, 800, true );
 
 			// Ensure there is a Uncategorized category for the portfolio post type
