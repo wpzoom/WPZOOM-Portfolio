@@ -462,6 +462,12 @@ function load_files() {
 	//Load Archive template
 	require_once 'classes/class-wpzoom-portfolio-template.php';
 
+	if( ! class_exists( 'WPZOOM_Portfolio_Pro' )) {
+		require_once 'classes/class-wpzoom-portfolio-metaboxes-upsell.php';
+	}
+
+	
+
 }
 
 add_action( 'plugin_loaded', 'load_files' );
