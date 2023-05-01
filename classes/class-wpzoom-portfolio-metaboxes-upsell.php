@@ -44,14 +44,18 @@ defined( 'ABSPATH' ) || exit;
 
 	public function add_meta_box( $post_type ) {
 
-		add_meta_box(
-			'wpzoom_portfolio_video_settings',
-			'Video Settings [PRO only] <span>PRO</span>',
-			array( $this, 'video_settings' ),
-			'portfolio_item',
-			'normal',
-			'high'
-		);
+		global $wp_meta_boxes;
+
+		if ( ! isset( $wp_meta_boxes['portfolio_item']['normal']['high']['wpzoom_portfolio_video_settings'] ) ) {
+			add_meta_box(
+				'wpzoom_portfolio_video_settings',
+				'Video Settings [PRO only] <span>PRO</span>',
+				array( $this, 'video_settings' ),
+				'portfolio_item',
+				'normal',
+				'high'
+			);
+		}
 
 	}
 
