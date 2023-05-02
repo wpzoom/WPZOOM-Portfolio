@@ -196,7 +196,7 @@ class WPZOOM_Blocks_Portfolio {
             if ( 'portfolio_item_post_thumbs' === $column_name ) {
                 echo '<a href="' . esc_url( get_edit_post_link() ) . '" class="wpzoom-portfolio__thumbnail">';
                 if ( has_post_thumbnail() ) {
-                    the_post_thumbnail( 'medium' );
+                    the_post_thumbnail( 'thumbnail' );
                 }
                 echo '</a>';
             }
