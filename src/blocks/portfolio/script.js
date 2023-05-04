@@ -14,17 +14,28 @@ function filterButtonClick( event ) {
 	let item = this.parentElement;
 
 	if ( item ) {
+
 		let cat = extractClassValue( item, 'cat-item-' );
 
 		if ( cat && cat.length > 0 ) {
-			let wrap = item.closest( '.wpzoom-blocks_portfolio-block' ).querySelector( '.wpzoom-blocks_portfolio-block_items-list' ),
+
+			let portfolioContainer = item.closest( '.wpzoom-blocks_portfolio-block' ),
+				moreBtn = portfolioContainer.querySelector( '.wpzoom-blocks_portfolio-block_show-more' ),
+				wrap = item.closest( '.wpzoom-blocks_portfolio-block' ).querySelector( '.wpzoom-blocks_portfolio-block_items-list' ),
 			    show = 'all' == cat ? wrap.querySelectorAll( '[data-category]' ) : wrap.querySelectorAll( '[data-category="' + cat + '"]' ),
 			    hide = 'all' == cat ? [] : wrap.querySelectorAll( '[data-category]:not([data-category="' + cat + '"])' );
+
 
 			item.parentNode.querySelectorAll( 'li' ).forEach( filterBtn => {
 				filterBtn.classList.remove( 'current-cat' );
 			} );
 			item.classList.add( 'current-cat' );
+
+			if( portfolioContainer.classList.contains( 'ajax-load-items' ) ) {
+				if( show.length <= 0 ) {
+					portfolioFilteredItems( item );
+				}
+			}
 
 			show.forEach( theItem => {
 				let classList = theItem.classList;
@@ -122,6 +133,56 @@ function portfolioItemLightboxClose( event ) {
 	}
 }
 
+function portfolioFilteredItems( item ) {
+
+	let container = item.closest( '.wpzoom-blocks_portfolio-block' ),
+	    itemsContainer = container.querySelector( '.wpzoom-blocks_portfolio-block_items-list' ),
+	    params = new URLSearchParams( {
+	        layout:         extractClassValue( container, 'layout-' ),
+	        order:          extractClassValue( container, 'order-' ),
+	        order_by:       extractClassValue( container, 'orderby-' ),
+	        per_page:       parseInt( extractClassValue( container, 'perpage-' ) ) || 6,
+			cats:           extractClassValue( item, 'cat-item-' ),
+	        page:           1,
+	        show_thumbnail: container.classList.contains( 'show-thumbnail' ),
+	        thumbnail_size: extractClassValue( container, 'thumbnail-size-' ),
+	        show_video:     container.classList.contains( 'show-video' ),
+	        show_author:    container.classList.contains( 'show-author' ),
+	        show_date:      container.classList.contains( 'show-date' ),
+	        show_excerpt:   container.classList.contains( 'show-excerpt' ),
+	        show_read_more: container.classList.contains( 'show-readmore' ),
+			source: container.classList.contains( 'post_type-post' ) ? 'post' : 'portfolio_item'
+	    } ),
+	    fetchRequest = apiFetch( { path: '/wpzoom-blocks/v1/portfolio-posts?' + params.toString() } );
+	
+		fetchRequest.then( response => {
+		if ( response ) {
+
+			let items = 'items' in response ? response.items : [],
+				new_posts = 'new_posts' in response ? response.new_posts : [];
+			
+			if ( items ) {
+				itemsContainer.insertAdjacentHTML( 'beforeend', items );
+				portfolioMasonry();
+			}
+
+			if( new_posts ) {
+				
+				var ex_posts = container.getAttribute( 'data-exclude-posts' );
+				if( null !== ex_posts ) {
+					ex_posts =  ex_posts + ',' + new_posts.toString();
+					container.setAttribute('data-exclude-posts', ex_posts );
+				}
+				else {
+					container.setAttribute('data-exclude-posts', new_posts );
+				}
+				
+			}
+
+		}
+	} );
+}
+
 /**
  * Called when the show more portfolio items button is clicked.
  *
@@ -141,6 +202,7 @@ function portfolioShowMoreClick( event ) {
 	        order_by:       extractClassValue( container, 'orderby-' ),
 	        per_page:       parseInt( extractClassValue( container, 'perpage-' ) ) || 6,
 			cats:           extractClassValue( container, 'category-' ),
+			exclude:        container.getAttribute( 'data-exclude-posts' ),
 	        page:           page,
 	        show_thumbnail: container.classList.contains( 'show-thumbnail' ),
 	        thumbnail_size: extractClassValue( container, 'thumbnail-size-' ),

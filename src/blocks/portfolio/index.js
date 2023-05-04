@@ -179,7 +179,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 		render() {
 			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
 			const { amount, categories, columnsAmount, columnsGap, layout, lazyLoad, lightbox,
-					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, showDate,
+					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, enableAjaxLoading, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor } = attributes;
 			const { imageSizes } = this.state;
 
@@ -405,6 +405,13 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									label={ __( 'Show Category Filter at the Top', 'wpzoom-portfolio' ) }
 									checked={ showCategoryFilter }
 									onChange={ ( value ) => setAttributes( { showCategoryFilter: value } ) }
+								/>
+								}
+								{ showCategoryFilter && <ToggleControl
+									label={ __( 'Load Dynamically New Posts in Each Category', 'wpzoom-portfolio' ) }
+									checked={ enableAjaxLoading }
+									help={ __( 'This option will try to display the same number of posts in each category as it\'s configured in the Number of Posts option above.', 'wpzoom-portfolio' ) }
+									onChange={ ( value ) => setAttributes( { enableAjaxLoading: value } ) }
 								/>
 								}
 								<ToggleControl
