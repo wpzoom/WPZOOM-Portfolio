@@ -454,6 +454,7 @@ function load_files() {
 	require_once 'classes/class-wpzoom-portfolio-shortcode.php';
 	require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
 	require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
+	require_once 'classes/class-wpzoom-portfolio-assets-manager.php';
 
 	//Load Settings Panel
 	require_once 'classes/class-wpzoom-settings-fields.php';

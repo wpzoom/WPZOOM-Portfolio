@@ -179,6 +179,40 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Hook into the REST API in order to add some custom things
 		add_action( 'rest_api_init', array( $this, 'rest_api_routes' ) );
+
+		add_action( 'wp_ajax_wpzoom_load_more_items', array( $this, 'load_more_items' ) );
+		add_action( 'wp_ajax_nopriv_wpzoom_load_more_items', array( $this, 'load_more_items' ) );
+
+	}
+
+	public function load_more_items() { 
+		
+		$output = '';
+
+		$offset  = sanitize_text_field( $_POST['offset'] );
+		$exclude = isset( $_POST['exclude'] ) && ! empty( $_POST['exclude'] ) ? explode( ',', sanitize_text_field( $_POST['exclude'] ) ) : array();
+		
+		$data    = sanitize_text_field( $_POST['posts_data'] );
+		$data    = json_decode( stripslashes( $data ), true );
+
+		unset( $data['total'] );
+
+		if( !empty( $offset ) ) {
+			$data['offset'] = $offset;
+		}
+
+		if( $exclude ) {
+			$data['exclude_posts'] = $exclude;
+		}
+
+		$output .= '<div class="wpzoom-ajax-portfolio-items">';
+		$output .= $this->items_html( $data );
+		$output .= '</div>';
+
+		echo $output;
+
+		wp_die();
+
 	}
 
     /**
@@ -306,8 +340,7 @@ class WPZOOM_Blocks_Portfolio {
 		</div>' : '';
 
 		// Build a string with all the CSS classes
-		$classes = "$class$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
-		            $date_class$excerpt_class$readmore_class$align$layout_class$columns$lightbox$post_type_class$extra_class$category_class$ajax_load_class";
+		$classes = "$class$lightbox$layout_class$columns$post_type_class$extra_class$ajax_load_class";
 
 		// Try to get portfolio items
 		$items_html = $this->items_html( array(
@@ -408,10 +441,55 @@ class WPZOOM_Blocks_Portfolio {
 			  begin="0.3"/>     
 		  </circle>
 		</svg></div>';
+
+		if ( get_query_var('paged') ) {
+			$paged = get_query_var('paged');
+		} else if ( get_query_var('page') ) {
+			$paged = get_query_var('page');
+		} else {
+			$paged = 1;
+		}
+
+		$adjusted_offset = ( ( $paged - 1 ) * (int)$per_page );
+		$offset          = $adjusted_offset + (int)$per_page;
+
+		$data_load_more = array(
+			'categories'            => $categories,
+			'class'                 => 'wpzoom-blocks_portfolio-block',
+			'layout'                => $layout,
+			'lightbox'              => $use_lightbox,
+			'lightbox_caption'      => $lightbox_caption,
+			'order'                 => $order,
+			'order_by'              => $order_by,
+			'per_page'              => $per_page,
+			'read_more_label'       => $read_more_label,
+			'show_author'           => $show_author,
+			'show_background_video' => $show_video,
+			'show_date'             => $show_date,
+			'show_excerpt'          => $show_excerpt,
+			'show_read_more'        => $show_read_more,
+			'show_thumbnail'        => $show_thumbnail,
+			'source'                => $source,
+			'thumbnail_size'        => $thumbnail_size,
+			'total'                 => $this->all_posts
+		);
 		
+		$data_load_more = wp_json_encode( $data_load_more );
 
 		// Return the final output
-		return "<div class=\"wpzoom-blocks $classes\">$cats_filter<ul class=\"{$class}_items-list\">$output</ul>$btns_wrap</div><!--.$class-->$css";
+		return sprintf(
+			'<div class="wpzoom-blocks %s" data-offset="%s" data-load-more=\'%s\'>%s<ul class="%s_items-list">%s</ul>%s</div><!--.%s-->%s',
+			$classes,
+			$offset,
+			$data_load_more,
+			$cats_filter,
+			$class,
+			$output,
+			$btns_wrap,
+			$class,
+			$css
+		);
+
 	}
 
 	/**
@@ -426,6 +504,7 @@ class WPZOOM_Blocks_Portfolio {
 		// Setup some default values
 		$defaults = array(
 			'categories'            => array(),
+			'offset'                => 0,
 			'exclude_posts'         => array(),
 			'class'                 => 'wpzoom-blocks_portfolio-block',
 			'layout'                => 'grid',
@@ -466,6 +545,7 @@ class WPZOOM_Blocks_Portfolio {
 			'orderby'        => $args[ 'order_by' ],
 			'posts_per_page' => $args[ 'per_page' ],
 			'paged'          => $args[ 'page' ],
+			'offset'         => $args[ 'offset' ],
 			'post_type'      => $source
 		);
 
@@ -491,6 +571,9 @@ class WPZOOM_Blocks_Portfolio {
 		// Cache the amount of pages returned by the query
 		$this->result_pages = $query->max_num_pages;
 
+		//Cache the amount of all posts
+		$this->all_posts = $query->found_posts;
+
 		$posts_ids = array();
 
 		// If the above query returned any results...
@@ -513,6 +596,7 @@ class WPZOOM_Blocks_Portfolio {
 				$has_cover = ( $args[ 'show_background_video' ] && ! empty( $video ) ) || ( $args[ 'show_thumbnail' ] && ! empty( $thumbnail ) );
 				$cover_class = $has_cover ? ' has-cover' : '';
 				$posts_ids[] = $id;
+				$post_thumbnail_url = get_the_post_thumbnail_url( $id );
 
 				if( 'masonry' !== $args['layout'] ) {
 					// Open the list item for this portfolio item
@@ -525,7 +609,7 @@ class WPZOOM_Blocks_Portfolio {
 
 
 				// Add a wrapper article around the entire portfolio item (including the thumbnail)
-				$output .= "<article class='${class}_item-wrap'>";
+				$output .= "<article class='${class}_item-wra portfolio_item'>";
 
 				// If the video should be shown...
 				if ( $args[ 'show_background_video' ] && ! empty( $video ) ) {
@@ -542,6 +626,7 @@ class WPZOOM_Blocks_Portfolio {
 
 					if( $args[ 'lightbox' ] ) {
 						// Add the lightbox icon
+						$output .= '<a class="mfp-image portfolio-block-popup-video popup_image_icon" href="'. $post_thumbnail_url .'">';
 						$output .= "<span class='${class}_lightbox_icon'>
 										<svg enable-background='new 0 0 32 32' id='Layer_4' version='1.1' viewBox='0 0 32 32' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
 											<g>
@@ -551,6 +636,7 @@ class WPZOOM_Blocks_Portfolio {
 											</g>
 										</svg>
 									</span>";
+						$output .= '</a>';
 						};
 
                     $output .= "</div>";
