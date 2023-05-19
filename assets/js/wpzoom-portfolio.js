@@ -128,6 +128,23 @@
 		 */
 		$('.wpzoom-blocks_portfolio-block_filter ul').portfolioBlockFilter();
 
+		//Apply Masonry
+		let container = document.getElementsByClassName('wpzoom-blocks_portfolio-block');
+		[].forEach.call(container, function(el) {					
+			if( el.classList.contains( 'layout-masonry' ) ) {
+				var elem = el.querySelector('.wpzoom-blocks_portfolio-block_items-list');
+				var msnry = new Masonry( elem, {
+					// options
+					itemSelector: '.wpzoom-blocks_portfolio-block_item',
+				});
+	
+				// element
+				imagesLoaded( el ).on( 'progress', function() {
+					msnry.layout();
+				});
+			}
+		});
+
 		/**
 		 * Load more stuff.
 		 */
