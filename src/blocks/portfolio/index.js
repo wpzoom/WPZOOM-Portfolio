@@ -391,7 +391,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									/>
 								}
 
-                                { layout == 'grid' &&
+                                { ( layout == 'grid' || layout == 'masonry' ) &&
 								<RangeControl
 									label={ __( 'Columns Gap', 'wpzoom-portfolio' ) }
 									max={ 100 }

@@ -305,8 +305,11 @@ class WPZOOM_Blocks_Portfolio {
 			<a href="' . $view_all_link . '" title="' . esc_attr( $view_all_label ) . '" class="wpz-portfolio-button__link">' . $view_all_label . '</a>
 		</div>' : '';
 
+		$class_unique     = 'wpzoom-portfolio-block-' . uniqid( 'block-' );
+		$class_css_unique = ' ' . $class_unique;
+
 		// Build a string with all the CSS classes
-		$classes = "$class$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
+		$classes = "$class$class_css_unique$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
 		            $date_class$excerpt_class$readmore_class$align$layout_class$columns$lightbox$post_type_class$extra_class$category_class$ajax_load_class";
 
 		// Try to get portfolio items
@@ -352,34 +355,69 @@ class WPZOOM_Blocks_Portfolio {
 			$output .= '<li class="' . $class . '_no-portfolio-items">' . esc_html__(  'No portfolio items.', 'wpzoom-portfolio' ) . '</li>';
 		}
 
-		$filter_color_hover = '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li a:hover,
-                         .wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li.current-cat a,
-                         .wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li.current-cat a:hover,
-                         .wpzoom-blocks_portfolio-block.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a:hover {
+		$filter_color_hover = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li a:hover,
+                         .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li.current-cat a,
+                         .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li.current-cat a:hover,
+                         .wpzoom-blocks_portfolio-.' . $class_unique . '.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a:hover {
 							color:' . $attr['primaryColor'] . ';
 		                 }';
 
-        $filter_color = '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li a,
-        .wpzoom-blocks_portfolio-block.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a {
+        $filter_color = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li a,
+        .wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a {
                                     color:' . $attr['secondaryColor'] . ';
                                  }';
-		$button_color_hover = '.wpzoom-blocks_portfolio-block .wpz-portfolio-button__link {
+		$button_color_hover = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link {
 							background:' . $attr['secondaryColor'] . ';
 						}';
 
-        $button_color = '.wpzoom-blocks_portfolio-block .wpz-portfolio-button__link:hover,
-                        .wpzoom-blocks_portfolio-block .wpz-portfolio-button__link:focus,
-                        .wpzoom-blocks_portfolio-block .wpz-portfolio-button__link:active {
+        $button_color = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link:hover,
+                        .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link:focus,
+                        .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link:active {
                             background:' . $attr['primaryColor'] . ';
                         }';
 		$columns_gap = isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ? '.wpzoom-blocks_portfolio-block_items-list { grid-gap:' . $attr['columnsGap'] . 'px; }' : '';
+		
+		if( isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ) {
+			if( isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ) {
+				switch( $attr[ 'columnsAmount' ] ) {
+
+					case 1:
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-1 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { margin-botton: ' . $attr['columnsGap'] . 'px }';
+					break;
+						
+					case 2:
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-2 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(50% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
+					break;
+
+					case 3:
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-3 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(33.333% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
+					break;
+
+					case 4:
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-4 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(25% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
+					break;
+
+					case 5:
+						$masonry_selectors = '.wpzoom-blocks_portfolio-.' . $class_unique . '.layout-masonry.columns-5 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(20% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
+					break;
+
+					case 6:
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-6 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(16.666% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
+					break;
+				}
+			}
+			
+		}
+
+		$masonry_columns_gap = isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ? $masonry_selectors : '';
 		$css = sprintf( 
 			'<style>%s</style>',
 			$filter_color .
             $filter_color_hover .
 			$button_color .
             $button_color_hover . 
-			$columns_gap
+			$columns_gap .
+			$masonry_columns_gap
 		);
 
 		$preloader = '<div class="wpzoom-portfolio-preloader"><svg  width="75" version="1.1" id="L4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
