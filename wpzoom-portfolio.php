@@ -449,20 +449,40 @@ class WPZOOM_Blocks {
 	}
 }
 
+function wpzoom_theme_has_portfolio() {
+
+	$wpzoom_themes = array(
+		'wpzoom-inspiro-pro'
+	);
+	
+	$current_theme = get_option( 'stylesheet' );
+
+	if( ! in_array( $current_theme, $wpzoom_themes ) ) {
+		return false;
+	}
+
+	return true;
+
+}
+
 function load_files() {
+
 	//Add Portfolio Shortcode
 	require_once 'classes/class-wpzoom-portfolio-shortcode.php';
-	require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
-	require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
 
-	//Load Settings Panel
-	require_once 'classes/class-wpzoom-settings-fields.php';
-	require_once 'classes/class-wpzoom-portfolio-settings-page.php';
+	if( ! wpzoom_theme_has_portfolio() ) {
+		require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
+		require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
 
-	//Load Archive template
-	require_once 'classes/class-wpzoom-portfolio-template.php';
+		//Load Settings Panel
+		require_once 'classes/class-wpzoom-settings-fields.php';
+		require_once 'classes/class-wpzoom-portfolio-settings-page.php';
 
-	if( ! class_exists( 'WPZOOM_Portfolio_Pro' )) {
+		//Load Archive template
+		require_once 'classes/class-wpzoom-portfolio-template.php';
+	}
+
+	if( ! class_exists( 'WPZOOM_Portfolio_Pro' ) && ! wpzoom_theme_has_portfolio() ) {
 		require_once 'classes/class-wpzoom-portfolio-metaboxes-upsell.php';
 	}
 
@@ -474,7 +494,7 @@ add_action( 'plugin_loaded', 'load_files' );
 
 function load_reorder_portfolio_items() {
 
-	if( ! current_user_can( 'edit_posts' ) ) {
+	if( ! current_user_can( 'edit_posts' ) || wpzoom_theme_has_portfolio() ) {
 		return;
 	}
 
@@ -496,6 +516,7 @@ function load_reorder_portfolio_items() {
 	new WPZOOM_Featured_Posts( $wpzoom_portfrolio_reorder_settings, $featured_posts_plugin_uri );
 
 }
+
 add_action( 'init', 'load_reorder_portfolio_items' );
 
 add_action( 'init', 'WPZOOM_Blocks_Portfolio_Shortcode::instance' );
