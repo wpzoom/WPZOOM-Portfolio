@@ -326,6 +326,10 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										{
 											label: __( 'Z → A', 'wpzoom-portfolio' ),
 											value: 'title/desc'
+										},
+										{
+											label: __( 'Random', 'wpzoom-portfolio' ),
+											value: 'rand/desc'
 										}
 									] }
 									onChange={ ( value ) => {
