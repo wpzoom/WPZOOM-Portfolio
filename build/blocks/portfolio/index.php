@@ -540,9 +540,18 @@ class WPZOOM_Blocks_Portfolio {
 				$permalink = esc_url( get_permalink( $post ) );
 				$title = get_the_title( $post );
 				$title_attr = the_title_attribute( array( 'post' => $post, 'echo' => false ) );
+				
 				$the_categories = get_the_terms( $id, ( 'portfolio_item' == $source ? 'portfolio' : 'category' ) );
 				$no_category = get_term_by( 'slug', 'uncategorized', ( 'portfolio_item' == $source ? 'portfolio' : 'category' ) );
+				
 				$category = ! is_wp_error( $the_categories ) && is_array( $the_categories ) && count( $the_categories ) > 0 ? $the_categories[0]->term_id : $no_category->term_id;
+				$category_classname = '';
+				if( ! is_wp_error( $the_categories ) && is_array( $the_categories ) && count( $the_categories ) > 0 ) {
+					foreach( $the_categories as $cat ) {
+						$category_classname .= ' ' . $class . '_category-' . $cat->term_id;
+					}
+				}
+
 				$thumbnail = get_the_post_thumbnail( $post, $args[ 'thumbnail_size' ] );
 				$video_type = 'service' == get_post_meta( $id, '_wpzb_portfolio_video_type', true ) ? 'service' : 'library';
 				$video_id = intval( get_post_meta( $id, '_wpzb_portfolio_video_id', true ) );
@@ -554,11 +563,11 @@ class WPZOOM_Blocks_Portfolio {
 
 				if( 'masonry' !== $args['layout'] ) {
 					// Open the list item for this portfolio item
-					$output .= "<li class='${class}_item ${class}_item-$id ${class}_category-$category$cover_class fade-in'  data-category='$category'>";
+					$output .= "<li class='${class}_item ${class}_item-$id$category_classname$cover_class fade-in'  data-category='$category'>";
 				}
 				else {
 					// Open the list item for this portfolio item
-					$output .= "<li class='${class}_item ${class}_item-$id ${class}_category-$category$cover_class'  data-category='$category'>";
+					$output .= "<li class='${class}_item ${class}_item-$id$category_classname$cover_class'  data-category='$category'>";
 				}
 
 

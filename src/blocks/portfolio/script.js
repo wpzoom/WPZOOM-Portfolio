@@ -22,9 +22,8 @@ function filterButtonClick( event ) {
 			let portfolioContainer = item.closest( '.wpzoom-blocks_portfolio-block' ),
 				moreBtn = portfolioContainer.querySelector( '.wpzoom-blocks_portfolio-block_show-more' ),
 				wrap = item.closest( '.wpzoom-blocks_portfolio-block' ).querySelector( '.wpzoom-blocks_portfolio-block_items-list' ),
-			    show = 'all' == cat ? wrap.querySelectorAll( '[data-category]' ) : wrap.querySelectorAll( '[data-category="' + cat + '"]' ),
-			    hide = 'all' == cat ? [] : wrap.querySelectorAll( '[data-category]:not([data-category="' + cat + '"])' );
-
+			    show = 'all' == cat ? wrap.querySelectorAll( '[data-category]' ) : wrap.querySelectorAll( '.wpzoom-blocks_portfolio-block_category-' + cat + '' ),
+			    hide = 'all' == cat ? [] : wrap.querySelectorAll( '[data-category]:not(.wpzoom-blocks_portfolio-block_category-' + cat + ')' );
 
 			item.parentNode.querySelectorAll( 'li' ).forEach( filterBtn => {
 				filterBtn.classList.remove( 'current-cat' );
