@@ -109,11 +109,11 @@
 }
 
 .portfolio-tabs {
-    opacity: .75;
+/*    opacity: .75;
     filter: grayscale(20%);
     pointer-events: none;
     cursor: not-allowed!important;
-
+*/
 /*    filter: blur(0.5px);*/
 }
 
