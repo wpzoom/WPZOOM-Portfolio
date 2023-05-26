@@ -49,7 +49,7 @@ defined( 'ABSPATH' ) || exit;
 		if ( ! isset( $wp_meta_boxes['portfolio_item']['normal']['high']['wpzoom_portfolio_video_settings'] ) ) {
 			add_meta_box(
 				'wpzoom_portfolio_video_settings',
-				'Video Settings [PRO only] <span>PRO</span>',
+				'Video Settings [WPZOOM Portfolio] <span>PRO Feature</span>',
 				array( $this, 'video_settings' ),
 				'portfolio_item',
 				'normal',
@@ -114,7 +114,7 @@ defined( 'ABSPATH' ) || exit;
 			</div>
 		</div>
 		<div class="wpzoom-overlay-metabox-upsell">
-			<a href="https://www.wpzoom.com/plugins/portfolio-grid/" target="_blank">Get Portfolio PRO &rarr;</a>
+			<a href="https://www.wpzoom.com/plugins/portfolio-grid/" target="_blank">Get WPZOOM Portfolio PRO &rarr;</a>
 		</div>
 	<?php
 	}
