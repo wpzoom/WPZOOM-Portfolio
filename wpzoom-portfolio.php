@@ -464,6 +464,14 @@ function wpzoom_theme_has_portfolio() {
 	if( ! in_array( $current_theme, $wpzoom_themes ) ) {
 		return false;
 	}
+	else {
+		if( 'inspiro' == $current_theme ) {
+			$theme = wp_get_theme();
+			if(	 'https://www.wpzoom.com/free-wordpress-themes/inspiro-lite/' == $theme->get( 'ThemeURI' ) ) {
+				return false;
+			}
+		}
+	}
 
 	return true;
 
