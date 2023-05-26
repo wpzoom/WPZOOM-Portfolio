@@ -5,7 +5,7 @@ Author URI:        https://www.wpzoom.com/
 Requires at least: 5.8
 Requires PHP:      7.4
 Tested up to:      6.2
-Stable tag:        1.3.1
+Stable tag:        1.3.2
 License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Tags:              portfolio, gutenberg, block, grid, wpzoom, inspiro
@@ -128,6 +128,12 @@ Yes, you can find the documentation for this plugin with more instructions on ou
 
 
 == Changelog ==
+
+= 1.3.2 =
+* Load new posts dynamically in the category filter
+* Added spacing between items option to the masonry layout
+* Added option to sort items randomly
+* Minor fixes and improvements
 
 = 1.3.1 =
 * Minor bug fix
