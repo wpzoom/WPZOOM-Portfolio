@@ -89,6 +89,10 @@ class WPZOOM_Blocks_Portfolio {
 			'type'    => 'boolean',
 			'default' => true
 		],
+		'enableAjaxLoading' => [
+			'type' => 'boolean',
+			'default' => false
+		],
 		'showDate' => [
 			'type'    => 'boolean',
 			'default' => true
@@ -143,6 +147,16 @@ class WPZOOM_Blocks_Portfolio {
 	 * @since  1.0.0
 	 */
 	private $result_pages = 0;
+
+
+	/**
+	 * The number of result pages for the portfolio items query.
+	 *
+	 * @var    int
+	 * @access private
+	 * @since  1.0.0
+	 */
+	private $posts_ids = array();
 
 	/**
 	 * Basic class initialization.
@@ -252,6 +266,7 @@ class WPZOOM_Blocks_Portfolio {
 		$show_read_more = isset( $attr[ 'showReadMore' ] ) ? boolval( $attr[ 'showReadMore' ] ) : true;
 		$extra_class = isset( $attr['className'] ) ? ' ' . esc_attr( $attr['className'] ) : '';
 		$read_more_label = isset( $attr['readMoreLabel'] ) ? esc_html( $attr['readMoreLabel'] ) : esc_html__( 'Read More', 'wpzoom-portfolio' );
+		$enable_ajax_load_items = isset( $attr['enableAjaxLoading'] ) ? boolval( $attr['enableAjaxLoading'] ) : false;
 
 		// CSS classes for query parameters
 		$post_type_class = ' post_type-' . $source;
@@ -265,6 +280,7 @@ class WPZOOM_Blocks_Portfolio {
 		$date_class = $show_date ? ' show-date' : '';
 		$excerpt_class = $show_excerpt ? ' show-excerpt' : '';
 		$readmore_class = $show_read_more ? ' show-readmore' : '';
+		$ajax_load_class = $enable_ajax_load_items ? ' ajax-load-items' : '';
 		$category_class = '';
 		// Build the category filter buttons, if enabled
 		$categories = isset( $attr[ 'categories' ] ) && is_array( $attr[ 'categories' ] ) ? array_filter( $attr[ 'categories' ] ) : array();
@@ -289,9 +305,12 @@ class WPZOOM_Blocks_Portfolio {
 			<a href="' . $view_all_link . '" title="' . esc_attr( $view_all_label ) . '" class="wpz-portfolio-button__link">' . $view_all_label . '</a>
 		</div>' : '';
 
+		$class_unique     = 'wpzoom-portfolio-block-' . uniqid( 'block-' );
+		$class_css_unique = ' ' . $class_unique;
+
 		// Build a string with all the CSS classes
-		$classes = "$class$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
-		            $date_class$excerpt_class$readmore_class$align$layout_class$columns$lightbox$post_type_class$extra_class$category_class";
+		$classes = "$class$class_css_unique$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
+		            $date_class$excerpt_class$readmore_class$align$layout_class$columns$lightbox$post_type_class$extra_class$category_class$ajax_load_class";
 
 		// Try to get portfolio items
 		$items_html = $this->items_html( array(
@@ -336,35 +355,97 @@ class WPZOOM_Blocks_Portfolio {
 			$output .= '<li class="' . $class . '_no-portfolio-items">' . esc_html__(  'No portfolio items.', 'wpzoom-portfolio' ) . '</li>';
 		}
 
-		$filter_color_hover = '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li a:hover,
-                         .wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li.current-cat a,
-                         .wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li.current-cat a:hover,
-                         .wpzoom-blocks_portfolio-block.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a:hover {
+		$filter_color_hover = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li a:hover,
+                         .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li.current-cat a,
+                         .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li.current-cat a:hover,
+                         .wpzoom-blocks_portfolio-.' . $class_unique . '.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a:hover {
 							color:' . $attr['primaryColor'] . ';
 		                 }';
 
-        $filter_color = '.wpzoom-blocks_portfolio-block .wpzoom-blocks_portfolio-block_filter ul li a,
-        .wpzoom-blocks_portfolio-block.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a {
+        $filter_color = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li a,
+        .wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a {
                                     color:' . $attr['secondaryColor'] . ';
                                  }';
-		$button_color_hover = '.wpzoom-blocks_portfolio-block .wpz-portfolio-button__link {
+		$button_color_hover = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link {
 							background:' . $attr['secondaryColor'] . ';
 						}';
 
-        $button_color = '.wpzoom-blocks_portfolio-block .wpz-portfolio-button__link:hover,
-                        .wpzoom-blocks_portfolio-block .wpz-portfolio-button__link:focus,
-                        .wpzoom-blocks_portfolio-block .wpz-portfolio-button__link:active {
+        $button_color = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link:hover,
+                        .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link:focus,
+                        .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link:active {
                             background:' . $attr['primaryColor'] . ';
                         }';
 		$columns_gap = isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ? '.wpzoom-blocks_portfolio-block_items-list { grid-gap:' . $attr['columnsGap'] . 'px; }' : '';
+		
+		if( isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ) {
+			if( isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ) {
+				switch( $attr[ 'columnsAmount' ] ) {
+
+					case 1:
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-1 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { margin-botton: ' . $attr['columnsGap'] . 'px }';
+					break;
+						
+					case 2:
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-2 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(50% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
+					break;
+
+					case 3:
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-3 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(33.333% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
+					break;
+
+					case 4:
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-4 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(25% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
+					break;
+
+					case 5:
+						$masonry_selectors = '.wpzoom-blocks_portfolio-.' . $class_unique . '.layout-masonry.columns-5 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(20% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
+					break;
+
+					case 6:
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-6 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(16.666% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
+					break;
+				}
+			}
+			
+		}
+
+		$masonry_columns_gap = isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ? $masonry_selectors : '';
 		$css = sprintf( 
 			'<style>%s</style>',
 			$filter_color .
             $filter_color_hover .
 			$button_color .
             $button_color_hover . 
-			$columns_gap
+			$columns_gap .
+			$masonry_columns_gap
 		);
+
+		$preloader = '<div class="wpzoom-portfolio-preloader"><svg  width="75" version="1.1" id="L4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
+		  <circle fill="#0BB4AA" stroke="none" cx="6" cy="50" r="6">
+			<animate
+			  attributeName="opacity"
+			  dur="1s"
+			  values="0;1;0"
+			  repeatCount="indefinite"
+			  begin="0.1"/>    
+		  </circle>
+		  <circle fill="#0BB4AA" stroke="none" cx="26" cy="50" r="6">
+			<animate
+			  attributeName="opacity"
+			  dur="1s"
+			  values="0;1;0"
+			  repeatCount="indefinite" 
+			  begin="0.2"/>       
+		  </circle>
+		  <circle fill="#0BB4AA" stroke="none" cx="46" cy="50" r="6">
+			<animate
+			  attributeName="opacity"
+			  dur="1s"
+			  values="0;1;0"
+			  repeatCount="indefinite" 
+			  begin="0.3"/>     
+		  </circle>
+		</svg></div>';
 		
 
 		// Return the final output
@@ -383,6 +464,7 @@ class WPZOOM_Blocks_Portfolio {
 		// Setup some default values
 		$defaults = array(
 			'categories'            => array(),
+			'exclude_posts'         => array(),
 			'class'                 => 'wpzoom-blocks_portfolio-block',
 			'layout'                => 'grid',
 			'lightbox'              => true,
@@ -425,6 +507,10 @@ class WPZOOM_Blocks_Portfolio {
 			'post_type'      => $source
 		);
 
+		if( ! empty( $args['exclude_posts'] ) && count( array_filter( $args[ 'exclude_posts' ] ) ) > 0 ) {
+			$params['post__not_in'] = $args['exclude_posts'];
+		}
+
 		// If filter categories were specified...
 		if ( !empty( $args[ 'categories' ] ) && count( array_filter( $args[ 'categories' ] ) ) > 0 && '-1' != $args[ 'categories' ][0] ) {
 			// Add them to the parameters for the query
@@ -443,6 +529,8 @@ class WPZOOM_Blocks_Portfolio {
 		// Cache the amount of pages returned by the query
 		$this->result_pages = $query->max_num_pages;
 
+		$posts_ids = array();
+
 		// If the above query returned any results...
 		if ( $query->have_posts() ) {
 			// Go through every portfolio item in the results...
@@ -452,9 +540,18 @@ class WPZOOM_Blocks_Portfolio {
 				$permalink = esc_url( get_permalink( $post ) );
 				$title = get_the_title( $post );
 				$title_attr = the_title_attribute( array( 'post' => $post, 'echo' => false ) );
+				
 				$the_categories = get_the_terms( $id, ( 'portfolio_item' == $source ? 'portfolio' : 'category' ) );
 				$no_category = get_term_by( 'slug', 'uncategorized', ( 'portfolio_item' == $source ? 'portfolio' : 'category' ) );
+				
 				$category = ! is_wp_error( $the_categories ) && is_array( $the_categories ) && count( $the_categories ) > 0 ? $the_categories[0]->term_id : $no_category->term_id;
+				$category_classname = '';
+				if( ! is_wp_error( $the_categories ) && is_array( $the_categories ) && count( $the_categories ) > 0 ) {
+					foreach( $the_categories as $cat ) {
+						$category_classname .= ' ' . $class . '_category-' . $cat->term_id;
+					}
+				}
+
 				$thumbnail = get_the_post_thumbnail( $post, $args[ 'thumbnail_size' ] );
 				$video_type = 'service' == get_post_meta( $id, '_wpzb_portfolio_video_type', true ) ? 'service' : 'library';
 				$video_id = intval( get_post_meta( $id, '_wpzb_portfolio_video_id', true ) );
@@ -462,14 +559,15 @@ class WPZOOM_Blocks_Portfolio {
 				$video = $this->get_video_embed_code( ( 'service' == $video_type ? $video_url : wp_get_attachment_url( $video_id ) ), 'library' == $video_type );
 				$has_cover = ( $args[ 'show_background_video' ] && ! empty( $video ) ) || ( $args[ 'show_thumbnail' ] && ! empty( $thumbnail ) );
 				$cover_class = $has_cover ? ' has-cover' : '';
+				$posts_ids[] = $id;
 
 				if( 'masonry' !== $args['layout'] ) {
 					// Open the list item for this portfolio item
-					$output .= "<li class='${class}_item ${class}_item-$id ${class}_category-$category$cover_class fade-in'  data-category='$category'>";
+					$output .= "<li class='${class}_item ${class}_item-$id$category_classname$cover_class fade-in'  data-category='$category'>";
 				}
 				else {
 					// Open the list item for this portfolio item
-					$output .= "<li class='${class}_item ${class}_item-$id ${class}_category-$category$cover_class'  data-category='$category'>";
+					$output .= "<li class='${class}_item ${class}_item-$id$category_classname$cover_class'  data-category='$category'>";
 				}
 
 
@@ -583,9 +681,12 @@ class WPZOOM_Blocks_Portfolio {
 				$output .= '</li>';
 			}
 
+			
 			// Reset the WordPress post data so this block doesn't mess up the main query
 			wp_reset_postdata();
 		}
+
+		$this->posts_ids = $posts_ids;
 
 		// Return the final HTML string
 		return $output;
@@ -789,6 +890,7 @@ class WPZOOM_Blocks_Portfolio {
 				$show_excerpt = isset( $params[ 'show_excerpt' ] ) ? boolval( $params[ 'show_excerpt' ] ) : true;
 				$show_read_more = isset( $params[ 'show_read_more' ] ) ? boolval( $params[ 'show_read_more' ] ) : true;
 				$source = isset( $params[ 'source' ] ) ? $params[ 'source' ] : 'portfolio_item';
+				$exclude_posts = isset( $params['exclude'] ) && ! empty( $params['exclude'] ) ? explode( ',', $params[ 'exclude' ] ) : array();
 
 				// Build the HTML to return
 				$items = $this->items_html( array(
@@ -799,6 +901,7 @@ class WPZOOM_Blocks_Portfolio {
 					'per_page'              => $per_page,
 					'page'                  => $page,
 					'categories'            => $categories,
+					'exclude_posts'         => $exclude_posts,
 					'show_thumbnail'        => $show_thumbnail,
 					'thumbnail_size'        => $thumbnail_size,
 					'show_background_video' => $show_background_video,
@@ -810,7 +913,11 @@ class WPZOOM_Blocks_Portfolio {
 				) );
 
 				// Assign the results to return
-				$result = array( 'items' => $items, 'has_more' => $page < $this->result_pages );
+				$result = array( 
+					'items'     => $items, 
+					'has_more'  => $page < $this->result_pages,
+					'new_posts' => $this->posts_ids
+				);
 			}
 		}
 
