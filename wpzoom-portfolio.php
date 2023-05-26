@@ -483,16 +483,15 @@ function load_files() {
 	require_once 'classes/class-wpzoom-portfolio-shortcode.php';
 
 	if( ! wpzoom_theme_has_portfolio() ) {
-		require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
-		require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
-
-		//Load Settings Panel
-		require_once 'classes/class-wpzoom-settings-fields.php';
-		require_once 'classes/class-wpzoom-portfolio-settings-page.php';
-
 		//Load Archive template
 		require_once 'classes/class-wpzoom-portfolio-template.php';
 	}
+	
+	//Load Settings Panel
+	require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
+	require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
+	require_once 'classes/class-wpzoom-settings-fields.php';
+	require_once 'classes/class-wpzoom-portfolio-settings-page.php';
 
 	if( ! class_exists( 'WPZOOM_Portfolio_Pro' ) && ! wpzoom_theme_has_portfolio() ) {
 		require_once 'classes/class-wpzoom-portfolio-metaboxes-upsell.php';
