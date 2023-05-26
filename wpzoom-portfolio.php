@@ -452,9 +452,13 @@ class WPZOOM_Blocks {
 function wpzoom_theme_has_portfolio() {
 
 	$wpzoom_themes = array(
-		'wpzoom-inspiro-pro'
+		'angle',
+		'inspiro',
+		'wpzoom-inspiro-pro',
+		'wpzoom-reel',
+		'wpzoom-rezzo'
 	);
-	
+
 	$current_theme = get_option( 'stylesheet' );
 
 	if( ! in_array( $current_theme, $wpzoom_themes ) ) {
@@ -486,15 +490,13 @@ function load_files() {
 		require_once 'classes/class-wpzoom-portfolio-metaboxes-upsell.php';
 	}
 
-	
-
 }
 
 add_action( 'plugin_loaded', 'load_files' );
 
 function load_reorder_portfolio_items() {
 
-	if( ! current_user_can( 'edit_posts' ) || wpzoom_theme_has_portfolio() ) {
+	if( ! current_user_can( 'edit_posts' ) || current_theme_supports( 'zoom-portfolio' ) ) {
 		return;
 	}
 
@@ -518,5 +520,4 @@ function load_reorder_portfolio_items() {
 }
 
 add_action( 'init', 'load_reorder_portfolio_items' );
-
 add_action( 'init', 'WPZOOM_Blocks_Portfolio_Shortcode::instance' );
