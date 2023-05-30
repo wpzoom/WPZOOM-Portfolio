@@ -145,6 +145,8 @@
 			}
 		});
 
+		initPortfolio();
+
 		/**
 		 * Load more stuff.
 		 */
@@ -223,9 +225,6 @@
 					);
 				
 				});
-
-
-
 		});
 
 	});
@@ -269,8 +268,8 @@
 					category_id = $portfolio.attr('data-subcategory');
 				}
 
-				let show = 'all' == category_id ? $portfolio.find( '[data-category]' ) : $portfolio.find( '[data-category="' + category_id + '"]' ),
-			    	hide = 'all' == category_id ? null : $portfolio.find( '[data-category]:not([data-category="' + category_id + '"])' );
+				let show = 'all' == category_id ? $portfolio.find( '[data-category]' ) : $portfolio.find( '.wpzoom-blocks_portfolio-block_category-' + category_id + '' ),
+			    	hide = 'all' == category_id ? null : $portfolio.find( '[data-category]:not(.wpzoom-blocks_portfolio-block_category-' + category_id + ')' );
 
 				var items_number = $taxs.siblings( '.current-cat' ).attr( 'data-counter' );
 				var filteredItems = $( filter );
@@ -318,13 +317,44 @@
 		});
 	};
 
+	function initPortfolio() {
+
+		let container = document.getElementsByClassName('wpzoom-blocks_portfolio-block');
+	
+		[].forEach.call(container, function(el) {
+	
+			
+			let itemsContainer = el.querySelector('.wpzoom-blocks_portfolio-block_items-list');
+	
+			let minHeight = itemsContainer.firstChild.offsetHeight;
+			if( undefined !== minHeight ) {
+				itemsContainer.style.minHeight = minHeight + 'px';
+			}
+	
+			if( ! el.classList.contains( 'layout-masonry' ) ) {
+				for (var i = 0; i < itemsContainer.children.length; i++ ) {
+					var child = itemsContainer.children[i];
+					if ( child.tagName == 'LI' ) {
+						child.classList.add('fade-in');
+					}
+				}
+			}
+	
+		});
+	
+	}
+
 	/**
 	 * Get Portfolio Filtered Items.
 	 */
 	$.fn.getPortfolioFilteredItems = function () {
-		var $this = $(this);
-		var $portfolioWrapper = $(this).closest('.wpzoom-blocks_portfolio-block');
-		var $portfolio = $portfolioWrapper.find('.wpzoom-blocks_portfolio-block_items-list');
+		
+		let $this = $(this),
+			$portfolioWrapper = $(this).closest('.wpzoom-blocks_portfolio-block'),
+			$portfolio = $portfolioWrapper.find('.wpzoom-blocks_portfolio-block_items-list'),
+			$preloader = $portfolio.find('.wpzoom-preloader-container');
+			
+			$preloader.css({ display: 'flex' });
 
 		let portfolioData     = $portfolioWrapper.data( 'load-more' ),
 			revertCats        = portfolioData.categories;
@@ -362,7 +392,9 @@
 				if ( status == 'success' ) {
 					
 					var $newItems = $( data).find('.wpzoom-blocks_portfolio-block_item' );
+					$newItems.addClass( 'fade-in' );
 					$newItems.find('article').removeClass('hentry').addClass('portfolio_item');
+					$preloader.hide();
 					$portfolio.append( $newItems );
 					
 					$newItems.find('.portfolio_item .portfolio-block-popup-video').magnificPopupCallbackforPortfolioBlock();

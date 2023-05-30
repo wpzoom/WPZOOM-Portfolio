@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const IgnoreEmitPlugin = require( 'ignore-emit-webpack-plugin' );
 const production = process.env.NODE_ENV === 'production';
 
-const entryObject = glob.sync( './src/{,blocks/*/}{{index}.js,{style,editor}.scss}' ).reduce( ( acc, item ) => {
+const entryObject = glob.sync( './src/{,blocks/*/}{{index,script}.js,{style,editor}.scss}' ).reduce( ( acc, item ) => {
 	acc[ item.replace( /^\.\/src\/(.+)\/*\.(js|scss)$/i, '$1' ) ] = item;
 	return acc;
 }, {} );

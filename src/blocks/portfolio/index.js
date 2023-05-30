@@ -326,6 +326,10 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										{
 											label: __( 'Z → A', 'wpzoom-portfolio' ),
 											value: 'title/desc'
+										},
+										{
+											label: __( 'Random', 'wpzoom-portfolio' ),
+											value: 'rand/desc'
 										}
 									] }
 									onChange={ ( value ) => {
@@ -391,7 +395,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									/>
 								}
 
-                                { layout == 'grid' &&
+                                { ( layout == 'grid' || layout == 'masonry' ) &&
 								<RangeControl
 									label={ __( 'Columns Gap', 'wpzoom-portfolio' ) }
 									max={ 100 }

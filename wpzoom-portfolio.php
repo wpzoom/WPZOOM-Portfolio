@@ -14,7 +14,7 @@
  * Author:      WPZOOM
  * Author URI:  https://www.wpzoom.com
  * Text Domain: wpzoom-portfolio
- * Version:     1.3.1
+ * Version:     1.3.2
  * License:     GPL2+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
@@ -449,6 +449,34 @@ class WPZOOM_Blocks {
 	}
 }
 
+function wpzoom_theme_has_portfolio() {
+
+	$wpzoom_themes = array(
+		'angle',
+		'inspiro',
+		'wpzoom-inspiro-pro',
+		'wpzoom-reel',
+		'wpzoom-rezzo'
+	);
+
+	$current_theme = get_option( 'stylesheet' );
+
+	if( ! in_array( $current_theme, $wpzoom_themes ) ) {
+		return false;
+	}
+	else {
+		if( 'inspiro' == $current_theme ) {
+			$theme = wp_get_theme();
+			if(	 'https://www.wpzoom.com/free-wordpress-themes/inspiro-lite/' == $theme->get( 'ThemeURI' ) ) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+
+}
+
 function load_files() {
 	//Add Portfolio Shortcode
 	require_once 'classes/class-wpzoom-portfolio-shortcode.php';
@@ -460,22 +488,20 @@ function load_files() {
 	require_once 'classes/class-wpzoom-settings-fields.php';
 	require_once 'classes/class-wpzoom-portfolio-settings-page.php';
 
-	//Load Archive template
-	require_once 'classes/class-wpzoom-portfolio-template.php';
-
-	if( ! class_exists( 'WPZOOM_Portfolio_Pro' )) {
-		require_once 'classes/class-wpzoom-portfolio-metaboxes-upsell.php';
+	if( ! wpzoom_theme_has_portfolio() ) {
+		//Load Archive template
+		require_once 'classes/class-wpzoom-portfolio-template.php';
 	}
 
-	
-
+	if( ! class_exists( 'WPZOOM_Portfolio_Pro' ) && ! wpzoom_theme_has_portfolio() ) {
+		require_once 'classes/class-wpzoom-portfolio-metaboxes-upsell.php';
+	}
 }
-
 add_action( 'plugin_loaded', 'load_files' );
 
 function load_reorder_portfolio_items() {
 
-	if( ! current_user_can( 'edit_posts' ) ) {
+	if( ! current_user_can( 'edit_posts' ) || current_theme_supports( 'zoom-portfolio' ) ) {
 		return;
 	}
 
@@ -498,5 +524,4 @@ function load_reorder_portfolio_items() {
 
 }
 add_action( 'init', 'load_reorder_portfolio_items' );
-
 add_action( 'init', 'WPZOOM_Blocks_Portfolio_Shortcode::instance' );

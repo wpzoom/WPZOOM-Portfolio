@@ -567,6 +567,19 @@ $primary_color: #0bb4aa;
     }
 }
 
+.wpzoom-preloader-container {
+	display:none;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	align-content: center;
+	justify-content: center;
+	
+}
+.wpzoom-portfolio-preloader {
+	display: flex;
+}
+
 
 @media screen and (max-width: 768px) {
 
