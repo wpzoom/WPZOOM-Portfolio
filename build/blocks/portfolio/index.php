@@ -352,6 +352,7 @@ class WPZOOM_Blocks_Portfolio {
 			'class'                 => 'wpzoom-blocks_portfolio-block',
 			'layout'                => $layout,
 			'lightbox'              => $use_lightbox,
+			'lightbox_caption'      => $lightbox_caption,
 			'order'                 => $order,
 			'order_by'              => $order_by,
 			'per_page'              => $per_page,
@@ -676,6 +677,8 @@ class WPZOOM_Blocks_Portfolio {
 						<div class='${class}_item-media'>
 							<a href='$permalink' title='$title_attr' rel='bookmark'>$thumbnail</a>
 						</div>";
+						
+					$output .= '<div class="portfolio-block-entry-thumbnail-popover-content" data-show-caption="' . $show_lightbox_image_caption . '">';
 
 					if( $args[ 'lightbox' ] ) {
 						// Add the lightbox icon
@@ -690,9 +693,14 @@ class WPZOOM_Blocks_Portfolio {
 										</svg>
 									</span>";
 						$output .= '</a>';
-						};
+					};
+
+					$output .= '<span class="portfolio_item-title" style="display: none;">';
+					$output .= '<a href="' . esc_url( get_permalink( $id ) ) . '" title="' . esc_attr( get_the_title( $id ) ) . '">' . get_the_title( $id ) . '</a>';
+					$output .= '</span>';
 
                     $output .= "</div>";
+					$output .= "</div>";
 
 				}
 

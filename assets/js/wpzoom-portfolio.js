@@ -15,12 +15,12 @@
             image: {
                 titleSrc: function (item) {
 
-                    var $el = this.currItem.el;
-                    var $popover_content = $el.closest('.portfolio-block-entry-thumbnail-popover-content');
-                    var $link = $popover_content.find('.portfolio_item-title a');
-                    var $title = $link.html();
-                    var $href = $link.attr('href');
-                    var show_caption = $popover_content.data('show-caption');
+                    let $el = this.currItem.el,
+                    	$popover_content = $el.closest('.portfolio-block-entry-thumbnail-popover-content'),
+                    	$link = $popover_content.find('.portfolio_item-title a'),
+                    	$title = $link.html(),
+                    	$href = $link.attr('href'),
+                    	show_caption = $popover_content.data('show-caption');
 
                     if ( show_caption ) {
                         return '<a href="' + $href + '">' + $title + '</a>';
@@ -91,16 +91,16 @@
                 },
                 markupParse: function (template, values, item) {
 
-                    if (item.type === 'iframe') {
+                    if ( item.type === 'iframe' ) {
 
-                        var $el = item.el;
-                        var $popover_content = $el.closest('.portfolio-block-entry-thumbnail-popover-content');
-                        var $link = $el.closest('.portfolio-block-entry-thumbnail-popover-content').find('.portfolio_item-title a');
-                        var $title = $link.html();
-                        var $href = $link.attr('href');
-                        var show_caption = $popover_content.data('show-caption');
+                        let $el = item.el,
+							$popover_content = $el.closest('.portfolio-block-entry-thumbnail-popover-content'),
+							$link = $el.closest('.portfolio-block-entry-thumbnail-popover-content').find('.portfolio_item-title a'),
+							$title = $link.html(),
+							$href = $link.attr('href'),
+							show_caption = $popover_content.data('show-caption');
 
-                        if (show_caption) {
+                        if ( show_caption ) {
                             values.title = '<a href="' + $href + '">' + $title + '</a>';
                         }
                     }
