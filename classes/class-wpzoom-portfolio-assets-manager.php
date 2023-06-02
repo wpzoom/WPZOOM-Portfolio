@@ -2,7 +2,7 @@
 /**
  * WPZOOM Portfolio Assets Manager
  *
- * @since   1.0.5
+ * @since   1.3.2
  * @package WPZOOM_Portfolio
  */
 
@@ -16,22 +16,22 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 	/**
 	 * Main WPZOOM_Portfolio_Assets_Manager Class.
 	 *
-	 * @since 1.0.5
+	 * @since 1.3.2
 	 */
 	class WPZOOM_Portfolio_Assets_Manager {
 
 		/**
 		 * This class instance.
 		 *
-		 * @var WPZOOM_Portfolio_Template
-		 * @since 1.0.5
+		 * @var WPZOOM_Portfolio_Assets_Manager
+		 * @since 1.3.2
 		 */
 		private static $instance;
 
 		/**
 		 * Provides singleton instance.
 		 *
-		 * @since 1.0.5
+		 * @since 1.3.2
 		 * @return self instance
 		 */
 		public static function instance() {			
@@ -48,13 +48,21 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 		 */
 		public function __construct() {
 
-			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_styles' ) );
-			add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_frontend_styles' ) );
+			add_action( 'enqueue_block_assets', array( $this, 'enqueue_frontend_styles' ) );
 
 		}
 
 		public function enqueue_frontend_styles() {
 		
+			$should_enqueue =
+				has_block( 'wpzoom-blocks/portfolio' ) ||
+				has_block( 'wpzoom-blocks/portfolio-layouts' ) ||
+				self::has_wpzoom_portfolio_shortcode();
+
+			if( ! $should_enqueue ) {
+				return;
+			}
+
 			wp_enqueue_style( 
 				'magnificPopup', 
 				WPZOOM_PORTFOLIO_URL . 'assets/css/magnific-popup.css', 
@@ -89,6 +97,29 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 
 		}
 
+		/**
+		 * Check the post content has wpzoom portfolio shortcode
+		 *
+		 * @since  1.3.2
+		 * @param  int         $post_id The post ID.
+		 * @param  boolean|int $content The post content.
+		 * @return boolean     Return true if post content has portfolio shortcode, else return false.
+		 */
+		public static function has_wpzoom_portfolio_shortcode( $post_id = 0, $content = '' ) {
+			
+			$post_id = $post_id > 0 ? $post_id : get_the_ID();
+			
+			if ( empty( $content ) ) {
+				$content = get_post_field( 'post_content', $post_id );
+			}
+
+			if ( $content ) {			
+				if ( has_shortcode( $content, 'wpzoom_block_portfolio' ) || has_shortcode( $content, 'wpzoom_portfolio_layout' ) ) {
+					return true;
+				}
+			}
+			return false;
+		}
 
 	}
 

@@ -203,6 +203,15 @@ class WPZOOM_Blocks {
 	 */
 	public function enqueue_portfolio_block_assets() {
 
+		$should_enqueue =
+		has_block( 'wpzoom-blocks/portfolio' ) ||
+		has_block( 'wpzoom-blocks/portfolio-layouts' ) ||
+		WPZOOM_Portfolio_Assets_Manager::has_wpzoom_portfolio_shortcode();
+
+		if( ! $should_enqueue ) {
+			return;
+		}
+
 		wp_enqueue_script( 'masonry' );
 
 		wp_enqueue_script( 'wpzoom-blocks-js-script-main' ); 
