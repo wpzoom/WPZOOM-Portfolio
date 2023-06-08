@@ -281,6 +281,7 @@
 				}
 
 				show.find('.portfolio-block-popup-video').magnificPopupCallbackforPortfolioBlock();
+				show.find('.portfolio-pro-popup-video').magnificPopupCallbackforPortfolioBlock();
 
 				show.each(function () {
 
@@ -398,6 +399,7 @@
 					$portfolio.append( $newItems );
 					
 					$newItems.find('.portfolio_item .portfolio-block-popup-video').magnificPopupCallbackforPortfolioBlock();
+					$newItems.find('.portfolio_item .portfolio-pro-popup-video').magnificPopupCallbackforPortfolioBlock();
 					
 					if( $newItems ) {
 						var newPosts = [];
