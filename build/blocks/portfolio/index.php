@@ -563,33 +563,33 @@ class WPZOOM_Blocks_Portfolio {
 
 				if( 'masonry' !== $args['layout'] ) {
 					// Open the list item for this portfolio item
-					$output .= "<li class='${class}_item ${class}_item-$id$category_classname$cover_class fade-in'  data-category='$category'>";
+					$output .= "<li class='{$class}_item {$class}_item-$id$category_classname$cover_class fade-in'  data-category='$category'>";
 				}
 				else {
 					// Open the list item for this portfolio item
-					$output .= "<li class='${class}_item ${class}_item-$id$category_classname$cover_class'  data-category='$category'>";
+					$output .= "<li class='{$class}_item {$class}_item-$id$category_classname$cover_class'  data-category='$category'>";
 				}
 
 
 				// Add a wrapper article around the entire portfolio item (including the thumbnail)
-				$output .= "<article class='${class}_item-wrap'>";
+				$output .= "<article class='{$class}_item-wrap'>";
 
 				// If the video should be shown...
 				if ( $args[ 'show_background_video' ] && ! empty( $video ) ) {
 					// Add it to the output
-					$output .= "<div class='${class}_item-bgvid'><div class='${class}_item-media'>$video</div></div>";
+					$output .= "<div class='{$class}_item-bgvid'><div class='{$class}_item-media'>$video</div></div>";
 				}
 				// If the thumbnail should be shown...
 				elseif ( $args[ 'show_thumbnail' ] && ! empty( $thumbnail ) ) {
 					// Add it to the output
-					$output .= "<div class='${class}_item-thumbnail'>
-						<div class='${class}_item-media'>
+					$output .= "<div class='{$class}_item-thumbnail'>
+						<div class='{$class}_item-media'>
 							<a href='$permalink' title='$title_attr' rel='bookmark'>$thumbnail</a>
 						</div>";
 
 					if( $args[ 'lightbox' ] ) {
 						// Add the lightbox icon
-						$output .= "<span class='${class}_lightbox_icon'>
+						$output .= "<span class='{$class}_lightbox_icon'>
 										<svg enable-background='new 0 0 32 32' id='Layer_4' version='1.1' viewBox='0 0 32 32' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
 											<g>
 												<rect fill='none' height='30' stroke='#fff' stroke-linejoin='round' stroke-miterlimit='10' stroke-width='2' transform='matrix(6.123234e-17 -1 1 6.123234e-17 0 32)' width='30' x='1' y='1'/>
@@ -605,17 +605,17 @@ class WPZOOM_Blocks_Portfolio {
 				}
 
 				// Add a wrapper div around just the portfolio item details (excluding the thumbnail)
-				$output .= "<div class='${class}_item-details'>";
+				$output .= "<div class='{$class}_item-details'>";
 
 
 				// Add the portfolio item title to the output
-				$output .= "<h3 class='${class}_item-title'><a href='$permalink' title='$title_attr' rel='bookmark'>$title</a></h3>";
+				$output .= "<h3 class='{$class}_item-title'><a href='$permalink' title='$title_attr' rel='bookmark'>$title</a></h3>";
 
 				// If the layout type is set to list...
 				if ( 'list' == $args[ 'layout' ] ) {
 					// Add a wrapper div around just the portfolio item meta if needed
 					if ( $args[ 'show_author' ] || $args[ 'show_date' ] ) {
-						$output .= "<div class='${class}_item-meta'>";
+						$output .= "<div class='{$class}_item-meta'>";
 					}
 
 					// If the author should be shown...
@@ -626,7 +626,7 @@ class WPZOOM_Blocks_Portfolio {
 						$author_title = esc_attr( sprintf( __( 'Posts by %s', 'wpzoom-portfolio' ), $author_name ) );
 
 						// Add the author to the output
-						$output .= "<cite class='${class}_item-author'><a href='$author_url' title='$author_title' rel='author'>$author_name</a></cite>";
+						$output .= "<cite class='{$class}_item-author'><a href='$author_url' title='$author_title' rel='author'>$author_name</a></cite>";
 					}
 
 					// If the date should be shown...
@@ -638,7 +638,7 @@ class WPZOOM_Blocks_Portfolio {
 						$date_title = esc_attr( sprintf( __( 'Posted on %s', 'wpzoom-portfolio' ), $date ) );
 
 						// Add the date to the output
-						$output .= "<time datetime='$datetime' class='${class}_item-date'><a href='$date_url' title='$date_title'>$date</a></time>";
+						$output .= "<time datetime='$datetime' class='{$class}_item-date'><a href='$date_url' title='$date_title'>$date</a></time>";
 					}
 
 					// Close the portfolio item meta wrapper div if needed
@@ -652,7 +652,7 @@ class WPZOOM_Blocks_Portfolio {
 						$raw_cont = get_the_excerpt( $post );
 
 						// Add the excerpt to the output
-						$output .= "<div class='${class}_item-content'>$raw_cont</div>";
+						$output .= "<div class='{$class}_item-content'>$raw_cont</div>";
 					}
 
 					// If the Read More button should be shown...
@@ -662,7 +662,7 @@ class WPZOOM_Blocks_Portfolio {
 						$readmore_title = esc_attr__( 'Continue reading this post...', 'wpzoom-portfolio' );
 
 						// Add the button to the output
-						$output .= "<div class='${class}_item-readmore-button'>
+						$output .= "<div class='{$class}_item-readmore-button'>
 							<a href='$permalink' title='$readmore_title' class='wpz-portfolio-button__link'>$readmore</a>
 						</div>";
 					}
