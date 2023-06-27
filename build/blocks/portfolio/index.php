@@ -137,7 +137,64 @@ class WPZOOM_Blocks_Portfolio {
         'secondaryColor' => [
             'type'    => 'string',
             'default' => '#000'
-        ]
+		],
+		'backgroundColor' => [
+			'type' => 'string',
+			'default' => '#000'
+		],
+		'textColor' => [
+			'type' => 'string',
+			'default' => '#000'
+		],
+		'style' => [
+			'type' => 'object',
+		],
+		'fontFamily' => [
+			'type' => 'string',
+		],
+		'fontSize' => [
+			'type' => 'string',
+			'default' => 18
+		],
+		'btnTextColor' => [
+			'type'    => 'string'
+		],
+		'btnHoverTextColor' => [
+			'type'    => 'string'
+		],
+		'btnBgColor' => [
+			'type' => 'string'
+		],
+		'btnHoverBgColor' => [
+			'type' => 'string'
+		],
+		'btnFontFamily' => [
+			'type' => 'string',
+		],
+		'btnFontSize' => [
+			'type' => 'string',
+		],
+		'btnTextTransform' => [
+			'type' => 'string',
+		],
+		'btnBorder' => [
+			'type'    => 'boolean',
+			'default' => false
+		],
+		'btnBorderStyle' => [
+			'type' => 'string',
+			'default' => 'solid'
+		],
+		'btnBorderWidth' => [
+			'type' => 'string',
+			'default' => 1
+		],
+		'btnBorderColor' => [
+			'type' => 'string',
+		],
+		'btnHoverBorderColor' => [
+			'type' => 'string',
+		],
 	];
 
 	/**
