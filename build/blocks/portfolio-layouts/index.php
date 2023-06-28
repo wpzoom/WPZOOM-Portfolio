@@ -70,6 +70,9 @@ class WPZOOM_Blocks_Portfolio_Layouts {
 
 		$layout = get_post( intval( $layout_id ) );
 
+		if( ! $layout ) {
+			return '';
+		}
 		if ( has_blocks( $layout->post_content ) ) {
 			$blocks = parse_blocks( $layout->post_content );
 		}

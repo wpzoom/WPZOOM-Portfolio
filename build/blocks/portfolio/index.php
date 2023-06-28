@@ -138,6 +138,10 @@ class WPZOOM_Blocks_Portfolio {
             'type'    => 'string',
             'default' => '#000'
 		],
+		'filterActiveColor' => [
+			'type'    => 'string',
+			'default' => '#0BB4AA'
+		],
 		'backgroundColor' => [
 			'type' => 'string',
 			'default' => '#000'
@@ -153,8 +157,36 @@ class WPZOOM_Blocks_Portfolio {
 			'type' => 'string',
 		],
 		'fontSize' => [
-			'type' => 'string',
+			'type' => 'number',
 			'default' => 18
+		],
+		'postTitleColor' => [
+			'type' => 'string'
+		],
+		'postHoverTitleColor' => [
+			'type' => 'string'
+		],
+		'postTitleFontSize' => [
+			'type' => 'number',
+			'default' => 18
+		],
+		'postTitleTextTransform' => [
+			'type' => 'string',
+		], 
+		'postTitleLetterSpacing' => [
+			'type' => 'number',
+			'default' => 1
+		], 
+		'postTitleFontFamily' => [
+			'type' => 'string',
+		], 
+		'postTitleFontWeight' => [
+			'type' => 'number',
+			'default' => 500
+		], 
+		'postTitleLineHeight' => [
+			'type' => 'number',
+			'default' => 28
 		],
 		'btnTextColor' => [
 			'type'    => 'string'
@@ -172,7 +204,8 @@ class WPZOOM_Blocks_Portfolio {
 			'type' => 'string',
 		],
 		'btnFontSize' => [
-			'type' => 'string',
+			'type' => 'number',
+			'default' => 14
 		],
 		'btnTextTransform' => [
 			'type' => 'string',
@@ -186,8 +219,8 @@ class WPZOOM_Blocks_Portfolio {
 			'default' => 'solid'
 		],
 		'btnBorderWidth' => [
-			'type' => 'string',
-			'default' => 1
+			'type' => 'number',
+			'default' => 0
 		],
 		'btnBorderColor' => [
 			'type' => 'string',
@@ -237,6 +270,40 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Hook into the REST API in order to add some custom things
 		add_action( 'rest_api_init', array( $this, 'rest_api_routes' ) );
+
+		add_action( 'wp_ajax_wpzoom_load_more_items', array( $this, 'load_more_items' ) );
+		add_action( 'wp_ajax_nopriv_wpzoom_load_more_items', array( $this, 'load_more_items' ) );
+
+	}
+
+	public function load_more_items() { 
+		
+		$output = '';
+
+		$offset  = sanitize_text_field( $_POST['offset'] );
+		$exclude = isset( $_POST['exclude'] ) && ! empty( $_POST['exclude'] ) ? explode( ',', sanitize_text_field( $_POST['exclude'] ) ) : array();
+		
+		$data    = sanitize_text_field( $_POST['posts_data'] );
+		$data    = json_decode( stripslashes( $data ), true );
+
+		unset( $data['total'] );
+
+		if( !empty( $offset ) ) {
+			$data['offset'] = $offset;
+		}
+
+		if( $exclude ) {
+			$data['exclude_posts'] = $exclude;
+		}
+
+		$output .= '<div class="wpzoom-ajax-portfolio-items">';
+		$output .= $this->items_html( $data );
+		$output .= '</div>';
+
+		echo $output;
+
+		wp_die();
+
 	}
 
     /**
@@ -287,7 +354,7 @@ class WPZOOM_Blocks_Portfolio {
 	public function render( $attr, $content ) {
 		// Specify the output and class variables to be used below
 		$output = '';
-		$class = 'wpzoom-blocks_portfolio-block';
+		$class = 'wpzoom-blocks wpzoom-blocks_portfolio-block';
 
 		// Determine where the portfolio items should come from
 		$source = isset( $attr[ 'source' ] ) && ! empty( $attr[ 'source' ] ) ? $attr[ 'source' ] : 'portfolio_item';
@@ -340,6 +407,7 @@ class WPZOOM_Blocks_Portfolio {
 		$readmore_class = $show_read_more ? ' show-readmore' : '';
 		$ajax_load_class = $enable_ajax_load_items ? ' ajax-load-items' : '';
 		$category_class = '';
+
 		// Build the category filter buttons, if enabled
 		$categories = isset( $attr[ 'categories' ] ) && is_array( $attr[ 'categories' ] ) ? array_filter( $attr[ 'categories' ] ) : array();
 		foreach( $categories as $category ) {
@@ -363,12 +431,11 @@ class WPZOOM_Blocks_Portfolio {
 			<a href="' . $view_all_link . '" title="' . esc_attr( $view_all_label ) . '" class="wpz-portfolio-button__link">' . $view_all_label . '</a>
 		</div>' : '';
 
-		$class_unique     = 'wpzoom-portfolio-block-' . uniqid( 'block-' );
+		$class_unique     = 'wpzoom-portfolio-' . uniqid( 'block-' );
 		$class_css_unique = ' ' . $class_unique;
 
 		// Build a string with all the CSS classes
-		$classes = "$class$class_css_unique$order_class$order_by_class$per_page_class$thumbnail_class$thumbnail_size_class$video_class$author_class
-		            $date_class$excerpt_class$readmore_class$align$layout_class$columns$lightbox$post_type_class$extra_class$category_class$ajax_load_class";
+		$classes = "$class$class_css_unique$lightbox$align$layout_class$columns$post_type_class$extra_class$category_class$ajax_load_class";
 
 		// Try to get portfolio items
 		$items_html = $this->items_html( array(
@@ -376,6 +443,7 @@ class WPZOOM_Blocks_Portfolio {
 			'class'                 => 'wpzoom-blocks_portfolio-block',
 			'layout'                => $layout,
 			'lightbox'              => $use_lightbox,
+			'lightbox_caption'      => $lightbox_caption,
 			'order'                 => $order,
 			'order_by'              => $order_by,
 			'per_page'              => $per_page,
@@ -413,28 +481,113 @@ class WPZOOM_Blocks_Portfolio {
 			$output .= '<li class="' . $class . '_no-portfolio-items">' . esc_html__(  'No portfolio items.', 'wpzoom-portfolio' ) . '</li>';
 		}
 
-		$filter_color_hover = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li a:hover,
-                         .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li.current-cat a,
-                         .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li.current-cat a:hover,
-                         .wpzoom-blocks_portfolio-.' . $class_unique . '.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a:hover {
-							color:' . $attr['primaryColor'] . ';
-		                 }';
-
-        $filter_color = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li a,
-        .wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a {
-                                    color:' . $attr['secondaryColor'] . ';
-                                 }';
-		$button_color_hover = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link {
-							background:' . $attr['secondaryColor'] . ';
-						}';
-
-        $button_color = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link:hover,
-                        .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link:focus,
-                        .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link:active {
-                            background:' . $attr['primaryColor'] . ';
-                        }';
-		$columns_gap = isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ? '.wpzoom-blocks_portfolio-block_items-list { grid-gap:' . $attr['columnsGap'] . 'px; }' : '';
+		//Get Filter Style
+		$generalStyle = isset( $attr['style'] ) ? wp_style_engine_get_styles( $attr['style'] ) : '';
+		$general_css  = is_array( $generalStyle ) && isset( $generalStyle['css'] ) ? $generalStyle['css'] : '';
 		
+		//print_r( $general_css );
+
+		$general_style = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' {' . $general_css . '}';
+		
+		if( isset( $attr['textColor'] ) ) {
+			$general_style .= '.wpzoom-blocks_portfolio-block.' . $class_unique . ' { color:' . $attr['textColor'] . '}';
+		}
+
+		$filter_color_hover = $filter_color_active = $filter_color = $post_title = $post_title_hover = $button_color_hover = $button_style = '';
+		
+		//Set filter hover color
+		if( isset( $attr['primaryColor'] ) ) {
+			$filter_color_hover = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li a:hover,
+				.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li.current-cat a:hover,
+				.wpzoom-blocks_portfolio-.' . $class_unique . '.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a:hover {
+					color:' . $attr['primaryColor'] . ';
+				}';
+		}
+		
+		//Set filter active color
+		if( isset( $attr['filterActiveColor'] ) ) {
+			$filter_color_active = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li.current-cat a { color:' . $attr['filterActiveColor'] . '; }';
+		}
+
+		//Set filter default color
+		if( isset( $attr['secondaryColor'] ) ) {
+			$filter_color = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li a,
+			.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a {
+				color:' . $attr['secondaryColor'] . ';
+			}';
+		}
+
+		//Post Title styling 
+		$postTitleFontFamily = isset( $attr['postTitleFontFamily'] ) && 'Default' !== $attr['postTitleFontFamily'] ? 'font-family: ' . $attr['postTitleFontFamily'] . ';' : '';
+		$postTitleFontSize   = isset( $attr['postTitleFontSize'] ) && 18 !== $attr['postTitleFontSize'] ? 'font-size: ' . $attr['postTitleFontSize'] . 'px !important;' : '';
+		$postTitleLineHeight = isset( $attr['postTitleLineHeight'] ) ? 'line-height: ' . $attr['postTitleLineHeight'] . 'px;' : '';
+		$postTitleFontWeight = isset( $attr['postTitleFontWeight'] ) ? 'font-weight: ' . $attr['postTitleFontWeight'] . ' !important;' : '';
+		$postTitleColor      = isset( $attr['postTitleColor'] ) ? 'color: ' . $attr['postTitleColor'] . ' !important;' : '';
+		
+		$postTitleTextTransform = isset( $attr['postTitleTextTransform'] ) ? 'text-transform: ' . $attr['postTitleTextTransform'] . ';' : '';
+		$postTitleLetterSpacing = isset( $attr['$postTitleLetterSpacing'] ) ? 'letter-spacing: ' . $attr['$postTitleLetterSpacing'] . 'px;' : '';
+
+		$post_title = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_item-details .wpzoom-blocks_portfolio-block_item-title a {' .
+			 $postTitleFontFamily .
+			 $postTitleFontSize .
+			 $postTitleLineHeight .
+			 $postTitleFontWeight .
+			 $postTitleColor . 
+			 $postTitleTextTransform .
+			 $postTitleLetterSpacing .
+		'}';
+
+		if( isset( $attr['postHoverTitleColor'] ) ) {
+			$post_title_hover = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_item-details .wpzoom-blocks_portfolio-block_item-title:hover a { color:' . $attr['postHoverTitleColor'] . ' !important};';
+		}
+		
+		//Buttons styling		
+		$btnTextColor     = isset( $attr['btnTextColor'] ) ? 'color: ' . $attr['btnTextColor'] . ' !important;' : '';
+		$btnBgColor       = isset( $attr['btnBgColor'] ) ? 'background: ' . $attr['btnBgColor'] . ' !important;' : '';
+		$btnFontFamily    = isset( $attr['btnFontFamily'] ) && 'Default' !== $attr['btnFontFamily'] ? 'font-family: ' . $attr['btnFontFamily'] . ';' : '';
+		$btnFontSize      = isset( $attr['btnFontSize'] ) && 14 !== $attr['btnFontSize'] ? 'font-size: ' . $attr['btnFontSize'] . 'px !important;' : '';
+		$btnTextTransform = isset( $attr['btnTextTransform'] ) ? 'text-transform: ' . $attr['btnTextTransform'] . ';' : '';
+
+		$btnBorderStyle = $btnBorderWidth = $btnBorderColor = '';
+		$btnBorder = isset( $attr['btnBorder'] ) ? true : false;
+		if( $btnBorder ) {
+			
+			$btnBorderStyle = isset( $attr['btnBorderStyle'] ) ? 'border-style:' . $attr['btnBorderStyle'] . ';' : 'border-style:solid;';
+			$btnBorderWidth = isset( $attr['btnBorderWidth'] ) ? 'border-width:' . $attr['btnBorderWidth'] . 'px;' : 'border-width:1px';
+			$btnBorderColor = isset( $attr['btnBorderColor'] ) ? 'border-color:' . $attr['btnBorderColor'] . ';' : '';
+		
+		}
+
+		$button_style = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link {' .
+			$btnTextColor . 
+			$btnBgColor .
+			$btnFontFamily . 
+			$btnFontSize . 
+			$btnTextTransform . 
+			$btnBorderStyle . 
+			$btnBorderWidth . 
+			$btnBorderColor .
+		'}';
+
+		if( isset( $attr['btnHoverBgColor'] ) || isset( $attr['btnHoverTextColor'] ) || isset( $attr['btnHoverBorderColor'] ) ) {
+
+			$btnHoverTextColor   = isset( $attr['btnHoverTextColor'] ) ? 'color:' . $attr['btnHoverTextColor'] . ' !important;' : '';
+			$btnHoverBgColor     = isset( $attr['btnHoverBgColor'] ) ? 'background:' . $attr['btnHoverBgColor'] . ' !important;' : '';
+			$btnHoverBorderColor = isset( $attr['btnHoverBorderColor'] ) ? 'border-color:' . $attr['btnHoverBorderColor'] . ';' : '';
+
+			$button_color_hover = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link:hover,
+                        .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link:focus,
+                        .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpz-portfolio-button__link:active { '.
+							$btnHoverTextColor .
+                            $btnHoverBgColor .
+							$btnHoverBorderColor .
+                        '}';
+
+		}
+
+		//Set Column gap
+		$columns_gap = isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ? '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_items-list { grid-gap:' . $attr['columnsGap'] . 'px; }' : '';
+
 		if( isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ) {
 			if( isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ) {
 				switch( $attr[ 'columnsAmount' ] ) {
@@ -468,46 +621,78 @@ class WPZOOM_Blocks_Portfolio {
 		}
 
 		$masonry_columns_gap = isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ? $masonry_selectors : '';
+
 		$css = sprintf( 
 			'<style>%s</style>',
+			$general_style .
 			$filter_color .
             $filter_color_hover .
-			$button_color .
+			$filter_color_active .
+			$post_title . 
+			$post_title_hover .
+			$button_style .
             $button_color_hover . 
 			$columns_gap .
 			$masonry_columns_gap
 		);
 
+		$preloaderColor = isset( $attr['secondaryColor'] ) ? $attr['secondaryColor'] : '#0BB4AA';		
+
 		$preloader = '<div class="wpzoom-portfolio-preloader"><svg  width="75" version="1.1" id="L4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0" xml:space="preserve">
-		  <circle fill="#0BB4AA" stroke="none" cx="6" cy="50" r="6">
-			<animate
-			  attributeName="opacity"
-			  dur="1s"
-			  values="0;1;0"
-			  repeatCount="indefinite"
-			  begin="0.1"/>    
-		  </circle>
-		  <circle fill="#0BB4AA" stroke="none" cx="26" cy="50" r="6">
-			<animate
-			  attributeName="opacity"
-			  dur="1s"
-			  values="0;1;0"
-			  repeatCount="indefinite" 
-			  begin="0.2"/>       
-		  </circle>
-		  <circle fill="#0BB4AA" stroke="none" cx="46" cy="50" r="6">
-			<animate
-			  attributeName="opacity"
-			  dur="1s"
-			  values="0;1;0"
-			  repeatCount="indefinite" 
-			  begin="0.3"/>     
-		  </circle>
+		  <circle fill="' . $preloaderColor . '" stroke="none" cx="6" cy="50" r="6"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.1"/></circle>
+		  <circle fill="' . $preloaderColor . '" stroke="none" cx="26" cy="50" r="6"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.2"/></circle>
+		  <circle fill="' . $preloaderColor . '" stroke="none" cx="46" cy="50" r="6"><animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.3"/></circle>
 		</svg></div>';
+
+		if ( get_query_var('paged') ) {
+			$paged = get_query_var('paged');
+		} else if ( get_query_var('page') ) {
+			$paged = get_query_var('page');
+		} else {
+			$paged = 1;
+		}
+
+		$adjusted_offset = ( ( $paged - 1 ) * (int)$per_page );
+		$offset          = $adjusted_offset + (int)$per_page;
+
+		$data_load_more = array(
+			'categories'            => $categories,
+			'class'                 => 'wpzoom-blocks_portfolio-block',
+			'layout'                => $layout,
+			'lightbox'              => $use_lightbox,
+			'lightbox_caption'      => $lightbox_caption,
+			'order'                 => $order,
+			'order_by'              => $order_by,
+			'per_page'              => $per_page,
+			'read_more_label'       => $read_more_label,
+			'show_author'           => $show_author,
+			'show_background_video' => $show_video,
+			'show_date'             => $show_date,
+			'show_excerpt'          => $show_excerpt,
+			'show_read_more'        => $show_read_more,
+			'show_thumbnail'        => $show_thumbnail,
+			'source'                => $source,
+			'thumbnail_size'        => $thumbnail_size,
+			'total'                 => $this->all_posts
+		);
 		
+		$data_load_more = wp_json_encode( $data_load_more );
 
 		// Return the final output
-		return "<div class=\"wpzoom-blocks $classes\">$cats_filter<ul class=\"{$class}_items-list\">$output</ul>$btns_wrap</div><!--.$class-->$css";
+		return sprintf(
+			'<div %s data-offset="%s" data-load-more=\'%s\'>%s<ul class="%s_items-list">%s<li class="wpzoom-preloader-container">%s</li></ul>%s</div><!--.%s-->%s',
+			get_block_wrapper_attributes( array( 'class' => $classes ) ),
+			$offset,
+			$data_load_more,
+			$cats_filter,
+			$class,
+			$output,
+			$preloader,
+			$btns_wrap,
+			$class,
+			$css
+		);
+
 	}
 
 	/**
@@ -522,10 +707,12 @@ class WPZOOM_Blocks_Portfolio {
 		// Setup some default values
 		$defaults = array(
 			'categories'            => array(),
+			'offset'                => 0,
 			'exclude_posts'         => array(),
 			'class'                 => 'wpzoom-blocks_portfolio-block',
 			'layout'                => 'grid',
 			'lightbox'              => true,
+			'lightbox_caption'      => false,
 			'order'                 => 'desc',
 			'order_by'              => 'date',
 			'page'                  => 1,
@@ -562,6 +749,7 @@ class WPZOOM_Blocks_Portfolio {
 			'orderby'        => $args[ 'order_by' ],
 			'posts_per_page' => $args[ 'per_page' ],
 			'paged'          => $args[ 'page' ],
+			'offset'         => $args[ 'offset' ],
 			'post_type'      => $source
 		);
 
@@ -581,11 +769,16 @@ class WPZOOM_Blocks_Portfolio {
 			);
 		}
 
+		$show_lightbox_image_caption = isset( $args[ 'lightbox_caption' ] ) ? $args[ 'lightbox_caption' ] : true;
+
 		// Perform the query to get the desired portfolio items
 		$query = new WP_Query( $params );
 
 		// Cache the amount of pages returned by the query
 		$this->result_pages = $query->max_num_pages;
+
+		//Cache the amount of all posts
+		$this->all_posts = $query->found_posts;
 
 		$posts_ids = array();
 
@@ -609,7 +802,7 @@ class WPZOOM_Blocks_Portfolio {
 						$category_classname .= ' ' . $class . '_category-' . $cat->term_id;
 					}
 				}
-
+				
 				$thumbnail = get_the_post_thumbnail( $post, $args[ 'thumbnail_size' ] );
 				$video_type = 'service' == get_post_meta( $id, '_wpzb_portfolio_video_type', true ) ? 'service' : 'library';
 				$video_id = intval( get_post_meta( $id, '_wpzb_portfolio_video_id', true ) );
@@ -618,10 +811,11 @@ class WPZOOM_Blocks_Portfolio {
 				$has_cover = ( $args[ 'show_background_video' ] && ! empty( $video ) ) || ( $args[ 'show_thumbnail' ] && ! empty( $thumbnail ) );
 				$cover_class = $has_cover ? ' has-cover' : '';
 				$posts_ids[] = $id;
+				$post_thumbnail_url = get_the_post_thumbnail_url( $id );
 
 				if( 'masonry' !== $args['layout'] ) {
 					// Open the list item for this portfolio item
-					$output .= "<li class='{$class}_item {$class}_item-$id$category_classname$cover_class fade-in'  data-category='$category'>";
+					$output .= "<li class='{$class}_item {$class}_item-$id$category_classname$cover_class'  data-category='$category'>";
 				}
 				else {
 					// Open the list item for this portfolio item
@@ -630,7 +824,7 @@ class WPZOOM_Blocks_Portfolio {
 
 
 				// Add a wrapper article around the entire portfolio item (including the thumbnail)
-				$output .= "<article class='{$class}_item-wrap'>";
+				$output .= "<article class='{$class}_item-wra portfolio_item'>";
 
 				// If the video should be shown...
 				if ( $args[ 'show_background_video' ] && ! empty( $video ) ) {
@@ -644,9 +838,12 @@ class WPZOOM_Blocks_Portfolio {
 						<div class='{$class}_item-media'>
 							<a href='$permalink' title='$title_attr' rel='bookmark'>$thumbnail</a>
 						</div>";
+						
+					$output .= '<div class="portfolio-block-entry-thumbnail-popover-content" data-show-caption="' . $show_lightbox_image_caption . '">';
 
 					if( $args[ 'lightbox' ] ) {
 						// Add the lightbox icon
+						$output .= '<a class="mfp-image portfolio-block-popup-video popup_image_icon" href="'. $post_thumbnail_url .'">';
 						$output .= "<span class='{$class}_lightbox_icon'>
 										<svg enable-background='new 0 0 32 32' id='Layer_4' version='1.1' viewBox='0 0 32 32' xml:space='preserve' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'>
 											<g>
@@ -656,9 +853,15 @@ class WPZOOM_Blocks_Portfolio {
 											</g>
 										</svg>
 									</span>";
-						};
+						$output .= '</a>';
+					};
+
+					$output .= '<span class="portfolio_item-title" style="display: none;">';
+					$output .= '<a href="' . esc_url( get_permalink( $id ) ) . '" title="' . esc_attr( get_the_title( $id ) ) . '">' . get_the_title( $id ) . '</a>';
+					$output .= '</span>';
 
                     $output .= "</div>";
+					$output .= "</div>";
 
 				}
 
