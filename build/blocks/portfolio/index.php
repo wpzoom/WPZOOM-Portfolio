@@ -493,6 +493,10 @@ class WPZOOM_Blocks_Portfolio {
 			$general_style .= '.wpzoom-blocks_portfolio-block.' . $class_unique . ' { color:' . $attr['textColor'] . '}';
 		}
 
+		if( isset( $attr['fontFamily'] ) ) {
+			$general_style .= '.wpzoom-blocks_portfolio-block.' . $class_unique . ' { font-family:' . $attr['fontFamily'] . '}';
+		}
+
 		$filter_color_hover = $filter_color_active = $filter_color = $post_title = $post_title_hover = $button_color_hover = $button_style = '';
 		
 		//Set filter hover color
