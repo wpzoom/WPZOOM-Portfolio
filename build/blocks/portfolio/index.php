@@ -142,6 +142,10 @@ class WPZOOM_Blocks_Portfolio {
 			'type'    => 'string',
 			'default' => '#0BB4AA'
 		],
+		'filterAlignment' => [
+			'type' => 'string',
+			'default' => 'center'
+		],
 		'backgroundColor' => [
 			'type' => 'string',
 			'default' => '#000'
@@ -497,7 +501,7 @@ class WPZOOM_Blocks_Portfolio {
 			$general_style .= '.wpzoom-blocks_portfolio-block.' . $class_unique . ' { font-family:' . $attr['fontFamily'] . '}';
 		}
 
-		$filter_color_hover = $filter_color_active = $filter_color = $post_title = $post_title_hover = $button_color_hover = $button_style = '';
+		$filter_color_hover = $filter_color_active = $filter_color = $filter_align = $post_title = $post_title_hover = $button_color_hover = $button_style = '';
 		
 		//Set filter hover color
 		if( isset( $attr['primaryColor'] ) ) {
@@ -519,6 +523,11 @@ class WPZOOM_Blocks_Portfolio {
 			.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-list .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-title a {
 				color:' . $attr['secondaryColor'] . ';
 			}';
+		}
+
+		//Set filter alignment
+		if( isset( $attr['filterAlignment'] ) && 'center' !== $attr['filterAlignment'] ) {
+			$filter_align = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul { text-align:' . $attr['filterAlignment'] . '; }';
 		}
 
 		//Post Title styling 
@@ -632,6 +641,7 @@ class WPZOOM_Blocks_Portfolio {
 			$filter_color .
             $filter_color_hover .
 			$filter_color_active .
+			$filter_align .
 			$post_title . 
 			$post_title_hover .
 			$button_style .

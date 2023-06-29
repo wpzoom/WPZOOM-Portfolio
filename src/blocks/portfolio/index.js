@@ -1,11 +1,14 @@
 import apiFetch from '@wordpress/api-fetch';
 import { 
 	InspectorControls,
-	PanelColorSettings
+	PanelColorSettings,
+	AlignmentControl
 } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
 import { 
 	BaseControl, 
+	Button, 
+	ButtonGroup,
 	Disabled, 
 	HorizontalRule, 
 	PanelBody, 
@@ -17,11 +20,7 @@ import {
 	TextControl, 
 	ToggleControl, 
 	TreeSelect, 
-	ColorPalette,
-	__experimentalFontFamily,
-	__experimentalFontFamilyControl,
-	__experimentalFontStyle,
-	__experimentalFontWeight 
+	ColorPalette
 } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { 
@@ -215,15 +214,13 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
 			const { amount, categories, columnsAmount, columnsGap, layout, lazyLoad, lightbox,
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, enableAjaxLoading, showDate,
-					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, postTitleFontSize,
+					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, postTitleFontSize,
 					postTitleTextTransform, postTitleLetterSpacing, postTitleFontFamily, postTitleFontWeight, postTitleLineHeight, postTitleColor, postHoverTitleColor,  btnTextColor, btnHoverTextColor, btnBgColor, btnHoverBgColor, btnFontFamily, btnFontSize, btnTextTransform, btnBorder, btnBorderStyle, btnBorderWidth,
 					btnBorderColor, btnHoverBorderColor } = attributes;
 			const { imageSizes } = this.state;
 
 			const post_type = wp.data.select( 'core/editor' ).getCurrentPostType();
 			const post_id   = wp.data.select('core/editor').getCurrentPost().id;
-
-			console.log( __experimentalFontFamily );
 
 			if ( ! taxonomyList || ! imageSizes ) {
 				return (
@@ -519,6 +516,14 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										label: __( 'Active Item Color', 'wpzoom-portfolio' )										
 									},
 								]}
+							/>
+							<h2>{ __( 'Alignment', 'wpzoom-portfolio') }</h2>
+							<HorizontalRule />
+							<AlignmentControl
+								value={ filterAlignment }
+								onChange={ ( nextAlign ) => {
+									setAttributes( { filterAlignment: nextAlign } );
+								} }
 							/>
 						</PanelBody>
 						<PanelBody title={ __( 'Post Title', 'wpzoom-portfolio' ) } initialOpen={ false } className="wpzb-settings-panel">
