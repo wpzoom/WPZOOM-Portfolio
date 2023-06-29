@@ -131,47 +131,57 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 
 			global $post;
 
-			$google_fonts = $font_families = array();
+			$google_fonts = $wp_google_fonts = $font_families = array();
 
 			$blocks = parse_blocks( $post->post_content );
 
 			foreach ( $blocks as $index => $block ) {
 
 				if ( 'wpzoom-blocks/portfolio' === $block['blockName'] ) {
-					if( isset( $block['attrs']['fontFamily'] ) ) {
-						$google_fonts[] = $block['attrs']['fontFamily'];
+					if( isset( $block['attrs']['fontFamily'] ) && 'Default' != $block['attrs']['fontFamily'] ) {
+						$wp_google_fonts[] = $block['attrs']['fontFamily'];
 					}
-					if( isset( $block['attrs']['postTitleFontFamily'] ) ) {
+					if( isset( $block['attrs']['postTitleFontFamily'] ) && 'Default' != $block['attrs']['postTitleFontFamily'] ) {
 						$google_fonts[] = $block['attrs']['postTitleFontFamily'];
 					}
-					if( isset( $block['attrs']['btnFontFamily'] ) ) {
+					if( isset( $block['attrs']['btnFontFamily'] ) && 'Default' != $block['attrs']['btnFontFamily'] ) {
 						$google_fonts[] = $block['attrs']['btnFontFamily'];
 					}
 				}
 
-
 			}
 
-			if( ! empty( $google_fonts ) ) {
-				foreach( $google_fonts as $google_font ) {
-					$google_font = ucfirst( $google_font );
-					$google_font = str_replace( ' ', '+', $google_font );
-					$font_families[] = $google_font . ':wght@300;400;500;600;700';
+			if( empty( $google_fonts ) && empty( $wp_google_fonts ) ) {
+				return;
+			}
+
+			if( !empty( $wp_google_fonts ) ) {
+				if( function_exists( 'wp_enqueue_fonts' ) ) {
+					wp_enqueue_fonts( $wp_google_fonts );
 				}
 			}
-
-			$fonts_url = add_query_arg( array(
-				'family' => implode( '&family=', $font_families ),
-				'display' => 'swap',
-			), 'https://fonts.googleapis.com/css2' );
-
-			wp_enqueue_style(
-				'wpzoom-portfolio-block-google-fonts',
-				wptt_get_webfont_url( esc_url_raw( $fonts_url ) ),
-				array(),
-				WPZOOM_PORTFOLIO_VERSION
-			);
-
+			
+			if( !empty( $google_fonts ) ) {
+				foreach( $google_fonts as $google_font ) {
+					$google_font = str_replace( '-', ' ', $google_font );
+					$google_font = ucwords( $google_font );
+					$google_font = str_replace( ' ', '+', $google_font );
+					
+					$font_families[] = $google_font . ':wght@300;400;500;600;700';
+				}
+	
+				$fonts_url = add_query_arg( array(
+					'family' => implode( '&family=', $font_families ),
+					'display' => 'swap',
+				), 'https://fonts.googleapis.com/css2' );
+	
+				wp_enqueue_style(
+					'wpzoom-portfolio-block-google-fonts',
+					wptt_get_webfont_url( esc_url_raw( $fonts_url ) ),
+					array(),
+					WPZOOM_PORTFOLIO_VERSION
+				);
+			}
 
 		}
 
