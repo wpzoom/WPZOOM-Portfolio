@@ -487,23 +487,23 @@ function wpzoom_theme_has_portfolio() {
 }
 
 function load_files() {
-
 	//Add Portfolio Shortcode
 	require_once 'classes/class-wpzoom-portfolio-shortcode.php';
 	require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
 	require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
+	
 	require_once 'classes/class-wpzoom-portfolio-assets-manager.php';
+	require_once 'classes/class-wpzoom-wptt-webfont-loader.php';
+	
+
+	//Load Settings Panel
+	require_once 'classes/class-wpzoom-settings-fields.php';
+	require_once 'classes/class-wpzoom-portfolio-settings-page.php';
 
 	if( ! wpzoom_theme_has_portfolio() ) {
 		//Load Archive template
 		require_once 'classes/class-wpzoom-portfolio-template.php';
 	}
-	
-	//Load Settings Panel
-	require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
-	require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
-	require_once 'classes/class-wpzoom-settings-fields.php';
-	require_once 'classes/class-wpzoom-portfolio-settings-page.php';
 
 	if( ! wpzoom_theme_has_portfolio() ) {
 		//Load Archive template

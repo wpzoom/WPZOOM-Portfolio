@@ -1,8 +1,14 @@
 import apiFetch from '@wordpress/api-fetch';
-import { InspectorControls } from '@wordpress/block-editor';
+import { 
+	InspectorControls,
+	PanelColorSettings,
+	AlignmentControl
+} from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
 import { 
 	BaseControl, 
+	Button, 
+	ButtonGroup,
 	Disabled, 
 	HorizontalRule, 
 	PanelBody, 
@@ -13,15 +19,15 @@ import {
 	Spinner, 
 	TextControl, 
 	ToggleControl, 
-	TreeSelect , 
-	ColorPalette 
+	TreeSelect, 
+	ColorPalette
 } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { 
 	Component, 
 	Fragment 
 } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+const { __ } = wp.i18n;
 import { groupBy } from 'lodash';
 import ServerSideRender from '@wordpress/server-side-render';
 
@@ -32,6 +38,15 @@ import {
 	blockColors, 
 	secondaryColors 
 } from './colors-palette';
+import fontFamilies from './fonts';
+import {
+	textTransformOptions,
+	fontWeightOptions,
+	fontFamilyOptions,
+} from './typography-settings.js';
+import {
+	borderStyleOptions
+} from './style-settings.js';
 import {
 	colorIcon,
 	fieldsIcon,
@@ -101,7 +116,26 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 	category: 'wpzoom-portfolio',
 	supports: {
 		align: true,
-		html: false
+		html: false,
+		color: {
+			text: true,
+			background: false,
+			link: true
+		},
+		typography: {
+			fontSize: true,
+			lineHeight: true,
+			__experimentalFontFamily: true,
+			__experimentalFontWeight: true,
+			__experimentalFontStyle: true,
+			__experimentalTextTransform: true,
+			__experimentalTextDecoration: true,
+			__experimentalLetterSpacing: true,
+			__experimentalDefaultControls: {
+				FontFamily: true,
+			}
+		},
+		__experimentalSelector: '.wpzoom-blocks_portfolio-block_filter .wpz-portfolio-filter__link'
 	},
 	example: {},
 	edit: withSelect( select => {
@@ -180,7 +214,9 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
 			const { amount, categories, columnsAmount, columnsGap, layout, lazyLoad, lightbox,
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, enableAjaxLoading, showDate,
-					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor } = attributes;
+					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, postTitleFontSize,
+					postTitleTextTransform, postTitleLetterSpacing, postTitleFontFamily, postTitleFontWeight, postTitleLineHeight, postTitleColor, postHoverTitleColor,  btnTextColor, btnHoverTextColor, btnBgColor, btnHoverBgColor, btnFontFamily, btnFontSize, btnTextTransform, btnBorder, btnBorderStyle, btnBorderWidth,
+					btnBorderColor, btnHoverBorderColor } = attributes;
 			const { imageSizes } = this.state;
 
 			const post_type = wp.data.select( 'core/editor' ).getCurrentPostType();
@@ -247,7 +283,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 
 			return (
 				<>
-					<InspectorControls>
+					<InspectorControls group="settings">
 						{ 'portfolio_layout' == post_type && (
 							<PanelBody icon={ shortcodeIcon } title={ __( 'Shortcode', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">
 								<p>{ __( 'To output this custom layout you can use the following shortcode:', 'wpzoom-portfolio' ) }</p>
@@ -270,22 +306,6 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								</p>
 							</PanelBody>
 						)}
-						<PanelBody icon={ colorIcon } title={ __( 'Colors', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">
-							<BaseControl label={ __( 'Accent Color', 'wpzoom-portfolio' ) } >
-								<ColorPalette
-									colors={ blockColors }
-									value={ primaryColor }
-									onChange={ ( color ) => setAttributes( { primaryColor: color } ) }
-								/>
-							</BaseControl>
-							<BaseControl label={ __( 'Secondary Color', 'wpzoom-portfolio' ) } >
-                                <ColorPalette
-                                    colors={ secondaryColors }
-                                    value={ secondaryColor }
-                                    onChange={ ( color ) => setAttributes( { secondaryColor: color } ) }
-                                />
-							</BaseControl>
-						</PanelBody>
 						<PanelBody icon={ filterIcon } title={ __( 'Filtering', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">
 								<SelectControl
 									label={ __( 'Portfolio Items Source', 'wpzoom-portfolio' ) }
@@ -475,7 +495,190 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								}
 							</PanelBody>
 					</InspectorControls>
+					<InspectorControls group="styles">
+						<PanelBody title={ __( 'Filter', 'wpzoom-portfolio' ) } initialOpen={ false } className="wpzb-settings-panel">
+							<PanelColorSettings
+								title={__( 'Colors', 'wpzoom-portfolio' ) }
+								colorSettings={[
+									{
+										value: secondaryColor,
+										onChange: ( secondaryColor ) => setAttributes({ secondaryColor } ),
+										label: __( 'Default Color', 'wpzoom-portfolio' )										
+									},
+									{
+										value: primaryColor,
+										onChange: ( primaryColor ) => setAttributes({ primaryColor } ),
+										label: __( 'Hover Color', 'wpzoom-portfolio' )
+									},
+									{
+										value: filterActiveColor,
+										onChange: ( filterActiveColor ) => setAttributes({ filterActiveColor } ),
+										label: __( 'Active Item Color', 'wpzoom-portfolio' )										
+									},
+								]}
+							/>
+							<h2>{ __( 'Alignment', 'wpzoom-portfolio') }</h2>
+							<HorizontalRule />
+							<AlignmentControl
+								value={ filterAlignment }
+								onChange={ ( nextAlign ) => {
+									setAttributes( { filterAlignment: nextAlign } );
+								} }
+							/>
+						</PanelBody>
+						<PanelBody title={ __( 'Post Title', 'wpzoom-portfolio' ) } initialOpen={ false } className="wpzb-settings-panel">
+							<PanelColorSettings
+								title={__( 'Colors', 'wpzoom-portfolio' ) }
+								colorSettings={[
+									{
+										value: postTitleColor,
+										onChange: ( postTitleColor ) => setAttributes({ postTitleColor } ),
+										label: __( 'Default Color', 'wpzoom-portfolio' )										
+									},
+									{
+										value: postHoverTitleColor,
+										onChange: ( postHoverTitleColor ) => setAttributes({ postHoverTitleColor } ),
+										label: __( 'Hover/Active Color', 'wpzoom-portfolio' )										
+									},
+								]}
+							/>
+							<h2>{ __( 'Typography', 'wpzoom-portfolio') }</h2>
+							<HorizontalRule />
+							<RangeControl
+								label={ __( 'Font Size', 'wpzoom-portfolio' )}
+								value={ postTitleFontSize}
+								onChange={( postTitleFontSize ) => setAttributes({ postTitleFontSize })}
+								min={12}
+								max={100}
+							/>
+							<SelectControl
+								label={ __( 'Font Family', 'wpzoom-portfolio' )}
+								options={ fontFamilyOptions }
+								value={ fontFamilies.includes( postTitleFontFamily ) ? postTitleFontFamily : 'Default' }
+								onChange={( postTitleFontFamily) => setAttributes({ postTitleFontFamily })} //default doesn't work here
+							/>
+							<SelectControl
+								label={ __( 'Font Weight', 'wpzoom-portfolio' )}
+								options = { fontWeightOptions }
+								value = { postTitleFontWeight }
+								onChange = { ( postTitleFontWeight ) => setAttributes({ postTitleFontWeight }) }
+							/>	
+							<SelectControl
+								label={ __( 'Text Transform', 'wpzoom-portfolio' )}
+								options={textTransformOptions}
+								value={ postTitleTextTransform }
+								onChange={( postTitleTextTransform ) => setAttributes({ postTitleTextTransform })}
+							/>									
+							<RangeControl
+								label={ __( 'Letter Spacing', 'wpzoom-portfolio' )}
+								value={ postTitleLetterSpacing}
+								onChange={( postTitleLetterSpacing ) => setAttributes({ postTitleLetterSpacing })}
+								min={-2}
+								max={6}
+							/>
+							<RangeControl
+								label={ __( 'Line Height', 'wpzoom-portfolio' )}
+								value = { postTitleLineHeight }
+								onChange={( postTitleLineHeight ) => setAttributes({ postTitleLineHeight })}
+								min={10}
+								max={120}
+							/>
+						</PanelBody>
 
+						<PanelBody initialOpen={ false } title={ __( 'Buttons', 'wpzoom-portfolio' ) } className="wpzb-settings-panel">
+							<PanelColorSettings
+								title={__( 'Label Colors', 'wpzoom-portfolio' ) }
+								colorSettings={[
+									{
+										value: btnTextColor,
+										onChange: ( btnTextColor ) => setAttributes({ btnTextColor } ),
+										label: __( 'Default Color', 'wpzoom-portfolio' )
+									},
+									{
+										value: btnHoverTextColor,
+										onChange: ( btnHoverTextColor ) => setAttributes( { btnHoverTextColor } ),
+										label: __( 'Hover Color', 'wpzoom-portfolio' )
+									},
+								]}
+							/>
+							<PanelColorSettings
+								title={__( 'Background Colors', 'wpzoom-portfolio' ) }
+								colorSettings={[
+									{
+										value: btnBgColor,
+										onChange: ( btnBgColor ) => setAttributes({ btnBgColor } ),
+										label: __( 'Default Color', 'wpzoom-portfolio' )
+									},
+									{
+										value: btnHoverBgColor,
+										onChange: ( btnHoverBgColor ) => setAttributes( { btnHoverBgColor } ),
+										label: __( 'Hover Color', 'wpzoom-portfolio' )
+									},
+								]}
+							/>
+							<h2>{ __( 'Typography', 'wpzoom-portfolio') }</h2>
+							<HorizontalRule />
+							<RangeControl
+								label={ __( 'Font Size', 'wpzoom-portfolio' )}
+								value={ btnFontSize }
+								onChange={( btnFontSize ) => setAttributes({ btnFontSize })}
+								min={12}
+								max={100}
+							/>
+							<SelectControl
+								label={ __( 'Font Family', 'wpzoom-portfolio' )}
+								options={ fontFamilyOptions }
+								value={ fontFamilies.includes( btnFontFamily ) ? btnFontFamily : 'Default' }
+								onChange={( btnFontFamily ) => setAttributes({ btnFontFamily })} //default doesn't work here
+							/>
+							<SelectControl
+								label={ __( 'Text Transform', 'wpzoom-portfolio' )}
+								options={ textTransformOptions }
+								value={ btnTextTransform }
+								onChange={( btnTextTransform ) => setAttributes({ btnTextTransform })}
+							/>
+							<ToggleControl
+								label={ __( 'Border?', 'wpzoom-portfolio' ) }
+								checked={ btnBorder }
+								onChange={ ( value ) => setAttributes( { btnBorder: value } ) }
+							/>
+							{ btnBorder &&
+							<SelectControl
+								label={ __( 'Border Style', 'wpzoom-portfolio' )}
+								options={ borderStyleOptions }
+								value={ btnBorderStyle }
+								onChange={ ( btnBorderStyle ) => setAttributes({ btnBorderStyle }) }
+							/> } 
+							{ btnBorder && 
+							<RangeControl
+								label={ __( 'Border Width', 'wpzoom-portfolio' ) }
+								value={ btnBorderWidth }
+								onChange={ ( value ) => setAttributes( { btnBorderWidth: value } ) }
+								min={ 0 }
+								max={ 10 }
+								required
+							/> }
+							{ btnBorder &&
+							<PanelColorSettings
+								title={__( 'Border Colors', 'wpzoom-portfolio' ) }
+								colorSettings={[
+									{
+										value: btnBorderColor,
+										onChange: ( btnBorderColor ) => setAttributes({ btnBorderColor } ),
+										label: __( 'Default Color', 'wpzoom-portfolio' ),
+										colors: blockColors 
+									},
+									{
+										value: btnHoverBorderColor,
+										onChange: ( btnHoverBorderColor ) => setAttributes( { btnHoverBorderColor } ),
+										label: __( 'Hover Color', 'wpzoom-portfolio' ),
+										colors: secondaryColors
+									},
+								]}
+							/>
+							}
+						</PanelBody>
+					</InspectorControls>
 					<Fragment>
 						<ServerSideRender block="wpzoom-blocks/portfolio" attributes={ attributes } />
 					</Fragment>
