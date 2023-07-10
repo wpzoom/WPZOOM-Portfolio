@@ -575,6 +575,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								onChange={( postTitleLetterSpacing ) => setAttributes({ postTitleLetterSpacing })}
 								min={-2}
 								max={6}
+								step={0.1}
 							/>
 							<RangeControl
 								label={ __( 'Line Height', 'wpzoom-portfolio' )}
@@ -643,6 +644,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								onChange={( btnLetterSpacing ) => setAttributes({ btnLetterSpacing })}
 								min={-2}
 								max={6}
+								step={0.1}
 							/>
 							<ToggleControl
 								label={ __( 'Border?', 'wpzoom-portfolio' ) }
