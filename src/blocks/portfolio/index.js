@@ -215,7 +215,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 			const { amount, categories, columnsAmount, columnsGap, layout, lazyLoad, lightbox,
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, enableAjaxLoading, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, postTitleFontSize,
-					postTitleTextTransform, postTitleLetterSpacing, postTitleFontFamily, postTitleFontWeight, postTitleLineHeight, postTitleColor, postHoverTitleColor,  btnTextColor, btnHoverTextColor, btnBgColor, btnHoverBgColor, btnFontFamily, btnFontSize, btnTextTransform, btnBorder, btnBorderStyle, btnBorderWidth,
+					postTitleTextTransform, postTitleLetterSpacing, postTitleFontFamily, postTitleFontWeight, postTitleLineHeight, postTitleColor, postHoverTitleColor,  btnTextColor, btnHoverTextColor, btnBgColor, btnHoverBgColor, btnFontFamily, btnFontSize, btnTextTransform, btnLetterSpacing, btnBorder, btnBorderStyle, btnBorderWidth,
 					btnBorderColor, btnHoverBorderColor } = attributes;
 			const { imageSizes } = this.state;
 
@@ -636,6 +636,13 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								options={ textTransformOptions }
 								value={ btnTextTransform }
 								onChange={( btnTextTransform ) => setAttributes({ btnTextTransform })}
+							/>
+							<RangeControl
+								label={ __( 'Letter Spacing', 'wpzoom-portfolio' )}
+								value={ btnLetterSpacing }
+								onChange={( btnLetterSpacing ) => setAttributes({ btnLetterSpacing })}
+								min={-2}
+								max={6}
 							/>
 							<ToggleControl
 								label={ __( 'Border?', 'wpzoom-portfolio' ) }

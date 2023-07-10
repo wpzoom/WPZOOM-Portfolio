@@ -214,6 +214,10 @@ class WPZOOM_Blocks_Portfolio {
 		'btnTextTransform' => [
 			'type' => 'string',
 		],
+		'btnLetterSpacing' => [
+			'type' => 'number',
+			'default' => 1
+		],
 		'btnBorder' => [
 			'type'    => 'boolean',
 			'default' => false
@@ -538,7 +542,7 @@ class WPZOOM_Blocks_Portfolio {
 		$postTitleColor      = isset( $attr['postTitleColor'] ) ? 'color: ' . $attr['postTitleColor'] . ' !important;' : '';
 		
 		$postTitleTextTransform = isset( $attr['postTitleTextTransform'] ) ? 'text-transform: ' . $attr['postTitleTextTransform'] . ';' : '';
-		$postTitleLetterSpacing = isset( $attr['$postTitleLetterSpacing'] ) ? 'letter-spacing: ' . $attr['$postTitleLetterSpacing'] . 'px;' : '';
+		$postTitleLetterSpacing = isset( $attr['postTitleLetterSpacing'] ) ? 'letter-spacing: ' . $attr['postTitleLetterSpacing'] . 'px;' : '';
 
 		$post_title = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_item-details .wpzoom-blocks_portfolio-block_item-title a {' .
 			 $postTitleFontFamily .
@@ -560,6 +564,7 @@ class WPZOOM_Blocks_Portfolio {
 		$btnFontFamily    = isset( $attr['btnFontFamily'] ) && 'Default' !== $attr['btnFontFamily'] ? 'font-family: ' . $attr['btnFontFamily'] . ';' : '';
 		$btnFontSize      = isset( $attr['btnFontSize'] ) && 14 !== $attr['btnFontSize'] ? 'font-size: ' . $attr['btnFontSize'] . 'px !important;' : '';
 		$btnTextTransform = isset( $attr['btnTextTransform'] ) ? 'text-transform: ' . $attr['btnTextTransform'] . ';' : '';
+		$btnLetterSpacing = isset( $attr['btnLetterSpacing'] ) ? 'letter-spacing: ' . $attr['btnLetterSpacing'] . 'px;' : '';
 
 		$btnBorderStyle = $btnBorderWidth = $btnBorderColor = '';
 		$btnBorder = isset( $attr['btnBorder'] ) ? true : false;
@@ -577,6 +582,7 @@ class WPZOOM_Blocks_Portfolio {
 			$btnFontFamily . 
 			$btnFontSize . 
 			$btnTextTransform . 
+			$btnLetterSpacing .
 			$btnBorderStyle . 
 			$btnBorderWidth . 
 			$btnBorderColor .
