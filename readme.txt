@@ -5,7 +5,7 @@ Author URI:        https://www.wpzoom.com/
 Requires at least: 5.8
 Requires PHP:      7.4
 Tested up to:      6.2
-Stable tag:        1.3.2
+Stable tag:        1.4.0
 License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Tags:              portfolio, gutenberg, block, grid, wpzoom, inspiro
@@ -128,6 +128,13 @@ Yes, you can find the documentation for this plugin with more instructions on ou
 
 
 == Changelog ==
+
+= 1.4.0 =
+* Added new customization options in a new Styles tab in the block settings.
+* You can now change the colors and fonts of different elements in the Portfolio block
+* The lightbox library was replaced with MagnificPopup
+* Improvements to the dynamic loading of items.
+* Lightbox will navigate only through items from the same category if selected in the filter at the top.
 
 = 1.3.2 =
 * Load new posts dynamically in the category filter
