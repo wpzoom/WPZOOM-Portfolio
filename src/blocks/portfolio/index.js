@@ -112,8 +112,8 @@ function dynamicSort( property ) {
 registerBlockType( 'wpzoom-blocks/portfolio', {
 	title: __( 'Portfolio', 'wpzoom-portfolio' ),
 	description: __( 'Display a customizable grid of portfolio items.', 'wpzoom-portfolio' ),
-	icon: 'images-alt2',
-	category: 'wpzoom-portfolio',
+	icon: 'layout',
+	category: 'wpzoom-blocks',
 	supports: {
 		align: true,
 		html: false,
@@ -581,8 +581,9 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								label={ __( 'Line Height', 'wpzoom-portfolio' )}
 								value = { postTitleLineHeight }
 								onChange={( postTitleLineHeight ) => setAttributes({ postTitleLineHeight })}
-								min={10}
-								max={120}
+								min={0}
+								max={3}
+                                step={0.1}
 							/>
 						</PanelBody>
 

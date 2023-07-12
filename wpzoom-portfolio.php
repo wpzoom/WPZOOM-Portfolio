@@ -336,13 +336,12 @@ class WPZOOM_Blocks {
 		$category_slugs = wp_list_pluck( $categories, 'slug' );
 
 		// Return the list of categories with our custom category included
-		return in_array( 'wpzoom-portfolio', $category_slugs, true ) ? $categories : array_merge(
+		return in_array( 'wpzoom-blocks', $category_slugs, true ) ? $categories : array_merge(
 			$categories,
 			array(
 				array(
-					'slug' => 'wpzoom-portfolio',
-					'title' => esc_html__( 'WPZOOM - Portfolio', 'wpzoom-portfolio' ),
-					'icon' => 'wordpress'
+					'slug' => 'wpzoom-blocks',
+					'title' => esc_html__( 'WPZOOM - Blocks', 'wpzoom-portfolio' )
 				)
 			)
 		);

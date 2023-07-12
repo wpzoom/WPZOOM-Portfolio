@@ -190,7 +190,7 @@ class WPZOOM_Blocks_Portfolio {
 		], 
 		'postTitleLineHeight' => [
 			'type' => 'number',
-			'default' => 28
+			'default' => 1.2
 		],
 		'btnTextColor' => [
 			'type'    => 'string'
@@ -537,7 +537,7 @@ class WPZOOM_Blocks_Portfolio {
 		//Post Title styling 
 		$postTitleFontFamily = isset( $attr['postTitleFontFamily'] ) && 'Default' !== $attr['postTitleFontFamily'] ? 'font-family: ' . $attr['postTitleFontFamily'] . ';' : '';
 		$postTitleFontSize   = isset( $attr['postTitleFontSize'] ) && 18 !== $attr['postTitleFontSize'] ? 'font-size: ' . $attr['postTitleFontSize'] . 'px !important;' : '';
-		$postTitleLineHeight = isset( $attr['postTitleLineHeight'] ) ? 'line-height: ' . $attr['postTitleLineHeight'] . 'px;' : '';
+		$postTitleLineHeight = isset( $attr['postTitleLineHeight'] ) ? 'line-height: ' . $attr['postTitleLineHeight'] . ';' : '';
 		$postTitleFontWeight = isset( $attr['postTitleFontWeight'] ) ? 'font-weight: ' . $attr['postTitleFontWeight'] . ' !important;' : '';
 		$postTitleColor      = isset( $attr['postTitleColor'] ) ? 'color: ' . $attr['postTitleColor'] . ' !important;' : '';
 		

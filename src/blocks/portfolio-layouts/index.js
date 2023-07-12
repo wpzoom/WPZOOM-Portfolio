@@ -27,8 +27,8 @@ function getPostEditURL( layoutId ) {
 registerBlockType( 'wpzoom-blocks/portfolio-layouts', {
     title:       __( 'Portfolio Layouts', 'wpzoom-portfolio' ),
     description: __( 'Select and display one of your portfolio layouts', 'wpzoom-portfolio' ),
-    icon: 'images-alt2',
-    category:    'wpzoom-portfolio',
+    icon: 'layout',
+    category:    'wpzoom-blocks',
     supports:    { align: true, html: false },
     attributes:  {
         layoutId: {
