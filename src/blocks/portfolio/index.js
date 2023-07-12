@@ -214,7 +214,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
 			const { amount, categories, columnsAmount, columnsGap, layout, lazyLoad, lightbox,
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, enableAjaxLoading, showDate,
-					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, postTitleFontSize,
+					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, postTitleFontSize, postTitleFontSizeMobile, 
 					postTitleTextTransform, postTitleLetterSpacing, postTitleFontFamily, postTitleFontWeight, postTitleLineHeight, postTitleColor, postHoverTitleColor,  btnTextColor, btnHoverTextColor, btnBgColor, btnHoverBgColor, btnFontFamily, btnFontSize, btnTextTransform, btnLetterSpacing, btnBorder, btnBorderStyle, btnBorderWidth,
 					btnBorderColor, btnHoverBorderColor } = attributes;
 			const { imageSizes } = this.state;
@@ -391,6 +391,20 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									max={ 100 }
 									required
 								/>
+								{ layout !== 'masonry' &&
+								<ToggleControl
+									label={ __( 'Show Category Filter at the Top', 'wpzoom-portfolio' ) }
+									checked={ showCategoryFilter }
+									onChange={ ( value ) => setAttributes( { showCategoryFilter: value } ) }
+								/>
+								}
+								{ showCategoryFilter && <ToggleControl
+									label={ __( 'Load Dynamically New Posts in Each Category', 'wpzoom-portfolio' ) }
+									checked={ enableAjaxLoading }
+									help={ __( 'This option will try to display the same number of posts in each category as it\'s configured in the Number of Posts option above.', 'wpzoom-portfolio' ) }
+									onChange={ ( value ) => setAttributes( { enableAjaxLoading: value } ) }
+								/>
+								}
 							</PanelBody>
 							<PanelBody icon={ layoutIcon } title={ __( 'Layout', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">
 								<RadioControl
@@ -424,20 +438,6 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									value={ columnsGap }
 								/>
                                 }
-								{ layout !== 'masonry' &&
-								<ToggleControl
-									label={ __( 'Show Category Filter at the Top', 'wpzoom-portfolio' ) }
-									checked={ showCategoryFilter }
-									onChange={ ( value ) => setAttributes( { showCategoryFilter: value } ) }
-								/>
-								}
-								{ showCategoryFilter && <ToggleControl
-									label={ __( 'Load Dynamically New Posts in Each Category', 'wpzoom-portfolio' ) }
-									checked={ enableAjaxLoading }
-									help={ __( 'This option will try to display the same number of posts in each category as it\'s configured in the Number of Posts option above.', 'wpzoom-portfolio' ) }
-									onChange={ ( value ) => setAttributes( { enableAjaxLoading: value } ) }
-								/>
-								}
 								<ToggleControl
 									label={ __( 'Show View All Button', 'wpzoom-portfolio' ) }
 									checked={ showViewAll }
@@ -550,6 +550,14 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								onChange={( postTitleFontSize ) => setAttributes({ postTitleFontSize })}
 								min={12}
 								max={100}
+							/>
+							<RangeControl
+								label={ __( 'Font Size - Mobile Devices', 'wpzoom-portfolio' )}
+								value={ postTitleFontSizeMobile }
+								onChange={( postTitleFontSizeMobile ) => setAttributes({ postTitleFontSizeMobile })}
+								min={8}
+								max={100}
+								help = { __( 'Set Font size only for mobile devices', 'wpzoom-portfolio' ) }
 							/>
 							<SelectControl
 								label={ __( 'Font Family', 'wpzoom-portfolio' )}

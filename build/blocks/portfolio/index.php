@@ -92,7 +92,7 @@ class WPZOOM_Blocks_Portfolio {
 		],
 		'enableAjaxLoading' => [
 			'type' => 'boolean',
-			'default' => false
+			'default' => true
 		],
 		'showDate' => [
 			'type'    => 'boolean',
@@ -171,6 +171,10 @@ class WPZOOM_Blocks_Portfolio {
 			'type' => 'string'
 		],
 		'postTitleFontSize' => [
+			'type' => 'number',
+			'default' => 18
+		],
+		'postTitleFontSizeMobile' => [
 			'type' => 'number',
 			'default' => 18
 		],
@@ -399,7 +403,7 @@ class WPZOOM_Blocks_Portfolio {
 		$show_read_more = isset( $attr[ 'showReadMore' ] ) ? boolval( $attr[ 'showReadMore' ] ) : true;
 		$extra_class = isset( $attr['className'] ) ? ' ' . esc_attr( $attr['className'] ) : '';
 		$read_more_label = isset( $attr['readMoreLabel'] ) ? esc_html( $attr['readMoreLabel'] ) : esc_html__( 'Read More', 'wpzoom-portfolio' );
-		$enable_ajax_load_items = isset( $attr['enableAjaxLoading'] ) ? boolval( $attr['enableAjaxLoading'] ) : false;
+		$enable_ajax_load_items = isset( $attr['enableAjaxLoading'] ) ? boolval( $attr['enableAjaxLoading'] ) : true;
 
 		// CSS classes for query parameters
 		$post_type_class = ' post_type-' . $source;
@@ -544,6 +548,13 @@ class WPZOOM_Blocks_Portfolio {
 		$postTitleTextTransform = isset( $attr['postTitleTextTransform'] ) ? 'text-transform: ' . $attr['postTitleTextTransform'] . ';' : '';
 		$postTitleLetterSpacing = isset( $attr['postTitleLetterSpacing'] ) ? 'letter-spacing: ' . $attr['postTitleLetterSpacing'] . 'px;' : '';
 
+		//Post title font size for mobile devices
+		$postTitleFontSizeMobile = isset( $attr['postTitleFontSizeMobile'] ) && 18 !== $attr['postTitleFontSizeMobile'] ? 'font-size: ' . $attr['postTitleFontSizeMobile'] . 'px !important;' : '';
+		
+		$mobile_style = ! empty( $postTitleFontSizeMobile ) ? '@media screen and (max-width: 700px) { .wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_item-details .wpzoom-blocks_portfolio-block_item-title a {' 
+			. $postTitleFontSizeMobile .
+		'}  }' : '';
+		
 		$post_title = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_item-details .wpzoom-blocks_portfolio-block_item-title a {' .
 			 $postTitleFontFamily .
 			 $postTitleFontSize .
@@ -653,7 +664,8 @@ class WPZOOM_Blocks_Portfolio {
 			$button_style .
             $button_color_hover . 
 			$columns_gap .
-			$masonry_columns_gap
+			$masonry_columns_gap .
+			$mobile_style
 		);
 
 		$preloaderColor = isset( $attr['secondaryColor'] ) ? $attr['secondaryColor'] : '#0BB4AA';		
