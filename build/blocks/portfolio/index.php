@@ -146,6 +146,24 @@ class WPZOOM_Blocks_Portfolio {
 			'type' => 'string',
 			'default' => 'center'
 		],
+		'filterFontSize' => [
+			'type' => 'number',
+			'default' => 18
+		],
+		'filterFontFamily' => [
+			'type' => 'string',
+		],
+		'filterTextTransform' => [
+			'type' => 'string',
+		], 
+		'filterLetterSpacing' => [
+			'type' => 'number',
+			'default' => 1
+		],
+		'filterFontWeight' => [
+			'type' => 'number',
+			'default' => 400
+		],
 		'backgroundColor' => [
 			'type' => 'string',
 			'default' => '#000'
@@ -161,8 +179,7 @@ class WPZOOM_Blocks_Portfolio {
 			'type' => 'string',
 		],
 		'fontSize' => [
-			'type' => 'number',
-			'default' => 18
+			'type' => 'string',
 		],
 		'postTitleColor' => [
 			'type' => 'string'
@@ -187,7 +204,7 @@ class WPZOOM_Blocks_Portfolio {
 		], 
 		'postTitleFontFamily' => [
 			'type' => 'string',
-		], 
+		],
 		'postTitleFontWeight' => [
 			'type' => 'number',
 			'default' => 500
@@ -292,8 +309,9 @@ class WPZOOM_Blocks_Portfolio {
 		
 		$output = '';
 
-		$offset  = sanitize_text_field( $_POST['offset'] );
-		$exclude = isset( $_POST['exclude'] ) && ! empty( $_POST['exclude'] ) ? explode( ',', sanitize_text_field( $_POST['exclude'] ) ) : array();
+		$offset      = sanitize_text_field( $_POST['offset'] );
+		$exclude     = isset( $_POST['exclude'] ) && ! empty( $_POST['exclude'] ) ? explode( ',', sanitize_text_field( $_POST['exclude'] ) ) : array();
+		$current_cat = isset( $_POST['current_cat'] ) && ! empty( $_POST['current_cat'] ) ? sanitize_text_field( $_POST['current_cat'] ) : array();
 		
 		$data    = sanitize_text_field( $_POST['posts_data'] );
 		$data    = json_decode( stripslashes( $data ), true );
@@ -302,6 +320,10 @@ class WPZOOM_Blocks_Portfolio {
 
 		if( !empty( $offset ) ) {
 			$data['offset'] = $offset;
+		}
+
+		if( ! empty( $current_cat ) ) {
+			$data['categories'] = array( $current_cat );
 		}
 
 		if( $exclude ) {
@@ -538,7 +560,22 @@ class WPZOOM_Blocks_Portfolio {
 			$filter_align = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul { text-align:' . $attr['filterAlignment'] . '; }';
 		}
 
-		//Post Title styling 
+		//Filter styling
+		$filterFontFamily    = isset( $attr['filterFontFamily'] ) && 'Default' !== $attr['filterFontFamily'] ? 'font-family: ' . $attr['filterFontFamily'] . ';' : '';
+		$filterFontSize      = isset( $attr['filterFontSize'] ) && 18 !== $attr['filterFontSize'] ? 'font-size: ' . $attr['filterFontSize'] . 'px !important;' : '';
+		$filterFontWeight    = isset( $attr['filterFontWeight'] ) ? 'font-weight: ' . $attr['filterFontWeight'] . ' !important;' : '';
+		$filterTextTransform = isset( $attr['filterTextTransform'] ) ? 'text-transform: ' . $attr['filterTextTransform'] . ';' : '';
+		$filterLetterSpacing = isset( $attr['filterLetterSpacing'] ) ? 'letter-spacing: ' . $attr['filterLetterSpacing'] . 'px;' : '';
+
+		$filter_style = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_filter ul li a {'.
+			$filterFontFamily . 
+			$filterFontSize .
+			$filterFontWeight . 
+			$filterTextTransform . 
+			$filterLetterSpacing .
+		'}';
+
+		//Post Title styling
 		$postTitleFontFamily = isset( $attr['postTitleFontFamily'] ) && 'Default' !== $attr['postTitleFontFamily'] ? 'font-family: ' . $attr['postTitleFontFamily'] . ';' : '';
 		$postTitleFontSize   = isset( $attr['postTitleFontSize'] ) && 18 !== $attr['postTitleFontSize'] ? 'font-size: ' . $attr['postTitleFontSize'] . 'px !important;' : '';
 		$postTitleLineHeight = isset( $attr['postTitleLineHeight'] ) ? 'line-height: ' . $attr['postTitleLineHeight'] . ';' : '';
@@ -659,6 +696,7 @@ class WPZOOM_Blocks_Portfolio {
             $filter_color_hover .
 			$filter_color_active .
 			$filter_align .
+			$filter_style .
 			$post_title . 
 			$post_title_hover .
 			$button_style .
@@ -1032,6 +1070,7 @@ class WPZOOM_Blocks_Portfolio {
 		// Attempt to get all the categories using the above parameters
 		$categories = get_categories( $args );
 
+
 		// The string that will be output
 		$output = '';
 
@@ -1248,6 +1287,8 @@ class WPZOOM_Blocks_Portfolio {
 	 * @since  1.0.0
 	 */
 	public function category_css_class( $css_classes, $category, $depth, $args ) {
+
+		$css_classes[] = 'cat-posts-total-' . $category->category_count;
 		$css_classes[] = 'wpz-block-button';
 
 		return $css_classes;

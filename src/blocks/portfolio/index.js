@@ -212,9 +212,9 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 
 		render() {
 			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
-			const { amount, categories, columnsAmount, columnsGap, layout, lazyLoad, lightbox,
+			const { amount, categories, columnsAmount, columnsGap, layout, lazyLoad, lightbox, style,
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, enableAjaxLoading, showDate,
-					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, postTitleFontSize, postTitleFontSizeMobile, 
+					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, filterFontSize, filterFontFamily, filterTextTransform, filterLetterSpacing, filterFontWeight, postTitleFontSize, postTitleFontSizeMobile, 
 					postTitleTextTransform, postTitleLetterSpacing, postTitleFontFamily, postTitleFontWeight, postTitleLineHeight, postTitleColor, postHoverTitleColor,  btnTextColor, btnHoverTextColor, btnBgColor, btnHoverBgColor, btnFontFamily, btnFontSize, btnTextTransform, btnLetterSpacing, btnBorder, btnBorderStyle, btnBorderWidth,
 					btnBorderColor, btnHoverBorderColor } = attributes;
 			const { imageSizes } = this.state;
@@ -516,6 +516,41 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										label: __( 'Active Item Color', 'wpzoom-portfolio' )										
 									},
 								]}
+							/>
+							<h2>{ __( 'Typography', 'wpzoom-portfolio') }</h2>
+							<HorizontalRule />
+							<RangeControl
+								label={ __( 'Font Size', 'wpzoom-portfolio' )}
+								value={ filterFontSize }
+								onChange={( filterFontSize ) => setAttributes({ filterFontSize })}
+								min={12}
+								max={100}
+							/>
+							<SelectControl
+								label={ __( 'Font Family', 'wpzoom-portfolio' )}
+								options={ fontFamilyOptions }
+								value={ fontFamilies.includes( filterFontFamily ) ? filterFontFamily : 'Default' }
+								onChange={( filterFontFamily ) => setAttributes({ filterFontFamily })} //default doesn't work here
+							/>
+							<SelectControl
+								label={ __( 'Font Weight', 'wpzoom-portfolio' )}
+								options = { fontWeightOptions }
+								value = { filterFontWeight }
+								onChange = { ( filterFontWeight ) => setAttributes({ filterFontWeight }) }
+							/>	
+							<SelectControl
+								label={ __( 'Text Transform', 'wpzoom-portfolio' )}
+								options={ textTransformOptions }
+								value={ filterTextTransform }
+								onChange={( filterTextTransform ) => setAttributes({ filterTextTransform })}
+							/>									
+							<RangeControl
+								label={ __( 'Letter Spacing', 'wpzoom-portfolio' )}
+								value={ filterLetterSpacing }
+								onChange={( filterLetterSpacing ) => setAttributes({ filterLetterSpacing })}
+								min={-2}
+								max={6}
+								step={0.1}
 							/>
 							<h2>{ __( 'Alignment', 'wpzoom-portfolio') }</h2>
 							<HorizontalRule />
