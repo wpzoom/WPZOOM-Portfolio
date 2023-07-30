@@ -131,6 +131,10 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 
 			global $post;
 
+			if ( ! isset( $post ) || ! is_object( $post ) ) {
+				return;
+			}
+
 			$google_fonts = $wp_google_fonts = $font_families = array();
 
 			$blocks = parse_blocks( $post->post_content );
