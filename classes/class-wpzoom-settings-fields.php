@@ -81,8 +81,15 @@ class WPZOOM_Portfolio_Settings_Fields {
 	 * @return void
 	 */
 	public function checkbox( $args ) {
+		
 		$checked     = self::parse_checkbox_field( $args );
 		$has_preview = isset( $args['preview'] ) && $args['preview'] === true;
+		$multi = isset( $args['multi'] ) && $args['multi'] === true;
+
+		$default_options = isset( $args['default'] ) && is_array( $args['default'] ) ? $args['default'] : array();
+		$opts = WPZOOM_Portfolio_Settings::get( $args['label_for'] );
+		$multi_value = !isset( $opts ) ? $default_options: $opts;
+		
 		?>
 		<fieldset class="wpzoom-pb-field-checkbox">
 			<?php
@@ -90,17 +97,32 @@ class WPZOOM_Portfolio_Settings_Fields {
 				echo wp_kses_post( $args['badge'] ); }
 				$this->create_nonce_field( $args );
 			?>
-
-			<label class="switch" for="<?php echo esc_attr( $args['label_for'] ); ?>">
-				<input type="hidden" name="wpzoom-portfolio-settings[<?php echo esc_attr( $args['label_for'] ); ?>]" value="0" />
-				<input name="wpzoom-portfolio-settings[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php checked( '1', $checked ); ?> <?php echo ( self::is_disabled( $args ) ? 'disabled' : '' ); ?>/>
-				<div class="slider round"></div>
-			</label>
-			<label for="<?php echo esc_attr( $args['label_for'] ); ?>">
+			<?php if ( ! $multi ) : ?>
+				<label class="switch" for="<?php echo esc_attr( $args['label_for'] ); ?>">
+					<input type="hidden" name="wpzoom-portfolio-settings[<?php echo esc_attr( $args['label_for'] ); ?>]" value="0" />
+					<input name="wpzoom-portfolio-settings[<?php echo esc_attr( $args['label_for'] ); ?>]" type="checkbox" id="<?php echo esc_attr( $args['label_for'] ); ?>" value="1" <?php checked( '1', $checked ); ?> <?php echo ( self::is_disabled( $args ) ? 'disabled' : '' ); ?>/>
+					<div class="slider round"></div>
+				</label>
+				<label for="<?php echo esc_attr( $args['label_for'] ); ?>">
+					<?php if ( isset( $args['description'] ) ) : ?>
+						<?php echo wp_kses_post( $args['description'] ); ?>
+					<?php endif ?>
+				</label>
+			<?php else: ?>
+				<div class="wpzoom-portfolio-pro-settings-multicheckbox">
+					<input type="hidden" name="wpzoom-portfolio-settings[<?php echo esc_attr( $args['label_for'] ); ?>]" value="0" />
+					<?php foreach ( $args['options'] as $key => $checkbox_item ) { ?>
+						<input name="wpzoom-portfolio-settings[<?php echo esc_attr( $args['label_for'] ); ?>][]" type="checkbox" id="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $key ); ?>" <?php echo $checked = ( is_array( $multi_value ) && in_array( $key, $multi_value ) ? ' checked="checked"' : '' ) ?> />
+						<label for="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $checkbox_item ); ?></label>
+					<?php } ?>
+				</div>
 				<?php if ( isset( $args['description'] ) ) : ?>
-					<?php echo wp_kses_post( $args['description'] ); ?>
+					<p class="description">
+						<?php echo wp_kses_post( $args['description'] ); ?>
+					</p>
 				<?php endif ?>
-			</label>
+			<?php endif; ?>
+			
 			<?php if ( $has_preview ) : ?>
 
 				<?php

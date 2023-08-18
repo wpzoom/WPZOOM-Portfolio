@@ -449,8 +449,9 @@ class WPZOOM_Blocks_Portfolio {
 		}
 		$categories_without_all = ! empty( $categories ) ? array_filter( $categories, function( $v ) { return '-1' != $v; } ) : array();
 		$enough_cats = count( $categories_without_all ) > 1 || empty( $categories ) || in_array( '-1', $categories );
+		$is_supported_source = in_array( $source, array( 'post', 'portfolio_item' ) ) ? true : false;
 		$cats = $this->list_categories( $categories_without_all, $source );
-		$cats_filter = $attr[ 'showCategoryFilter' ] && $enough_cats ? '<div class="' . $class . '_filter"><ul>' . $cats . '</ul></div>' : '';
+		$cats_filter = $attr[ 'showCategoryFilter' ] && $enough_cats && $is_supported_source ? '<div class="' . $class . '_filter"><ul>' . $cats . '</ul></div>' : '';
 
 		// Lightbox
 		$use_lightbox = isset( $attr[ 'lightbox' ] ) ? $attr[ 'lightbox' ] : true;
@@ -894,7 +895,7 @@ class WPZOOM_Blocks_Portfolio {
 
 
 				// Add a wrapper article around the entire portfolio item (including the thumbnail)
-				$output .= "<article class='{$class}_item-wra portfolio_item'>";
+				$output .= "<article class='{$class}_item-wrap portfolio_item'>";
 
 				// If the video should be shown...
 				if ( $args[ 'show_background_video' ] && ! empty( $video ) ) {

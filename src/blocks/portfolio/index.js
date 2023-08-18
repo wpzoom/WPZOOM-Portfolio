@@ -281,6 +281,28 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 
 			const sectionOpen = ( '1' === setting_options.wpzoom_portfolio_settings_sections_expanded ? true : false );
 
+			let customPosts = [
+				{
+					label: __( 'Portfolio Posts', 'wpzoom-portfolio' ),
+					value: 'portfolio_item'
+				},
+				{
+					label: __( 'Blog Posts', 'wpzoom-portfolio' ),
+					value: 'post'
+				}
+			];
+
+			if( undefined !== setting_options.wpzoom_pb_settings_custom_posts && 
+				null !== setting_options.wpzoom_pb_settings_custom_posts && 
+				0 !=  setting_options.wpzoom_pb_settings_custom_posts
+			) {
+				const transformedArray = setting_options.wpzoom_pb_settings_custom_posts.map( item => ({
+					label: item.replace( '_', ' ' ).replace(/\b\w/g, firstLetter => firstLetter.toUpperCase() ),
+					value: item,
+				  }));
+				customPosts = [...customPosts, ...transformedArray];
+			}
+
 			return (
 				<>
 					<InspectorControls group="settings">
@@ -310,16 +332,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								<SelectControl
 									label={ __( 'Portfolio Items Source', 'wpzoom-portfolio' ) }
 									value={ source }
-									options={ [
-										{
-											label: __( 'Portfolio Posts', 'wpzoom-portfolio' ),
-											value: 'portfolio_item'
-										},
-										{
-											label: __( 'Blog Posts', 'wpzoom-portfolio' ),
-											value: 'post'
-										}
-									] }
+									options={ customPosts }
 									onChange={ ( value ) => setAttributes( { source: value, categories: [] } ) }
 								/>
 
@@ -372,7 +385,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									onChange={ ( value ) => setAttributes( { categories: '' !== value ? value : undefined } ) }
 								/>
 								)}
-								{ 'post' !== source && (
+								{ 'portfolio_item' === source && (
 								<TreeSelect
 									label={ __( 'Categories', 'wpzoom-portfolio' ) }
 									help={ __( 'Multiple selections allowed.', 'wpzoom-portfolio' ) }
@@ -391,14 +404,14 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									max={ 100 }
 									required
 								/>
-								{ layout !== 'masonry' &&
+								{ layout !== 'masonry' && ( 'portfolio_item' === source || 'post' === source ) &&
 								<ToggleControl
 									label={ __( 'Show Category Filter at the Top', 'wpzoom-portfolio' ) }
 									checked={ showCategoryFilter }
 									onChange={ ( value ) => setAttributes( { showCategoryFilter: value } ) }
 								/>
 								}
-								{ showCategoryFilter && <ToggleControl
+								{ ( 'portfolio_item' === source || 'post' === source ) && showCategoryFilter && <ToggleControl
 									label={ __( 'Load Dynamically New Posts in Each Category', 'wpzoom-portfolio' ) }
 									checked={ enableAjaxLoading }
 									help={ __( 'This option will try to display the same number of posts in each category as it\'s configured in the Number of Posts option above.', 'wpzoom-portfolio' ) }

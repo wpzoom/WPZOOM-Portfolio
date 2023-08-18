@@ -162,14 +162,15 @@ div.wp-tab-panel-inactive {
     top: 50px;
     right: 0;
 }
-
-
 .wpzoom-pb-field-checkbox {
-	display:flex;
     flex-wrap: wrap;
 	margin: 10px 0;
     align-items: center;
 }
+.form-table td fieldset .wpzoom-portfolio-pro-settings-multicheckbox label {
+	margin-right: 20px !important;
+}
+
 .wpzoom-pb-field-checkbox .switch {
 	position: relative;
 	display: inline-block;
