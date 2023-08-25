@@ -50,6 +50,10 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 
 			add_action( 'enqueue_block_assets', array( $this, 'enqueue_frontend_styles' ) );
 			add_action( 'enqueue_block_assets', array( $this, 'enqueue_google_fonts' ) );
+			
+			//Enqueue google fonts to editor
+			add_action( 'enqueue_block_editor_assets', array( $this, 'load_google_fonts_to_editor' ), 1 );
+			
 
 		}
 
@@ -145,6 +149,9 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 					if( isset( $block['attrs']['fontFamily'] ) && 'Default' != $block['attrs']['fontFamily'] ) {
 						$wp_google_fonts[] = $block['attrs']['fontFamily'];
 					}
+					if( isset( $block['attrs']['filterFontFamily'] ) && 'Default' != $block['attrs']['filterFontFamily'] ) {
+						$google_fonts[] = $block['attrs']['filterFontFamily'];
+					}
 					if( isset( $block['attrs']['postTitleFontFamily'] ) && 'Default' != $block['attrs']['postTitleFontFamily'] ) {
 						$google_fonts[] = $block['attrs']['postTitleFontFamily'];
 					}
@@ -186,6 +193,17 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 					WPZOOM_PORTFOLIO_VERSION
 				);
 			}
+
+		}
+
+		public function load_google_fonts_to_editor() {
+
+			wp_enqueue_style( 
+				'wpzoom-portfolio-google-fonts', 
+				WPZOOM_PORTFOLIO_URL . '/assets/admin/css/editor-google-fonts.css',
+				array(), 
+				WPZOOM_PORTFOLIO_VERSION
+			);
 
 		}
 
