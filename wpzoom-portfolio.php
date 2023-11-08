@@ -485,35 +485,37 @@ function wpzoom_theme_has_portfolio() {
 
 }
 
-function load_files() {
-	//Add Portfolio Shortcode
-	require_once 'classes/class-wpzoom-portfolio-shortcode.php';
-	require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
-	require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
+if( ! function_exists( 'wpzoom_portfolio_load_files' ) ) {
+	function wpzoom_portfolio_load_files() {
+		//Add Portfolio Shortcode
+		require_once 'classes/class-wpzoom-portfolio-shortcode.php';
+		require_once 'classes/class-wpzoom-portfolio-admin-menu.php';
+		require_once 'classes/class-wpzoom-portfolio-custom-posts.php';
+		
+		require_once 'classes/class-wpzoom-portfolio-assets-manager.php';
+		require_once 'classes/class-wpzoom-wptt-webfont-loader.php';
+		
 	
-	require_once 'classes/class-wpzoom-portfolio-assets-manager.php';
-	require_once 'classes/class-wpzoom-wptt-webfont-loader.php';
+		//Load Settings Panel
+		require_once 'classes/class-wpzoom-settings-fields.php';
+		require_once 'classes/class-wpzoom-portfolio-settings-page.php';
 	
-
-	//Load Settings Panel
-	require_once 'classes/class-wpzoom-settings-fields.php';
-	require_once 'classes/class-wpzoom-portfolio-settings-page.php';
-
-	if( ! wpzoom_theme_has_portfolio() ) {
-		//Load Archive template
-		require_once 'classes/class-wpzoom-portfolio-template.php';
+		if( ! wpzoom_theme_has_portfolio() ) {
+			//Load Archive template
+			require_once 'classes/class-wpzoom-portfolio-template.php';
+		}
+	
+		if( ! wpzoom_theme_has_portfolio() ) {
+			//Load Archive template
+			require_once 'classes/class-wpzoom-portfolio-template.php';
+		}
+	
+		if( ! class_exists( 'WPZOOM_Portfolio_Pro' ) && ! wpzoom_theme_has_portfolio() ) {
+			require_once 'classes/class-wpzoom-portfolio-metaboxes-upsell.php';
+		}
 	}
-
-	if( ! wpzoom_theme_has_portfolio() ) {
-		//Load Archive template
-		require_once 'classes/class-wpzoom-portfolio-template.php';
-	}
-
-	if( ! class_exists( 'WPZOOM_Portfolio_Pro' ) && ! wpzoom_theme_has_portfolio() ) {
-		require_once 'classes/class-wpzoom-portfolio-metaboxes-upsell.php';
-	}
+	add_action( 'plugin_loaded', 'wpzoom_portfolio_load_files' );
 }
-add_action( 'plugin_loaded', 'load_files' );
 
 function load_reorder_portfolio_items() {
 
