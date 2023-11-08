@@ -4,8 +4,8 @@ Donate link:       http://paypal.me/wpzm/10usd
 Author URI:        https://www.wpzoom.com/
 Requires at least: 5.8
 Requires PHP:      7.4
-Tested up to:      6.3
-Stable tag:        1.4.1
+Tested up to:      6.4
+Stable tag:        1.4.2
 License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Tags:              portfolio, gutenberg, block, grid, wpzoom, inspiro
@@ -128,6 +128,9 @@ Yes, you can find the documentation for this plugin with more instructions on ou
 
 
 == Changelog ==
+
+= 1.4.2 =
+* Fixed a conflict with the WPZOOM Forms plugin
 
 = 1.4.1 =
 * Added Typography options to the Category Filter at the top
