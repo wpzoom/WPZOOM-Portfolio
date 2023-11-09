@@ -110,6 +110,7 @@ if ( ! class_exists( 'WPZOOM_Blocks_Portfolio_Shortcode' ) ) {
 
 			global $post;
 			static $i;
+			$blocks = array();
 
 			// Defining Shortcode's Attributes
 			$shortcode_args = shortcode_atts(
@@ -123,11 +124,20 @@ if ( ! class_exists( 'WPZOOM_Blocks_Portfolio_Shortcode' ) ) {
 				return '';	
 			}
 
-			$layout = get_post_field( 'post_content', intval( $post_id ), 'display' );
+			$layout = get_post( intval( $post_id ) );
+
+			if ( has_blocks( $layout->post_content ) ) {
+				$blocks = parse_blocks( $layout->post_content );
+			}
+			
+			$output = '';
+			foreach( $blocks as $block ) {
+				$output .= render_block( $block );
+			}
 
 			return sprintf( 
 				'<div class="wpzoom-portfolio-layout-shortcode-content">%1$s</div>',
-				apply_filters( 'the_content', $layout )
+				$output
 			);
 
 		}
