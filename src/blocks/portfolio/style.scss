@@ -338,11 +338,11 @@ $primary_color: #0bb4aa;
             margin: 0;
 
             &.fade-in {
-                animation: fadeIn 1 0.5s ease-in-out forwards;
+                animation: _fadeIn 1 0.5s ease-in-out forwards;
             }
 
             &.fade-out {
-                animation: fadeOut 1 0.5s ease-in-out forwards;
+                animation: _fadeOut 1 0.5s ease-in-out forwards;
             }
 
             .wpzoom-blocks_portfolio-block_item-thumbnail {
@@ -518,7 +518,7 @@ $primary_color: #0bb4aa;
 }
 
 
-@keyframes fadeIn {
+@keyframes _fadeIn {
     0% {
         position: fixed;
         z-index: -10;
@@ -543,7 +543,7 @@ $primary_color: #0bb4aa;
     }
 }
 
-@keyframes fadeOut {
+@keyframes _fadeOut {
     0% {
         position: static;
         z-index: 1;
