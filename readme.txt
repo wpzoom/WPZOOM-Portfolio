@@ -1,11 +1,11 @@
 === WPZOOM Portfolio ===
-Contributors:      WPZOOM, alexus450, ciorici, jick
+Contributors:      WPZOOM, alexus450, ciorici
 Donate link:       http://paypal.me/wpzm/10usd
 Author URI:        https://www.wpzoom.com/
 Requires at least: 5.8
 Requires PHP:      7.4
-Tested up to:      6.4
-Stable tag:        1.4.2
+Tested up to:      6.5
+Stable tag:        1.4.3
 License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Tags:              portfolio, gutenberg, block, grid, wpzoom, inspiro
@@ -14,7 +14,7 @@ The ultimate solution for creatives, designers, photographers, and businesses lo
 
 == Description ==
 
-⭐️ **[WPZOOM Portfolio PRO](https://www.wpzoom.com/plugins/portfolio-grid/?utm_source=wporg&utm_medium=website&utm_campaign=free_description)** **with 🎬 Video Integration NOW AVAILABLE!** ⭐️
+⭐️ **[WPZOOM Portfolio PRO](https://www.wpzoom.com/plugins/portfolio-pro/?utm_source=wporg&utm_medium=portfolio-free-wporg&utm_campaign=portfolio-desc-wporg)** **with 🎬 Video Integration NOW AVAILABLE!** ⭐️
 
 **Showcase your work in a sleek and elegant portfolio layout!**
 
@@ -68,7 +68,7 @@ Works with blog posts too!
 * Premium Support
 * and many new features coming soon!
 
-⭐️ **[Get the PRO version!](https://www.wpzoom.com/plugins/portfolio-grid/?utm_source=wporg&utm_medium=website&utm_campaign=free_description)** ⭐️
+⭐️ **[Get the PRO version!](https://www.wpzoom.com/plugins/portfolio-pro/?utm_source=wporg&utm_medium=website&utm_campaign=free_description)** ⭐️
 
 
 == 📌 Recommended Themes ==
@@ -128,6 +128,9 @@ Yes, you can find the documentation for this plugin with more instructions on ou
 
 
 == Changelog ==
+
+= 1.4.3 =
+* Fixed an issue with the permalinks
 
 = 1.4.2 =
 * Fixed a conflict with the WPZOOM Forms plugin

@@ -9,12 +9,12 @@
  *
  * @wordpress-plugin
  * Plugin Name: WPZOOM Portfolio
- * Plugin URI:  https://www.wpzoom.com/plugins/wpzoom-portfolio/
+ * Plugin URI:  https://www.wpzoom.com/plugins/portfolio-pro/
  * Description: The ultimate solution for creatives, designers, photographers, and businesses looking to showcase their work in an elegant, professional, and fully customizable way.
  * Author:      WPZOOM
  * Author URI:  https://www.wpzoom.com
  * Text Domain: wpzoom-portfolio
- * Version:     1.4.2
+ * Version:     1.4.3
  * License:     GPL2+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */

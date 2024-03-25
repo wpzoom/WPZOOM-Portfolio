@@ -249,11 +249,11 @@ class WPZOOM_Portfolio_Settings {
 		
 		$is_portfolio_theme = wpzoom_theme_has_portfolio();
 
-		$portfolio_root_desc = esc_html__( 'The slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings -> Permalinks page after changing this setting to flush permalinks.', 'wpzoom-portfolio' );
-		$portfolio_base_desc = esc_html__( 'The taxonomy slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings -> Permalinks page after changing this setting to flush permalinks.', 'wpzoom-portfolio' );
+		$portfolio_root_desc = esc_html__( 'The slug can\'t be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings > Permalinks page after changing this setting to flush permalinks.', 'wpzoom-portfolio' );
+		$portfolio_base_desc = esc_html__( 'The taxonomy slug can\'t be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings > Permalinks page after changing this setting to flush permalinks.', 'wpzoom-portfolio' );
 
 		if( $is_portfolio_theme )  {
-			$portfolio_root_desc = $portfolio_base_desc = '<note><i>'. __( 'It seems a Theme with portfolio is activated. Please, check the theme options -> portfolio section to change this settings', 'wpzoom-portfolio' ).'</i></note>';
+			$portfolio_root_desc = $portfolio_base_desc = '<note><i>'. __( 'Your current theme controls the structure of the Portfolio permalinks. Check the WPZOOM Theme Options > Portfolio Options > Permalinks section to change the structure', 'wpzoom-portfolio' ).'</i></note>';
 		}
 
 		self::$settings = array(
