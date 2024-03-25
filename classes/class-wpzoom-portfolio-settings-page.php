@@ -103,6 +103,8 @@ class WPZOOM_Portfolio_Settings {
 			self::$options['wpzoom_portfolio_base'] = $_wpzoom_portfolio_base;
 			self::update_option( self::$options );
 		}
+
+		flush_rewrite_rules();
 	}
 
 	/**
@@ -133,6 +135,8 @@ class WPZOOM_Portfolio_Settings {
 				self::update_option( array_merge( self::$options, $new_settings ) );
 			}
 		}
+
+		flush_rewrite_rules();
 
 		return apply_filters( 'wpzoom_pb_set_settings_defaults', self::$defaults );
 	}
@@ -273,7 +277,7 @@ class WPZOOM_Portfolio_Settings {
 									'label_for'   => 'wpzoom_portfolio_root',
 									'class'       => 'wpzoom-pb-field',
 									'description' => $portfolio_root_desc,
-									'default'     => '',
+									'default'     => 'project',
 									'type'        => 'text',
 									'readonly'    => $is_portfolio_theme
 								),
