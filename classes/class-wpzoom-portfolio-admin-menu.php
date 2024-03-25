@@ -21,7 +21,7 @@ class WPZOOM_Portfolio_Admin_Menu {
 	 *
 	 * @var string
 	 */
-	private static $goProLink = 'https://www.wpzoom.com/plugins/portfolio-pro/';
+	private static $goProLink = 'https://www.wpzoom.com/plugins/portfolio-pro/?utm_source=wpadmin&utm_medium=portfolio-free&utm_campaign=go-pro-links';
 
 	/**
 	 * The Constructor.
@@ -56,9 +56,9 @@ class WPZOOM_Portfolio_Admin_Menu {
 		// Add Go Pro link if the plugin is not active
 		if( ! defined( 'WPZOOM_PORTFOLIO_PRO_VERSION' ) && ! wpzoom_theme_has_portfolio() ) {
 			$links['go_pro'] = sprintf( 
-				'<a href="%1$s" target="_blank" class="wpzoom-portfolio-gopro" style="font-weight: bold;">%2$s</a>', 
+				'<a href="%1$s" target="_blank" class="wpzoom-portfolio-gopro" style="color:#0BB4AA;font-weight:bold;">UPGRADE &rarr; <span class="rcb-premium-badge" style="background-color: #0BB4AA; color: #fff; margin-left: 5px; font-size: 11px; min-height: 16px;  border-radius: 8px; display: inline-block; font-weight: 600; line-height: 1.6; padding: 0 8px">%2$s</span></a>',
 				self::$goProLink, 
-				esc_html__( 'Go Pro', 'wpzoom-portfolio' ) 
+				esc_html__( 'PRO', 'wpzoom-portfolio' )
 			);
 		}
 
@@ -73,7 +73,7 @@ class WPZOOM_Portfolio_Admin_Menu {
 		// Add Go Pro link to the Portfolio menu
 		if( ! defined( 'WPZOOM_PORTFOLIO_PRO_VERSION' ) && ! wpzoom_theme_has_portfolio() ) {
 			$submenu['edit.php?post_type=portfolio_item'][] = array( 
-				'' . esc_html__( 'Go Pro', 'wpzoom-portfolio' ) . '', 
+				'' . esc_html__( 'UPGRADE &rarr;', 'wpzoom-portfolio' ) . '',
 				'manage_options', 
 				self::$goProLink 
 			);
@@ -119,7 +119,7 @@ class WPZOOM_Portfolio_Admin_Menu {
 		?>
 		<style>
 			#adminmenu #menu-posts-portfolio_item a[href="<?php echo self::$goProLink; ?>"] {
-				color: #f00;
+				color: #0BB4AA;
 				font-weight: bold;
 			}
 		</style>
