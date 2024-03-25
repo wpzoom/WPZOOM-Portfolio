@@ -83,9 +83,25 @@ class WPZOOM_Portfolio_Settings {
 			// Only load if we are actually on the settings page.
 			if ( WPZOOM_PORTFOLIO_SETTINGS_PAGE === $page ) {
 				add_action( 'wpzoom_portfolio_admin_page', array( $this, 'settings_page' ) );
+				add_action( 'admin_init', array( $this, 'update_portfolio_options' ) );
 			}
 
 			$this->_fields = new WPZOOM_Portfolio_Settings_Fields();
+		}
+	}
+	
+	public function update_portfolio_options() {
+		$_wpzoom_portfolio_root = get_option( 'wpzoom_portfolio_root' );
+		$_wpzoom_portfolio_base = get_option( 'wpzoom_portfolio_base' );
+
+		if( ! wpzoom_theme_has_portfolio() ) {
+			update_option( 'wpzoom_portfolio_root', self::$options['wpzoom_portfolio_root'] );
+			update_option( 'wpzoom_portfolio_base', self::$options['wpzoom_portfolio_base'] );
+		}
+		else {
+			self::$options['wpzoom_portfolio_root'] = $_wpzoom_portfolio_root;
+			self::$options['wpzoom_portfolio_base'] = $_wpzoom_portfolio_base;
+			self::update_option( self::$options );
 		}
 	}
 
@@ -93,6 +109,7 @@ class WPZOOM_Portfolio_Settings {
 	 * Set default values for setting options.
 	 */
 	public function set_defaults() {
+
 		// Set active tab
 		self::$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'tab-general';
 
@@ -109,7 +126,9 @@ class WPZOOM_Portfolio_Settings {
 
 		// If new setting is added, update 'wpzoom-portfolio-settings' option
 		if ( ! empty( self::$options ) ) {
+
 			$new_settings = array_diff_key( self::$defaults, self::$options );
+
 			if ( ! empty( $new_settings ) ) {
 				self::update_option( array_merge( self::$options, $new_settings ) );
 			}
@@ -127,7 +146,7 @@ class WPZOOM_Portfolio_Settings {
 	public static function update_option( $value, $option = '', $autoload = null ) {
 		if ( empty( $option ) ) {
 			$option = self::$option;
-		}
+		}		
 
 		if ( self::$options !== false ) {
 			// The option already exists, so we just update it.
@@ -223,6 +242,15 @@ class WPZOOM_Portfolio_Settings {
 	public function settings_init() {
 		$premium_badge = '<span class="wpzoom-pb-badge wpzoom-pb-field-is_premium">' . __( 'Premium', 'wpzoom-portfolio' ) . '</span>';
 		$soon_badge    = '<span class="wpzoom-pb-badge wpzoom-pb-field-is_coming_soon">' . __( 'Coming Soon', 'wpzoom-portfolio' ) . '</span>';
+		
+		$is_portfolio_theme = wpzoom_theme_has_portfolio();
+
+		$portfolio_root_desc = esc_html__( 'The slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings -> Permalinks page after changing this setting to flush permalinks.', 'wpzoom-portfolio' );
+		$portfolio_base_desc = esc_html__( 'The taxonomy slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings -> Permalinks page after changing this setting to flush permalinks.', 'wpzoom-portfolio' );
+
+		if( $is_portfolio_theme )  {
+			$portfolio_root_desc = $portfolio_base_desc = '<note><i>'. __( 'It seems a Theme with portfolio is activated. Please, check the theme options -> portfolio section to change this settings', 'wpzoom-portfolio' ).'</i></note>';
+		}
 
 		self::$settings = array(
 			'general'     => array(
@@ -244,10 +272,10 @@ class WPZOOM_Portfolio_Settings {
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_root',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'The slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings -> Permalinks page after changing this setting to flush permalinks.', 'wpzoom-portfolio' ),
+									'description' => $portfolio_root_desc,
 									'default'     => '',
 									'type'        => 'text',
-									'id_only'     => true
+									'readonly'    => $is_portfolio_theme
 								),
 							),
 							array(
@@ -257,10 +285,10 @@ class WPZOOM_Portfolio_Settings {
 								'args'  => array(
 									'label_for'   => 'wpzoom_portfolio_base',
 									'class'       => 'wpzoom-pb-field',
-									'description' => esc_html__( 'The taxonomy slug name cannot be the same name as your portfolio page or the layout will break. This option changes the permalink when you use the permalink type as %postname%. Visit the Settings -> Permalinks page after changing this setting to flush permalinks.', 'wpzoom-portfolio' ),
+									'description' => $portfolio_base_desc,
 									'default'     => '',
 									'type'        => 'text',
-									'id_only'     => true
+									'readonly'    => $is_portfolio_theme
 								),
 							),
 						),
@@ -553,6 +581,7 @@ class WPZOOM_Portfolio_Settings {
 	 * @return void
 	 */
 	public function register_setting( $setting ) {
+
 		$setting['sanitize_callback'] = isset( $setting['sanitize_callback'] ) ? $setting['sanitize_callback'] : array();
 		register_setting( $setting['option_group'], $setting['option_name'], $setting['sanitize_callback'] );
 
@@ -576,6 +605,7 @@ class WPZOOM_Portfolio_Settings {
 						}
 
 						add_settings_field( $field['id'], $field['title'], $field['callback'], $section['page'], $section['id'], $field['args'] );
+						
 					}
 				}
 			}
