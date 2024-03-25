@@ -17,12 +17,67 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WPZOOM_Portfolio_Admin_Menu {
 
 	/**
+	 * Go Pro link.
+	 *
+	 * @var string
+	 */
+	private static $goProLink = 'https://www.wpzoom.com/plugins/portfolio-pro/';
+
+	/**
 	 * The Constructor.
 	 */
 	public function __construct() {
 
 		// Let's add menu item with subitems
 		add_action( 'admin_menu', array( $this, 'register_menus' ), 15 );
+		add_action( 'plugin_action_links_' . WPZOOM_PORTFOLIO_PLUGIN_BASE, array( $this, 'plugin_action_links' ) );
+		
+		add_action( 'admin_menu', array( $this, 'plugin_add_go_pro_link_to_menu' ), 15 );
+
+		add_action( 'admin_head', array( $this, 'add_css_go_pro_menu' ) );
+		add_action( 'admin_footer', array( $this, 'add_target_blank_go_pro_menu' ) );
+
+	}
+
+	/**
+	 * Add settings and go PRO link to plugin page.
+	 *
+	 * @param array $links Array of links.
+	 * @return array
+	 */
+	public function plugin_action_links( $links ) {
+
+		// Settings link
+		$settings_link = '<a href="' . admin_url( 'edit.php?post_type=portfolio_item&page=wpzoom-portfolio-settings' ) . '">' . esc_html__( 'Settings', 'wpzoom-portfolio' ) . '</a>';
+
+		// Add settings link to the array
+		array_unshift( $links, $settings_link );
+
+		// Add Go Pro link if the plugin is not active
+		if( ! defined( 'WPZOOM_PORTFOLIO_PRO_VERSION' ) && ! wpzoom_theme_has_portfolio() ) {
+			$links['go_pro'] = sprintf( 
+				'<a href="%1$s" target="_blank" class="wpzoom-portfolio-gopro" style="font-weight: bold;">%2$s</a>', 
+				self::$goProLink, 
+				esc_html__( 'Go Pro', 'wpzoom-portfolio' ) 
+			);
+		}
+
+		return $links;
+
+	}
+
+	// Add Go Pro link to the Portfolio menu
+	public function plugin_add_go_pro_link_to_menu() {
+		global $submenu;
+
+		// Add Go Pro link to the Portfolio menu
+		if( ! defined( 'WPZOOM_PORTFOLIO_PRO_VERSION' ) && ! wpzoom_theme_has_portfolio() ) {
+			$submenu['edit.php?post_type=portfolio_item'][] = array( 
+				'' . esc_html__( 'Go Pro', 'wpzoom-portfolio' ) . '', 
+				'manage_options', 
+				self::$goProLink 
+			);
+		}
 	}
 
 	/**
@@ -55,6 +110,33 @@ class WPZOOM_Portfolio_Admin_Menu {
 	 */
 	public function admin_page() {
 		do_action( 'wpzoom_portfolio_admin_page' );
+	}
+
+	/**
+	 * Add CSS to Go Pro link.
+	 */
+	public function add_css_go_pro_menu() {
+		?>
+		<style>
+			#adminmenu #menu-posts-portfolio_item a[href="<?php echo self::$goProLink; ?>"] {
+				color: #f00;
+				font-weight: bold;
+			}
+		</style>
+		<?php
+	}
+
+	/**
+	 * Add target="_blank" to Go Pro link.
+	 */
+	public function add_target_blank_go_pro_menu() {
+		?>
+		<script>
+			jQuery( document ).ready( function( $ ) {
+				$('a[href$="<?php echo self::$goProLink; ?>"]').attr('target', '_blank');				
+			});
+		</script>
+		<?php
 	}
 
 }
