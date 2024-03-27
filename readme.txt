@@ -1,4 +1,4 @@
-=== WPZOOM Portfolio ===
+=== WPZOOM Portfolio Lite - Filterable Portfolio Plugin ===
 Contributors:      WPZOOM, alexus450, ciorici
 Donate link:       http://paypal.me/wpzm/10usd
 Author URI:        https://www.wpzoom.com/
@@ -8,9 +8,9 @@ Tested up to:      6.5
 Stable tag:        1.4.3
 License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
-Tags:              portfolio, gutenberg, block, grid, wpzoom, inspiro
+Tags:              portfolio, image gallery, post grid, gallery, video portfolio
 
-The ultimate solution for creatives, designers, photographers, and businesses looking to showcase their work in an elegant, professional, and fully customizable way.
+The ultimate solution for creatives, designers, photographers, and businesses looking to showcase their work in a professional and fully customizable way
 
 == Description ==
 

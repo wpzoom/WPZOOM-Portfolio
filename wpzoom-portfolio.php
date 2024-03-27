@@ -8,7 +8,7 @@
  * @license   GPL-2.0-or-later
  *
  * @wordpress-plugin
- * Plugin Name: WPZOOM Portfolio
+ * Plugin Name: WPZOOM Portfolio Lite
  * Plugin URI:  https://www.wpzoom.com/plugins/portfolio-pro/
  * Description: The ultimate solution for creatives, designers, photographers, and businesses looking to showcase their work in an elegant, professional, and fully customizable way.
  * Author:      WPZOOM
