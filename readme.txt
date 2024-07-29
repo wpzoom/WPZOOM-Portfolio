@@ -4,8 +4,8 @@ Donate link:       http://paypal.me/wpzm/10usd
 Author URI:        https://www.wpzoom.com/
 Requires at least: 5.8
 Requires PHP:      7.4
-Tested up to:      6.5
-Stable tag:        1.4.3
+Tested up to:      6.6
+Stable tag:        1.4.4
 License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Tags:              portfolio, image gallery, post grid, gallery, video portfolio
@@ -128,6 +128,9 @@ Yes, you can find the documentation for this plugin with more instructions on ou
 
 
 == Changelog ==
+
+= 1.4.4 =
+* Minor bug fix for WP 6.6
 
 = 1.4.3 =
 * Fixed an issue with the permalinks
