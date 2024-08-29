@@ -87,7 +87,7 @@ class WPZOOM_Blocks_Portfolio_Layouts {
 			'<div class="wpzoom-portfolio-layout%3$s" id="wpzoom-portfolio-layout-%2$d">%1$s</div>',
 			$output,
 			intval( $layout_id ),
-			$align
+			esc_attr( $align )
 		);
 
 	}
