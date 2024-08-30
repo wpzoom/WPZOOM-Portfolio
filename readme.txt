@@ -130,7 +130,7 @@ Yes, you can find the documentation for this plugin with more instructions on ou
 == Changelog ==
 
 = 1.4.5 =
-* Minor bug fix with sanitization
+* Minor bug fix
 
 = 1.4.4 =
 * Minor bug fix for WP 6.6
