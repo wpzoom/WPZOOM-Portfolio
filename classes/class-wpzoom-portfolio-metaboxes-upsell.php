@@ -114,7 +114,7 @@ defined( 'ABSPATH' ) || exit;
 			</div>
 		</div>
 		<div class="wpzoom-overlay-metabox-upsell">
-			<a href="https://www.wpzoom.com/plugins/portfolio-pro/?utm_source=wpadmin&utm_medium=portfolio-free&utm_campaign=video-metabox-free" target="_blank">Get WPZOOM Portfolio PRO &rarr;</a>
+			<a href="https://www.wpzoom.com/plugins/portfolio-pro/?utm_source=wpadmin&utm_medium=portfolio-free&utm_campaign=video-metabox-free" target="_blank">Get the PRO version &rarr;</a>
 		</div>
 	<?php
 	}
