@@ -216,7 +216,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, enableAjaxLoading, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, filterFontSize, filterFontFamily, filterTextTransform, filterLetterSpacing, filterFontWeight, postTitleFontSize, postTitleFontSizeMobile, 
 					postTitleTextTransform, postTitleLetterSpacing, postTitleFontFamily, postTitleFontWeight, postTitleLineHeight, postTitleColor, postHoverTitleColor,  btnTextColor, btnHoverTextColor, btnBgColor, btnHoverBgColor, btnFontFamily, btnFontSize, btnTextTransform, btnLetterSpacing, btnBorder, btnBorderStyle, btnBorderWidth,
-					btnBorderColor, btnHoverBorderColor, showTitle } = attributes;
+					btnBorderColor, btnHoverBorderColor, showTitle, layoutBgOpacity, layoutBgOpacityHover } = attributes;
 			const { imageSizes } = this.state;
 
 			const post_type = wp.data.select( 'core/editor' ).getCurrentPostType();
@@ -579,6 +579,26 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								} }
 							/>
 						</PanelBody>
+						{ ( layout == 'grid' || layout == 'masonry' ) && 
+						<PanelBody title={ __( 'Layout', 'wpzoom-portfolio' ) } initialOpen={ false } className="wpzb-settings-panel">
+							<RangeControl
+								label={ __( 'Background Opacity (Normal)', 'wpzoom-portfolio' ) }
+								value={ layoutBgOpacity }
+								onChange={ ( value ) => setAttributes( { layoutBgOpacity: value } ) }
+								step={ 0.1 }
+								min={ 0 }
+								max={ 1 }
+							/>
+							<RangeControl
+								label={ __( 'Background Opacity (Hover)', 'wpzoom-portfolio' ) }
+								value={ layoutBgOpacityHover }
+								onChange={ ( value ) => setAttributes( { layoutBgOpacityHover: value } ) }
+								step={ 0.1 }
+								min={ 0 }
+								max={ 1 }
+							/>
+						</PanelBody>
+						}
 						<PanelBody title={ __( 'Post Title', 'wpzoom-portfolio' ) } initialOpen={ false } className="wpzb-settings-panel">
 							<PanelColorSettings
 								title={__( 'Colors', 'wpzoom-portfolio' ) }

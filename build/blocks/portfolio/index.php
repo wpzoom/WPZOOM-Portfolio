@@ -58,6 +58,14 @@ class WPZOOM_Blocks_Portfolio {
 			'type'    => 'string',
 			'default' => 'grid'
 		],
+		'layoutBgOpacity' => [
+			'type'    => 'number',
+			'default' => 0.1
+		],
+		'layoutBgOpacityHover' => [
+			'type'    => 'number',
+			'default' => 0.7
+		],
 		'lightbox' => [
 			'type'    => 'boolean',
 			'default' => true
@@ -526,8 +534,6 @@ class WPZOOM_Blocks_Portfolio {
 		$generalStyle = isset( $attr['style'] ) ? wp_style_engine_get_styles( $attr['style'] ) : '';
 		$general_css  = is_array( $generalStyle ) && isset( $generalStyle['css'] ) ? $generalStyle['css'] : '';
 		
-		//print_r( $general_css );
-
 		$general_style = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' {' . $general_css . '}';
 		
 		if( isset( $attr['textColor'] ) ) {
@@ -538,7 +544,7 @@ class WPZOOM_Blocks_Portfolio {
 			$general_style .= '.wpzoom-blocks_portfolio-block.' . $class_unique . ' { font-family:' . $attr['fontFamily'] . '}';
 		}
 
-		$filter_color_hover = $filter_color_active = $filter_color = $filter_align = $post_title = $post_title_hover = $button_color_hover = $button_style = '';
+		$filter_color_hover = $filter_color_active = $filter_color = $filter_align = $post_title = $post_title_hover = $button_color_hover = $button_style = $layout_style = '';
 		
 		//Set filter hover color
 		if( isset( $attr['primaryColor'] ) ) {
@@ -612,6 +618,14 @@ class WPZOOM_Blocks_Portfolio {
 		if( isset( $attr['postHoverTitleColor'] ) ) {
 			$post_title_hover = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_item-details .wpzoom-blocks_portfolio-block_item-title:hover a { color:' . $attr['postHoverTitleColor'] . ' !important};';
 		}
+
+		//Layout styling
+		if( isset( $attr['layoutBgOpacity'] ) && $attr['layoutBgOpacity'] !== 0.1 ) {
+			$layout_style = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-details { background: rgba(0,0,0,' . $attr['layoutBgOpacity'] . ');}';
+		}
+		if( isset( $attr['layoutBgOpacityHover'] ) && $attr['layoutBgOpacityHover'] !== 0.7 ) {
+			$layout_style .= '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item.has-cover:not(.lightbox):hover .wpzoom-blocks_portfolio-block_item-details { background: rgba(0,0,0,' . $attr['layoutBgOpacityHover'] . ');}';
+		}
 		
 		//Buttons styling		
 		$btnTextColor     = isset( $attr['btnTextColor'] ) ? 'color: ' . $attr['btnTextColor'] . ' !important;' : '';
@@ -660,7 +674,7 @@ class WPZOOM_Blocks_Portfolio {
 		}
 
 		//Set Column gap
-		$columns_gap = isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ? '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_items-list { grid-gap:' . $attr['columnsGap'] . 'px; }' : '';
+		$columns_gap = isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) && $layout !== 'list' ? '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_items-list { grid-gap:' . $attr['columnsGap'] . 'px; }' : '';
 
 		if( isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ) {
 			if( isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ) {
@@ -709,7 +723,8 @@ class WPZOOM_Blocks_Portfolio {
 			$button_style .
             $button_color_hover . 
 			$columns_gap .
-			$masonry_columns_gap .
+			$masonry_columns_gap . 
+			$layout_style .
 			$mobile_style
 		);
 
