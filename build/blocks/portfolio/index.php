@@ -78,6 +78,10 @@ class WPZOOM_Blocks_Portfolio {
 			'type'    => 'string',
 			'default' => 'Read More'
 		],
+		'showTitle' => [
+			'type'    => 'boolean',
+			'default' => false
+		],
 		'showAuthor' => [
 			'type'    => 'boolean',
 			'default' => true
@@ -410,6 +414,7 @@ class WPZOOM_Blocks_Portfolio {
 		$order_by = isset( $attr[ 'orderBy' ] ) ? $attr[ 'orderBy' ] : 'date';
 		$per_page = isset( $attr[ 'amount' ] ) ? intval( $attr[ 'amount' ] ) : 6;
 		$show_thumbnail = isset( $attr[ 'showThumbnail' ] ) ? boolval( $attr[ 'showThumbnail' ] ) : true;
+		$show_title     = isset( $attr[ 'showTitle' ] ) ? boolval( $attr[ 'showTitle' ] ) : false;
 
 		if( 'masonry' !== $layout ) {
 			$thumbnail_size = isset( $attr[ 'thumbnailSize' ] ) ? $attr[ 'thumbnailSize' ] : 'thumbnail';
@@ -488,6 +493,7 @@ class WPZOOM_Blocks_Portfolio {
 			'show_date'             => $show_date,
 			'show_excerpt'          => $show_excerpt,
 			'show_read_more'        => $show_read_more,
+			'show_title'            => $show_title,
 			'show_thumbnail'        => $show_thumbnail,
 			'source'                => $source,
 			'thumbnail_size'        => $thumbnail_size
@@ -742,6 +748,7 @@ class WPZOOM_Blocks_Portfolio {
 			'show_excerpt'          => $show_excerpt,
 			'show_read_more'        => $show_read_more,
 			'show_thumbnail'        => $show_thumbnail,
+			'show_title'            => $show_title,
 			'source'                => $source,
 			'thumbnail_size'        => $thumbnail_size,
 			'total'                 => $this->all_posts
@@ -795,6 +802,7 @@ class WPZOOM_Blocks_Portfolio {
 			'show_excerpt'          => true,
 			'show_read_more'        => true,
 			'show_thumbnail'        => true,
+			'show_title'            => false,
 			'source'                => 'portfolio_item',
 			'thumbnail_size'        => 'portfolio_item-thumbnail'
 		);
@@ -937,7 +945,7 @@ class WPZOOM_Blocks_Portfolio {
 				}
 
 				// Add a wrapper div around just the portfolio item details (excluding the thumbnail)
-				$output .= "<div class='{$class}_item-details'>";
+				$output .= isset( $args['show_title'] ) && $args['show_title'] ?  "<div class='{$class}_item-details show-title'>" : "<div class='{$class}_item-details'>";
 
 
 				// Add the portfolio item title to the output

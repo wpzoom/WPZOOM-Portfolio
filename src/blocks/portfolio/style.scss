@@ -274,14 +274,19 @@ $primary_color: #0bb4aa;
                 &:hover {
 
                     .wpzoom-blocks_portfolio-block_item-details {
+                        background: rgba(0, 0, 0, 0.7);
                         opacity: 1;
                     }
 
                 }
 
                 .wpzoom-blocks_portfolio-block_item-details {
-                    background: rgba(0, 0, 0, 0.7);
+                    
                     opacity: 0;
+
+                    &.show-title {
+                        opacity:1;
+                    }
 
                     .wpzoom-blocks_portfolio-block_item-title {
                         a {
@@ -292,6 +297,7 @@ $primary_color: #0bb4aa;
                         }
                     }
                 }
+                
             }
 
 

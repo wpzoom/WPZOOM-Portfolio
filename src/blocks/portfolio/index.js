@@ -216,7 +216,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, enableAjaxLoading, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, filterFontSize, filterFontFamily, filterTextTransform, filterLetterSpacing, filterFontWeight, postTitleFontSize, postTitleFontSizeMobile, 
 					postTitleTextTransform, postTitleLetterSpacing, postTitleFontFamily, postTitleFontWeight, postTitleLineHeight, postTitleColor, postHoverTitleColor,  btnTextColor, btnHoverTextColor, btnBgColor, btnHoverBgColor, btnFontFamily, btnFontSize, btnTextTransform, btnLetterSpacing, btnBorder, btnBorderStyle, btnBorderWidth,
-					btnBorderColor, btnHoverBorderColor } = attributes;
+					btnBorderColor, btnHoverBorderColor, showTitle } = attributes;
 			const { imageSizes } = this.state;
 
 			const post_type = wp.data.select( 'core/editor' ).getCurrentPostType();
@@ -491,6 +491,11 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									/>
 								}
 								<HorizontalRule />
+								{ ( layout == 'grid' || layout == 'masonry' ) && <ToggleControl
+									label={ __( 'Show Title', 'wpzoom-portfolio' ) }
+									checked={ showTitle }
+									onChange={ ( value ) => setAttributes( { showTitle: value } ) }
+								/>  }
 								{ fields }
 							</PanelBody>
 							<PanelBody icon={ settingsIcon } title={ __( 'Other Settings', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">
