@@ -621,10 +621,10 @@ class WPZOOM_Blocks_Portfolio {
 
 		//Layout styling
 		if( isset( $attr['layoutBgOpacity'] ) && $attr['layoutBgOpacity'] !== 0.1 ) {
-			$layout_style = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-details { background: rgba(0,0,0,' . $attr['layoutBgOpacity'] . ');}';
+			$layout_style = '.wpzoom-blocks_portfolio-block.' . $class_unique . ':not(.layout-list) .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item .wpzoom-blocks_portfolio-block_item-details { background: rgba(0,0,0,' . $attr['layoutBgOpacity'] . ');}';
 		}
 		if( isset( $attr['layoutBgOpacityHover'] ) && $attr['layoutBgOpacityHover'] !== 0.7 ) {
-			$layout_style .= '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item.has-cover:not(.lightbox):hover .wpzoom-blocks_portfolio-block_item-details { background: rgba(0,0,0,' . $attr['layoutBgOpacityHover'] . ');}';
+			$layout_style .= '.wpzoom-blocks_portfolio-block.' . $class_unique . ':not(.layout-list) .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item.has-cover:not(.lightbox):hover .wpzoom-blocks_portfolio-block_item-details { background: rgba(0,0,0,' . $attr['layoutBgOpacityHover'] . ');}';
 		}
 		
 		//Buttons styling		
