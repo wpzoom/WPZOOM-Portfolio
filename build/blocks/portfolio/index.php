@@ -808,7 +808,7 @@ class WPZOOM_Blocks_Portfolio {
 			'lightbox_caption'      => false,
 			'order'                 => 'desc',
 			'order_by'              => 'date',
-			'page'                  => 1,
+			'page'                  => get_query_var( is_front_page() ? 'page' : 'paged' ) ?: 1,
 			'per_page'              => 6,
 			'read_more_label'       => esc_html__(  'Read More', 'wpzoom-portfolio' ),
 			'show_author'           => true,
