@@ -61,8 +61,9 @@ $atts = array(
 	'secondaryColor'            => $secondaryColor
 );
 
-
 $content = '';
+
+WP_Block_Supports::$block_to_render['blockName'] = 'wpzoom-blocks/portfolio';
 
 $block_portfolio = new WPZOOM_Blocks_Portfolio;
 $block_portfolio_render = $block_portfolio->render( $atts, $content );
@@ -81,7 +82,7 @@ $block_portfolio_render = $block_portfolio->render( $atts, $content );
 	<?php 
 		printf( 
 			'<div class="wpzoom-block-portfolio-taxonomy">%1$s</div>',
-			$block_portfolio_render	
+			$block_portfolio_render
 		);
 	?>
 
