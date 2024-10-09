@@ -72,22 +72,26 @@ $block_portfolio_render = $block_portfolio->render( $atts, $content );
 
 <?php if ( have_posts() ) : ?>
 
-	<header class="page-header alignwide">
-		<?php the_archive_title( '<h1 class="page-title">', '</h1>' ); ?>
-		<?php if ( $description ) : ?>
-			<div class="archive-description"><?php echo wp_kses_post( wpautop( $description ) ); ?></div>
-		<?php endif; ?>
-	</header><!-- .page-header -->
+    <div class="wpz_portfolio_wrapper">
 
-	<?php 
-		printf( 
-			'<div class="wpzoom-block-portfolio-taxonomy">%1$s</div>',
-			$block_portfolio_render
-		);
-	?>
+    	<header class="page-header alignwide">
+    		<?php the_archive_title( '<h1 class="page-title">', '</h1>' ); ?>
+    		<?php if ( $description ) : ?>
+    			<div class="archive-description"><?php echo wp_kses_post( wpautop( $description ) ); ?></div>
+    		<?php endif; ?>
+    	</header><!-- .page-header -->
 
-	<?php else : ?>
-		<?php get_template_part( 'template-parts/content/content-none' ); ?>
-	<?php endif; ?>
+    	<?php
+    		printf(
+    			'<div class="wpzoom-block-portfolio-taxonomy">%1$s</div>',
+    			$block_portfolio_render
+    		);
+    	?>
+
+    	<?php else : ?>
+    		<?php get_template_part( 'template-parts/content/content-none' ); ?>
+    	<?php endif; ?>
+
+    </div>
 
 <?php get_footer(); ?>
