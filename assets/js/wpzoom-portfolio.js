@@ -184,13 +184,6 @@
 						loadedPosts.push( parseInt( postID[1] ) );
 					}); 
 
-					if( undefined !== exPosts ) {
-						exPosts = exPosts + ',' + newPosts.toString();
-						$this.attr( 'data-exclude-posts', exPosts );
-					}
-					else {
-						$this.attr( 'data-exclude-posts', newPosts );
-					}
 				};
 
 				btnLoadMore.on( 'click', function(e) {
@@ -353,7 +346,8 @@
 
 				let toLoad = 0;
 
-				if( category_total >= perPage && show.length < perPage ) {
+				//Check if we need to load more items
+				if( show.length < perPage ) {
 					toLoad = perPage - show.length;
 				}
 
@@ -532,13 +526,6 @@
 							loadedPosts.push( parseInt( postID[1] ) );
 						}); 
 
-						if( undefined !== exPosts ) {
-							exPosts = exPosts + ',' + newPosts.toString();
-							$portfolioWrapper.attr( 'data-exclude-posts', exPosts );
-						}
-						else {
-							$portfolioWrapper.attr( 'data-exclude-posts', newPosts );
-						}
 					};
 
 					let show = 'all' == category_id ? $portfolio.find( '[data-category]' ) : $portfolio.find( '.wpzoom-blocks_portfolio-block_category-' + category_id + '' );
