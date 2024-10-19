@@ -346,20 +346,23 @@
 
 				let toLoad = 0;
 
+				var items_left = category_total - show.length;
+
 				//Check if we need to load more items
 				if( show.length < perPage ) {
 					toLoad = perPage - show.length;
+					if( toLoad > items_left ) {
+						toLoad = items_left;
+					}
 				}
 
 				if(  $portfolioWrapper.hasClass( 'ajax-load-items' ) ) {
-
 					if( 0 == show.length ) {
 						$this.getPortfolioFilteredItems( perPage );
 					} 
 					else if( toLoad > 0 ) {
 						$this.getPortfolioFilteredItems( toLoad );
 					}
-
 				}
 
 				show.find('.portfolio-block-popup-video').magnificPopupCallbackforPortfolioBlock();
