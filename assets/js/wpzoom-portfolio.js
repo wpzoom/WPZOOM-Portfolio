@@ -5,7 +5,7 @@
     'use strict';
 
 	// Array to store loaded post IDs
-    var loadedPosts = [];
+    window.loadedPosts = [];
 
 	$.fn.magnificPopupCallbackforPortfolioBlock = function(){
 
@@ -160,8 +160,6 @@
 				$portfolioList    = $this.children('.wpzoom-blocks_portfolio-block_items-list'),
 				portfolioData     = $this.data( 'load-more' ),
 				totalPosts        = portfolioData.total,
-				postsNum          = portfolioData.per_page,
-				revertCats		  = portfolioData.categories,
 				
 				loadMoreContainer = $this.find( '.wpzoom-blocks_portfolio-block_show-more' ),
 				btnLoadMore       = loadMoreContainer.children( '.wpz-portfolio-button__link' ),
@@ -175,8 +173,6 @@
 				//exclude new items from the next query
 				if( $newItems ) {
 					var newPosts = [];
-					var exPosts = $this.attr( 'data-exclude-posts' );
-					
 					$newItems.each(function() {
 						var postID = post_filter_regex.exec( $(this).attr( 'class' ) );
 						post_filter_regex.lastIndex = 0;
@@ -189,8 +185,6 @@
 				btnLoadMore.on( 'click', function(e) {
 					
 					e.preventDefault();
-					
-					let offset = $this.data( 'offset' );
 					var $currentCat = $this.find('.wpzoom-blocks_portfolio-block_filter .current-cat');
 					var catID = tax_filter_regex.exec( $currentCat.attr('class') );
 					tax_filter_regex.lastIndex = 0;
@@ -214,7 +208,6 @@
 						{
 							action: 'wpzoom_load_more_items',
 							posts_data: JSON.stringify( portfolioData ),
-							//offset: offset,
 							exclude: loadedPosts,
 						},
 						function( data, status, code ) {
@@ -237,7 +230,7 @@
 										loadedPosts.push( parseInt( postID[1] ) );
 									}); 
 
-								};								
+								};
 
  								let filterTrigger = $this.find( '.wpzoom-blocks_portfolio-block_filter .current-cat a' );
 								if( !$this.hasClass( 'layout-masonry' ) && typeof( filterTrigger ) != 'undefined' && filterTrigger != null ) {
@@ -267,8 +260,7 @@
 
 								var show = 'all' == category_id ? $this.find( '[data-category]' ) : $this.find( '.wpzoom-blocks_portfolio-block_category-' + category_id + '' );
 
-
-								if( show.length > totalPosts ) {
+								if( show.length >= totalPosts ) {
 									btnLoadMore.animate({height: 'hide', opacity: 'hide'}, 'slow', function () {
 										btnLoadMore.remove();
 									});
@@ -298,6 +290,7 @@
 				perPage = $portfolioWrapper.data('load-more').per_page,
 
 				loadMoreContainer = $portfolioWrapper.find( '.wpzoom-blocks_portfolio-block_show-more' ),
+				btnLoadMorePro    = $portfolioWrapper.find( '.wpzoom-blocks_portfolio-block-pro_show-more' ).children( '.wpz-portfolio-button__link' ),
 				btnLoadMore       = loadMoreContainer.children( '.wpz-portfolio-button__link' ),
 				btnLoadMoreText   = btnLoadMore.html();
 
@@ -308,6 +301,7 @@
 			$taxs.on( 'click', function ( event ) {
 				event.preventDefault();
 				
+				btnLoadMorePro.removeClass( 'disabled' );
 				btnLoadMore.removeClass( 'disabled' );
 
 				$this = $(this);
@@ -404,6 +398,8 @@
 
 				if( 'all' !== category_total && show.length == category_total ) {
 					btnLoadMore.addClass( 'disabled' );
+					btnLoadMorePro.addClass( 'disabled' );
+					btnLoadMorePro.attr( 'data-category', 'all' );
 					btnLoadMore.attr( 'data-category', 'all' );
 				}
 
@@ -452,6 +448,7 @@
 
 			//Load More Button
 			loadMoreContainer = $portfolioWrapper.find( '.wpzoom-blocks_portfolio-block_show-more' ),
+			btnLoadMorePro    = $portfolioWrapper.find( '.wpzoom-blocks_portfolio-block-pro_show-more' ).children( '.wpz-portfolio-button__link' ),
 			btnLoadMore       = loadMoreContainer.children( '.wpz-portfolio-button__link' ),
 			btnLoadMoreText   = btnLoadMore.html();
 			
@@ -533,7 +530,9 @@
 
 					let show = 'all' == category_id ? $portfolio.find( '[data-category]' ) : $portfolio.find( '.wpzoom-blocks_portfolio-block_category-' + category_id + '' );
 					
+					
 					if( 'all' !== category_total && show.length == category_total ) {
+						btnLoadMorePro.addClass( 'disabled' );
 						btnLoadMore.addClass( 'disabled' );
 					}
 

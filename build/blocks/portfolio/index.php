@@ -324,10 +324,6 @@ class WPZOOM_Blocks_Portfolio {
 		$offset      = sanitize_text_field( $_POST['offset'] );
 		$exclude	 = isset( $_POST['exclude'] ) ?  array_map( 'intval', $_POST['exclude'] ) : array();
 		$current_cat = isset( $_POST['current_cat'] ) && ! empty( $_POST['current_cat'] ) ? sanitize_text_field( $_POST['current_cat'] ) : array();
-
-		
-		// Get the current page from AJAX request
-		$paged = isset( $_POST['page'] ) ? intval( $_POST['page'] ) : 1;
 		
 		$data    = sanitize_text_field( $_POST['posts_data'] );
 		$data    = json_decode( stripslashes( $data ), true );
@@ -344,10 +340,6 @@ class WPZOOM_Blocks_Portfolio {
 
 		if( $exclude ) {
 			$data['exclude_posts'] = $exclude;
-		}
-
-		if( $paged ) {
-			$data['paged'] = $paged;
 		}
 
 		$output .= '<div class="wpzoom-ajax-portfolio-items">';
