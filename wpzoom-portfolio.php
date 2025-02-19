@@ -182,6 +182,14 @@ class WPZOOM_Blocks {
 
 		wp_enqueue_script( 'wpzoom-blocks-js-index-main' ); 
 
+        wp_enqueue_script(
+            'portfolio-masonry-editor',
+            WPZOOM_PORTFOLIO_URL . 'assets/js/editor-init-masonry.js',
+            array('wp-edit-post', 'wp-dom-ready', 'masonry', 'imagesloaded'),
+            WPZOOM_PORTFOLIO_VERSION,
+            true
+        );
+
 		wp_localize_script(
 			'wpzoom-blocks-js-index-main',
 			'wpzoomPortfolioBlock',
