@@ -482,9 +482,13 @@ function wpzoom_theme_has_portfolio() {
 		return false;
 	}
 	else {
-		if( 'inspiro' == $current_theme && ! class_exists( 'WPZOOM' ) ) {
-            return false;   
+        if( 'inspiro' == $current_theme ) {
+            $theme = wp_get_theme();
+            if(  'inspiro' == $theme->get( 'TextDomain' ) ) {
+                return false;
+            }
         }
+
 	}
 
 	return true;
