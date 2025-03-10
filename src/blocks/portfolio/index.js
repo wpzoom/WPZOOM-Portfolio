@@ -62,7 +62,8 @@ import {
  * Module Constants
  */
 const {
-    setting_options
+    setting_options,
+    isPro
 } = wpzoomPortfolioBlock;
 
 function buildTermsTree( flatTerms ) {
@@ -277,6 +278,28 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 				}
 			</>;
 
+            let BackgroundVideoFields = <>
+                <ToggleControl
+                    label={ __( 'Enable Background Video', 'wpzoom-portfolio' ) }
+                    help={ __( 'By enabling this option, each portfolio post that have video will display a background video in Portfolio page that will be played on hover.', 'wpzoom-portfolio' ) }
+                    checked={ showBackgroundVideo }
+                    onChange={ ( value ) => setAttributes( { showBackgroundVideo: value } ) }
+                />
+                <HorizontalRule />
+                <ToggleControl
+                    label={ __( 'Play Always Video Background', 'wpzoom-portfolio' ) }
+                    help={ __( 'By enabling this option, all portfolio posts will play automatically the background video on hover in the Portfolio page.', 'wpzoom-portfolio' ) }
+                    checked={ alwaysPlayBackgroundVideo }
+                    onChange={ ( value ) => setAttributes( { alwaysPlayBackgroundVideo: value } ) }                                    
+                />
+                <Text>
+                    { __( 'NOTICE: This is an experimental feature and is not recommended if you haven\'t optimized your hover videos properly. A large number of posts with video on hover may slow down the page.', 'wpzoom-portfolio' ) }
+                </Text>
+            </>
+            if( !isPro ) {
+                BackgroundVideoFields = <Disabled>{ BackgroundVideoFields }</Disabled>;
+            }
+
 			if ( 'list' != layout ) {
 				fields = <Disabled>{ fields }</Disabled>;
 			}
@@ -490,22 +513,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 							</PanelBody>
 
                             <PanelBody icon={ videoIcon } title={ __( 'Background Video', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">
-                                <ToggleControl
-                                    label={ __( 'Enable Background Video', 'wpzoom-portfolio' ) }
-                                    help={ __( 'By enabling this option, each portfolio post that have video will display a background video in Portfolio page that will be played on hover.', 'wpzoom-portfolio' ) }
-                                    checked={ showBackgroundVideo }
-                                    onChange={ ( value ) => setAttributes( { showBackgroundVideo: value } ) }
-                                />
-                                <HorizontalRule />
-                                <ToggleControl
-                                    label={ __( 'Play Always Video Background', 'wpzoom-portfolio' ) }
-                                    help={ __( 'By enabling this option, all portfolio posts will play automatically the background video on hover in the Portfolio page.', 'wpzoom-portfolio' ) }
-                                    checked={ alwaysPlayBackgroundVideo }
-                                    onChange={ ( value ) => setAttributes( { alwaysPlayBackgroundVideo: value } ) }                                    
-                                />
-                                <Text>
-                                    { __( 'NOTICE: This is an experimental feature and is not recommended if you haven\'t optimized your hover videos properly. A large number of posts with video on hover may slow down the page.', 'wpzoom-portfolio' ) }
-                                </Text>
+                                { BackgroundVideoFields }
                             </PanelBody>
 
 							<PanelBody icon={ fieldsIcon } title={ __( 'Fields', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">

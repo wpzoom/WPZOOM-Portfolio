@@ -20,6 +20,11 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 	 */
 	class WPZOOM_Portfolio_Assets_Manager {
 
+        /**
+         * Is this the pro version?
+         */
+        private $is_pro = false;
+
 		/**
 		 * This class instance.
 		 *
@@ -53,7 +58,8 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 			
 			//Enqueue google fonts to editor
 			add_action( 'enqueue_block_editor_assets', array( $this, 'load_google_fonts_to_editor' ), 1 );
-			
+
+            $this->is_pro = apply_filters( 'wpz-portfolio_is-pro', false );
 
 		}
 
@@ -94,10 +100,10 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 
 			wp_localize_script( 
 				'wpzoom-portfolio-block',
-				'WPZoomPortfolioBlock', 
+				'WPZoomPortfolioBlockAssets',
 				array(
 					'ajaxURL'       => admin_url( 'admin-ajax.php' ),
-					'loadingString' => esc_html__( 'Loading...', 'wpzoom-portfolio' )
+					'loadingString' => esc_html__( 'Loading...', 'wpzoom-portfolio' ),
 				) 
 			);
 
