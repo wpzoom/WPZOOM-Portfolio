@@ -20,7 +20,8 @@ import {
 	TextControl, 
 	ToggleControl, 
 	TreeSelect, 
-	ColorPalette
+	ColorPalette,
+    __experimentalText as Text,
 } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { 
@@ -53,7 +54,8 @@ import {
 	filterIcon,
 	layoutIcon,
 	settingsIcon,
-	shortcodeIcon
+	shortcodeIcon,
+	videoIcon
 } from '../../icons';
 
 /**
@@ -216,7 +218,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, enableAjaxLoading, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, filterFontSize, filterFontFamily, filterTextTransform, filterLetterSpacing, filterFontWeight, postTitleFontSize, postTitleFontSizeMobile, 
 					postTitleTextTransform, postTitleLetterSpacing, postTitleFontFamily, postTitleFontWeight, postTitleLineHeight, postTitleColor, postHoverTitleColor,  btnTextColor, btnHoverTextColor, btnBgColor, btnHoverBgColor, btnFontFamily, btnFontSize, btnTextTransform, btnLetterSpacing, btnBorder, btnBorderStyle, btnBorderWidth,
-					btnBorderColor, btnHoverBorderColor, showTitle, layoutBgOpacity, layoutBgOpacityHover } = attributes;
+					btnBorderColor, btnHoverBorderColor, showTitle, layoutBgOpacity, layoutBgOpacityHover, showBackgroundVideo, alwaysPlayBackgroundVideo } = attributes;
 			const { imageSizes } = this.state;
 
 			const post_type = wp.data.select( 'core/editor' ).getCurrentPostType();
@@ -486,6 +488,26 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									/>
 								}
 							</PanelBody>
+
+                            <PanelBody icon={ videoIcon } title={ __( 'Background Video', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">
+                                <ToggleControl
+                                    label={ __( 'Enable Background Video', 'wpzoom-portfolio' ) }
+                                    help={ __( 'By enabling this option, each portfolio post that have video will display a background video in Portfolio page that will be played on hover.', 'wpzoom-portfolio' ) }
+                                    checked={ showBackgroundVideo }
+                                    onChange={ ( value ) => setAttributes( { showBackgroundVideo: value } ) }
+                                />
+                                <HorizontalRule />
+                                <ToggleControl
+                                    label={ __( 'Play Always Video Background', 'wpzoom-portfolio' ) }
+                                    help={ __( 'By enabling this option, all portfolio posts will play automatically the background video on hover in the Portfolio page.', 'wpzoom-portfolio' ) }
+                                    checked={ alwaysPlayBackgroundVideo }
+                                    onChange={ ( value ) => setAttributes( { alwaysPlayBackgroundVideo: value } ) }                                    
+                                />
+                                <Text>
+                                    { __( 'NOTICE: This is an experimental feature and is not recommended if you haven\'t optimized your hover videos properly. A large number of posts with video on hover may slow down the page.', 'wpzoom-portfolio' ) }
+                                </Text>
+                            </PanelBody>
+
 							<PanelBody icon={ fieldsIcon } title={ __( 'Fields', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">
 								{ layout !== 'masonry' &&
 									<ToggleControl
