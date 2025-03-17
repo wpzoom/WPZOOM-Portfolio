@@ -19,6 +19,32 @@
     }
 }
 
+.block-editor-block-styles__item[aria-label='Eccentric'] {
+	pointer-events: none;
+	position: relative;
+
+	span {
+		&::after {
+			content: 'PRO';
+			color: #fff;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #0BB4AA;
+			border-radius: 4px;
+			font-size: 12px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.05em;
+			padding: 4px 8px;
+			position: absolute;
+			top: -13px;
+			right: 10px;
+		}
+	}
+}
+
+
 .wpzb-button-select {
 	.components-radio-control__group-wrapper {
 		display: flex;
