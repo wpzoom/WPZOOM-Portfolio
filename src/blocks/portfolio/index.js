@@ -137,17 +137,6 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 		},
 		__experimentalSelector: '.wpzoom-blocks_portfolio-block_filter .wpz-portfolio-filter__link'
 	},
-	styles: [
-		{
-			name: 'default',
-			label: __( 'Default', 'wpzoom-portfolio' ),
-			isDefault: true
-		},
-		{
-			name: 'eccentric',
-			label: __( 'Eccentric', 'wpzoom-portfolio' ),
-		},		
-	],
 	example: {},
 	edit: withSelect( select => {
 		const { getEntityRecords } = select( 'core' );
@@ -438,7 +427,8 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									options={ [
 										{ value: 'list',    label: __( 'Columns', 'wpzoom-portfolio' ) },
 										{ value: 'grid',    label: __( 'Overlay', 'wpzoom-portfolio' ) },
-										{ value: 'masonry', label: __( 'Masonry', 'wpzoom-portfolio' ) }
+										{ value: 'masonry', label: __( 'Masonry', 'wpzoom-portfolio' ) },
+										{ value: 'eccentric', label: __( 'Eccentric', 'wpzoom-portfolio' ) }
 									] }
 									selected={ layout }
 								/>
