@@ -114,6 +114,10 @@ class WPZOOM_Blocks_Portfolio {
 			'type'    => 'boolean',
 			'default' => true
 		],
+		'showCategory' => [
+			'type'    => 'boolean',
+			'default' => true
+		],
 		'showReadMore' => [
 			'type'    => 'boolean',
 			'default' => true

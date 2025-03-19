@@ -216,7 +216,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, enableAjaxLoading, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, filterFontSize, filterFontFamily, filterTextTransform, filterLetterSpacing, filterFontWeight, postTitleFontSize, postTitleFontSizeMobile, 
 					postTitleTextTransform, postTitleLetterSpacing, postTitleFontFamily, postTitleFontWeight, postTitleLineHeight, postTitleColor, postHoverTitleColor,  btnTextColor, btnHoverTextColor, btnBgColor, btnHoverBgColor, btnFontFamily, btnFontSize, btnTextTransform, btnLetterSpacing, btnBorder, btnBorderStyle, btnBorderWidth,
-					btnBorderColor, btnHoverBorderColor, showTitle, layoutBgOpacity, layoutBgOpacityHover } = attributes;
+					btnBorderColor, btnHoverBorderColor, showTitle, layoutBgOpacity, layoutBgOpacityHover, showCategory } = attributes;
 			const { imageSizes } = this.state;
 
 			const post_type = wp.data.select( 'core/editor' ).getCurrentPostType();
@@ -236,21 +236,37 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 			const catTree   = buildTermsTree( categoriesList );
 
 			let fields = <>
-				<ToggleControl
-					label={ __( 'Show Author', 'wpzoom-portfolio' ) }
-					checked={ showAuthor }
-					onChange={ ( value ) => setAttributes( { showAuthor: value } ) }
-				/>
+				{ 'eccentric' == layout &&
+					<ToggleControl
+						label={ __( 'Show Category', 'wpzoom-portfolio' ) }
+						checked={ showCategory }
+						onChange={ ( value ) => setAttributes( { showCategory: value } ) }
+					/>
+				}
+				
+				<HorizontalRule /> 
 
-				<HorizontalRule />
+				{ 'eccentric' !== layout &&
+					<ToggleControl
+						label={ __( 'Show Author', 'wpzoom-portfolio' ) }
+						checked={ showAuthor }
+						onChange={ ( value ) => setAttributes( { showAuthor: value } ) }
+					/> 
+				}
+				{ 'eccentric' !== layout && 
+					<HorizontalRule /> 
+				}
 
-				<ToggleControl
-					label={ __( 'Show Date', 'wpzoom-portfolio' ) }
-					checked={ showDate }
-					onChange={ ( value ) => setAttributes( { showDate: value } ) }
-				/>
-
-				<HorizontalRule />
+				{ 'eccentric' !== layout &&
+					<ToggleControl
+						label={ __( 'Show Date', 'wpzoom-portfolio' ) }
+						checked={ showDate }
+						onChange={ ( value ) => setAttributes( { showDate: value } ) }
+					/>
+				}
+				{ 'eccentric' !== layout && 
+					<HorizontalRule /> 
+				}
 
 				<ToggleControl
 					label={ __( 'Show Excerpt', 'wpzoom-portfolio' ) }
@@ -275,7 +291,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 				}
 			</>;
 
-			if ( 'list' != layout ) {
+			if ( 'list' != layout && 'eccentric' != layout ) {
 				fields = <Disabled>{ fields }</Disabled>;
 			}
 
@@ -511,20 +527,22 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								/>  }
 								{ fields }
 							</PanelBody>
-							<PanelBody icon={ settingsIcon } title={ __( 'Other Settings', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">
-								<ToggleControl
-									label={ __( 'Open Portfolio Items in a Lightbox', 'wpzoom-portfolio' ) }
-									checked={ lightbox }
-									onChange={ ( value ) => setAttributes( { lightbox: value } ) }
-								/>
-								{ lightbox &&
+							{ 'eccentric' !== layout &&
+								<PanelBody icon={ settingsIcon } title={ __( 'Other Settings', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">
 									<ToggleControl
-										label={ __( 'Show Lightbox Caption', 'wpzoom-portfolio' ) }
-										checked={ lightboxCaption }
-										onChange={ ( value ) => setAttributes( { lightboxCaption: value } ) }
+										label={ __( 'Open Portfolio Items in a Lightbox', 'wpzoom-portfolio' ) }
+										checked={ lightbox }
+										onChange={ ( value ) => setAttributes( { lightbox: value } ) }
 									/>
-								}
-							</PanelBody>
+									{ lightbox &&
+										<ToggleControl
+											label={ __( 'Show Lightbox Caption', 'wpzoom-portfolio' ) }
+											checked={ lightboxCaption }
+											onChange={ ( value ) => setAttributes( { lightboxCaption: value } ) }
+										/>
+									}
+								</PanelBody>
+							}
 					</InspectorControls>
 					<InspectorControls group="styles">
 						<PanelBody title={ __( 'Filter', 'wpzoom-portfolio' ) } initialOpen={ false } className="wpzb-settings-panel">
