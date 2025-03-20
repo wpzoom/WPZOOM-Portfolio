@@ -417,6 +417,11 @@ class WPZOOM_Blocks_Portfolio {
 
 		// CSS classes for the layout type and columns amount
 		$layout = isset( $attr[ 'layout' ] ) && ! empty( $attr[ 'layout' ] ) ? $attr[ 'layout' ] : 'grid';
+
+		if( 'eccentric' === $layout ) {
+			$layout = 'grid';
+		}
+
 		$layout_class = ' layout-' . $layout;
 		$columns = isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ? ' columns-' . $attr[ 'columnsAmount' ] : '';
 				   // Query parameters

@@ -20,7 +20,9 @@ import {
 	TextControl, 
 	ToggleControl, 
 	TreeSelect, 
-	ColorPalette
+	ColorPalette,
+	Tooltip,
+	Popover
 } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { 
@@ -60,7 +62,9 @@ import {
  * Module Constants
  */
 const {
-    setting_options
+    setting_options,
+	is_pro,
+	plugin_url
 } = wpzoomPortfolioBlock;
 
 function buildTermsTree( flatTerms ) {
@@ -140,6 +144,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 	example: {},
 	edit: withSelect( select => {
 		const { getEntityRecords } = select( 'core' );
+		const isPro = is_pro || false;
 
 		var cats = [];
 		var taxonomies = [];
@@ -158,14 +163,16 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 
 		return {
 			taxonomyList: taxonomies,
-			categoriesList: cats
+			categoriesList: cats,
+			isPro
 		};
 	} )( class extends Component {
 		constructor() {
 			super( ...arguments );
 
 			this.state = {
-				imageSizes: []
+				imageSizes: [],
+				showEccentricTooltip: false
 			};
 		}
 
@@ -211,7 +218,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 		}
 
 		render() {
-			const { attributes, setAttributes, categoriesList, taxonomyList } = this.props;
+			const { attributes, setAttributes, categoriesList, taxonomyList, isPro } = this.props;
 			const { amount, categories, columnsAmount, columnsGap, layout, lazyLoad, lightbox, style,
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, enableAjaxLoading, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, filterFontSize, filterFontFamily, filterTextTransform, filterLetterSpacing, filterFontWeight, postTitleFontSize, postTitleFontSizeMobile, 
@@ -436,18 +443,53 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 								}
 							</PanelBody>
 							<PanelBody icon={ layoutIcon } title={ __( 'Layout', 'wpzoom-portfolio' ) } initialOpen={ sectionOpen } className="wpzb-settings-panel">
-								<RadioControl
-									className="wpzb-button-select wpzb-button-select-icons"
-									label={ __( 'Layout Type', 'wpzoom-portfolio' ) }
-									onChange={ ( value ) => setAttributes( { layout: value } ) }
-									options={ [
-										{ value: 'list',    label: __( 'Columns', 'wpzoom-portfolio' ) },
-										{ value: 'grid',    label: __( 'Overlay', 'wpzoom-portfolio' ) },
-										{ value: 'masonry', label: __( 'Masonry', 'wpzoom-portfolio' ) },
-										{ value: 'eccentric', label: __( 'Eccentric', 'wpzoom-portfolio' ) }
-									] }
-									selected={ layout }
-								/>
+								<div className="wpzb-layout-options">
+									<RadioControl
+										className="wpzb-button-select wpzb-button-select-icons"
+										label={ __( 'Layout Type', 'wpzoom-portfolio' ) }
+										onChange={ ( value ) => setAttributes( { layout: value } ) }
+										options={ [
+											{ value: 'list',    label: __( 'Columns', 'wpzoom-portfolio' ) },
+											{ value: 'grid',    label: __( 'Overlay', 'wpzoom-portfolio' ) },
+											{ value: 'masonry', label: __( 'Masonry', 'wpzoom-portfolio' ) },
+											{ 
+												value: 'eccentric', 
+												label: (
+													<div 
+														className="wpzb-layout-option-eccentric"
+														onMouseEnter={() => this.setState({ showEccentricTooltip: true })}
+														onMouseLeave={() => this.setState({ showEccentricTooltip: false })}
+													>
+														<span>{ __( 'Eccentric', 'wpzoom-portfolio' ) }</span>
+														{!isPro && this.state.showEccentricTooltip && (
+															<Popover
+																className="wpzoom-preview-tooltip"
+																position="top left"
+																noArrow={false}
+																focusOnMount={false}
+																expandOnMobile={true}
+																animate={true}
+																offset={16}
+															>
+																<img 
+																	src={plugin_url + "assets/images/eccentric-preview.jpg"}
+																	alt="Eccentric Layout Preview"
+																	style={{ 
+																		width: '100%',
+																		maxWidth: '400px',
+																		height: 'auto',
+																		borderRadius: '0'
+																	}}
+																/>
+															</Popover>
+														)}
+													</div>
+												)
+											}
+										] }
+										selected={ layout }
+									/>
+								</div>
 
                                 { ( layout == 'list' ) &&
 									<RangeControl

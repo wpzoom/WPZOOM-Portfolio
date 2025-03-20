@@ -194,7 +194,9 @@ class WPZOOM_Blocks {
 			'wpzoom-blocks-js-index-main',
 			'wpzoomPortfolioBlock',
 			array(
-				'setting_options' => ( !empty( $options ) ? $options : array() )
+				'setting_options' => ( !empty( $options ) ? $options : array() ),
+				'is_pro' => apply_filters( 'wpz-portfolio_is-pro', false ),
+				'plugin_url' => WPZOOM_PORTFOLIO_URL
 			)
 		);
 
