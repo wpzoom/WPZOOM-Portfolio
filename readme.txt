@@ -125,6 +125,11 @@ Yes, you can find the documentation for this plugin with more instructions on ou
 == Screenshots ==
 
 1. Portfolio Block
+2. Multiple layouts
+3. Full-width layout
+4. Masonry layout
+5. Filtering effect
+6. Portfolio Block
 
 
 == Changelog ==
