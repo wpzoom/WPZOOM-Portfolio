@@ -26,6 +26,10 @@
     applyMasonry();
 
     subscribe(() => {
+        // Clear any existing timeout to prevent multiple calls
+        if (timeout) {
+            clearTimeout(timeout);
+        }
 
         // Wait 500ms before reapplying Masonry (adjust delay as needed)
         timeout = setTimeout(() => {

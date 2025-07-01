@@ -319,6 +319,11 @@ class WPZOOM_Blocks_Portfolio {
 
 	public function load_more_items() { 
 		
+		// Verify nonce for security
+		if ( ! wp_verify_nonce( $_POST['nonce'], 'wpzoom_portfolio_nonce' ) ) {
+			wp_die( esc_html__( 'Security check failed', 'wpzoom-portfolio' ) );
+		}
+
 		$output = '';
 
 		$offset      = isset( $_POST['offset'] ) ? sanitize_text_field( $_POST['offset'] ) : 0;
@@ -695,7 +700,7 @@ class WPZOOM_Blocks_Portfolio {
 					break;
 
 					case 5:
-						$masonry_selectors = '.wpzoom-blocks_portfolio-.' . $class_unique . '.layout-masonry.columns-5 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(20% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-5 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(20% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
 					break;
 
 					case 6:

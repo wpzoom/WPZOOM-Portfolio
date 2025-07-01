@@ -97,7 +97,8 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 				'WPZoomPortfolioBlock', 
 				array(
 					'ajaxURL'       => admin_url( 'admin-ajax.php' ),
-					'loadingString' => esc_html__( 'Loading...', 'wpzoom-portfolio' )
+					'loadingString' => esc_html__( 'Loading...', 'wpzoom-portfolio' ),
+					'nonce'         => wp_create_nonce( 'wpzoom_portfolio_nonce' )
 				) 
 			);
 

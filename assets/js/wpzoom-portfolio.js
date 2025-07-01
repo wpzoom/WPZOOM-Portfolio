@@ -212,6 +212,7 @@
 							action: 'wpzoom_load_more_items',
 							posts_data: JSON.stringify( portfolioData ),
 							exclude: loadedPosts,
+							nonce: WPZoomPortfolioBlock.nonce,
 						},
 						function( data, status, code ) {
 							
@@ -501,6 +502,7 @@
 				posts_data: JSON.stringify( portfolioData ),
 				exclude: loadedPosts,
 				offset: 0,
+				nonce: WPZoomPortfolioBlock.nonce,
 			},
 			function( data, status, code ) {
 				
