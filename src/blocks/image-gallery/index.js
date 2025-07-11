@@ -1,7 +1,7 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { PanelBody, Button } from '@wordpress/components';
+import { PanelBody, Button, ToggleControl, HorizontalRule } from '@wordpress/components';
 
 registerBlockType( 'wpzoom-blocks/image-gallery', {
 	title: __( 'Image Gallery', 'wpzoom-portfolio' ),
@@ -12,18 +12,28 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 		images: {
 			type: 'array',
 			default: []
+        },
+        enableLightbox: {
+            type: 'boolean',
+            default: true
+        },
+        showCaptions: {
+            type: 'boolean',
+            default: true
 		}
 	},
 	edit: function( props ) {
 		const { attributes, setAttributes } = props;
-		const { images } = attributes;
+        const { images, enableLightbox, showCaptions } = attributes;
 
 		const onSelectImages = function( selectedImages ) {
-			// Store the image data we need (id, url, alt)
+            // Store the image data we need (id, url, alt, caption, full size)
 			const imageData = selectedImages.map( img => ({
 				id: img.id,
 				url: img.sizes && img.sizes.medium ? img.sizes.medium.url : img.url,
-				alt: img.alt || ''
+                fullUrl: img.url, // Full size for lightbox
+                alt: img.alt || '',
+                caption: img.caption || ''
 			}));
 			setAttributes({ images: imageData });
 		};
@@ -58,7 +68,21 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 						variant: 'secondary',
 						isDestructive: true,
 						style: { marginTop: '10px' }
-					}, __( 'Clear All', 'wpzoom-portfolio' ) )
+                    }, __('Clear All', 'wpzoom-portfolio')),
+
+                    wp.element.createElement(HorizontalRule),
+
+                    wp.element.createElement(ToggleControl, {
+                        label: __('Enable Lightbox', 'wpzoom-portfolio'),
+                        checked: enableLightbox,
+                        onChange: function (value) { setAttributes({ enableLightbox: value }); }
+                    }),
+
+                    enableLightbox && wp.element.createElement(ToggleControl, {
+                        label: __('Show Captions in Lightbox', 'wpzoom-portfolio'),
+                        checked: showCaptions,
+                        onChange: function (value) { setAttributes({ showCaptions: value }); }
+                    })
 				)
 			),
 			// Block Content - Image Grid
@@ -80,7 +104,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 					}, images.map( function( image, index ) {
 						return wp.element.createElement( 'div', {
 							key: image.id,
-							className: 'wpzoom-gallery-item'
+                            className: 'wpzoom-gallery-item' + (enableLightbox ? ' lightbox-enabled' : '')
 						},
 							wp.element.createElement( 'img', {
 								src: image.url,
@@ -91,7 +115,32 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 									objectFit: 'cover',
 									borderRadius: '4px'
 								}
-							})
+                            }),
+                            enableLightbox && wp.element.createElement('div', {
+                                className: 'wpzoom-lightbox-overlay',
+                                style: {
+                                    position: 'absolute',
+                                    top: 0,
+                                    left: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    backgroundColor: 'rgba(0,0,0,0.3)',
+                                    opacity: 0,
+                                    transition: 'opacity 0.3s',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    borderRadius: '4px'
+                                }
+                            },
+                                wp.element.createElement('span', {
+                                    style: {
+                                        color: 'white',
+                                        fontSize: '24px',
+                                        fontWeight: 'bold'
+                                    }
+                                }, '🔍')
+                            )
 						);
 					})
 				)
@@ -100,27 +149,41 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 	},
 	save: function( props ) {
 		const { attributes } = props;
-		const { images } = attributes;
+        const { images, enableLightbox, showCaptions } = attributes;
 
 		if ( images.length === 0 ) {
 			return null;
 		}
 
 		return wp.element.createElement( 'div', {
-			className: 'wpzoom-image-gallery-block'
+            className: 'wpzoom-image-gallery-block' + (enableLightbox ? ' use-lightbox' : '')
 		},
 			wp.element.createElement( 'div', {
 				className: 'wpzoom-gallery-grid'
 			}, images.map( function( image ) {
-				return wp.element.createElement( 'div', {
-					key: image.id,
-					className: 'wpzoom-gallery-item'
-				},
-					wp.element.createElement( 'img', {
-						src: image.url,
-						alt: image.alt
-					})
-				);
+                const imageElement = wp.element.createElement('img', {
+                    src: image.url,
+                    alt: image.alt
+                });
+
+                if (enableLightbox) {
+                    return wp.element.createElement('div', {
+                        key: image.id,
+                        className: 'wpzoom-gallery-item'
+                    },
+                        wp.element.createElement('a', {
+                            href: image.fullUrl,
+                            className: 'wpzoom-lightbox-link',
+                            'data-title': showCaptions ? image.caption : '',
+                            'data-lightbox': 'wpzoom-gallery'
+                        }, imageElement)
+                    );
+                } else {
+                    return wp.element.createElement('div', {
+                        key: image.id,
+                        className: 'wpzoom-gallery-item'
+                    }, imageElement);
+                }
 			})
 		));
 	}

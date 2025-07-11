@@ -13,12 +13,48 @@
 .wpzoom-gallery-item {
     position: relative;
     overflow: hidden;
-    cursor: pointer;
     transition: transform 0.3s ease;
 }
 
 .wpzoom-gallery-item:hover {
     transform: scale(1.02);
+}
+
+/* Lightbox functionality */
+.wpzoom-gallery-item.lightbox-enabled {
+    cursor: pointer;
+}
+
+.wpzoom-gallery-item .wpzoom-lightbox-link {
+    display: block;
+    text-decoration: none;
+    position: relative;
+}
+
+.wpzoom-gallery-item .wpzoom-lightbox-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    z-index: 2;
+}
+
+.wpzoom-gallery-item:hover .wpzoom-lightbox-overlay {
+    opacity: 1;
+}
+
+.wpzoom-gallery-item .wpzoom-lightbox-overlay span {
+    color: white;
+    font-size: 24px;
+    text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
 }
 
 .wpzoom-gallery-item img {
