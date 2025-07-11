@@ -12,7 +12,8 @@ import {
     ToggleControl,
     HorizontalRule,
     RangeControl,
-    SelectControl
+    SelectControl,
+    RadioControl
 } from '@wordpress/components';
 
 /**
@@ -31,7 +32,8 @@ import {
 
 const Edit = ({ attributes, setAttributes }) => {
     const {
-        images,
+        images, 
+        layout,
         columns,
         gap,
         imageSize,
@@ -40,7 +42,7 @@ const Edit = ({ attributes, setAttributes }) => {
         borderRadiusUnit,
         hoverEffect,
         enableLightbox,
-        showCaptions
+        showCaptions 
     } = attributes;
 
     const onSelectImages = (selectedImages) => {
@@ -63,6 +65,12 @@ const Edit = ({ attributes, setAttributes }) => {
             objectFit: 'cover'
         };
 
+        // For masonry layout, let images keep their natural dimensions
+        if (layout === 'masonry') {
+            return baseStyles;
+        }
+
+        // For grid layout, apply height and aspect ratio controls
         if (aspectRatio === 'auto') {
             // When aspect ratio is auto, use the set height
             baseStyles.height = imageSize + 'px';
@@ -115,11 +123,24 @@ const Edit = ({ attributes, setAttributes }) => {
                 </PanelBody>
 
                 <PanelBody
-                    icon={layoutIcon}
+                    icon={layoutIcon} 
                     title={__('Layout', 'wpzoom-portfolio')}
-                    initialOpen={false}
+                    initialOpen={false} 
                     className="wpzb-settings-panel"
                 >
+                    <RadioControl
+                        className="wpzb-button-select wpzb-button-select-icons"
+                        label={__('Layout Type', 'wpzoom-portfolio')}
+                        onChange={(value) => setAttributes({ layout: value })}
+                        options={[
+                            { value: 'grid', label: __('Grid', 'wpzoom-portfolio') },
+                            { value: 'masonry', label: __('Masonry', 'wpzoom-portfolio') }
+                        ]}
+                        selected={layout}
+                    />
+
+                    <HorizontalRule />
+
                     <RangeControl
                         label={__('Number of Columns', 'wpzoom-portfolio')}
                         value={columns}
@@ -142,8 +163,8 @@ const Edit = ({ attributes, setAttributes }) => {
 
                     <HorizontalRule />
 
-                    {/* Only show image height control when aspect ratio is "auto" */}
-                    {aspectRatio === 'auto' && (
+                    {/* Only show image height control when aspect ratio is "auto" AND layout is grid */}
+                    {layout === 'grid' && aspectRatio === 'auto' && (
                         <RangeControl
                             label={__('Image Height', 'wpzoom-portfolio')}
                             value={imageSize}
@@ -154,22 +175,40 @@ const Edit = ({ attributes, setAttributes }) => {
                         />
                     )}
 
-                    <SelectControl
-                        label={__('Aspect Ratio', 'wpzoom-portfolio')}
-                        value={aspectRatio}
-                        onChange={(value) => setAttributes({ aspectRatio: value })}
-                        options={[
-                            { label: __('Auto (Original)', 'wpzoom-portfolio'), value: 'auto' },
-                            { label: __('Square (1:1)', 'wpzoom-portfolio'), value: '1' },
-                            { label: __('Landscape (16:9)', 'wpzoom-portfolio'), value: '1.777' },
-                            { label: __('Landscape (4:3)', 'wpzoom-portfolio'), value: '1.333' },
-                            { label: __('Portrait (3:4)', 'wpzoom-portfolio'), value: '0.75' },
-                            { label: __('Portrait (9:16)', 'wpzoom-portfolio'), value: '0.5625' }
-                        ]}
-                        help={aspectRatio === 'auto' ? 
-                            __('Choose the aspect ratio for all images. When set to "Auto", you can control image height manually.', 'wpzoom-portfolio') :
-                            __('Choose the aspect ratio for all images. Image height will be automatically determined by the aspect ratio.', 'wpzoom-portfolio')}
-                    />
+                    {/* Only show aspect ratio control for grid layout */}
+                    {layout === 'grid' && (
+                        <SelectControl
+                            label={__('Aspect Ratio', 'wpzoom-portfolio')}
+                            value={aspectRatio}
+                            onChange={(value) => setAttributes({ aspectRatio: value })}
+                            options={[
+                                { label: __('Auto (Original)', 'wpzoom-portfolio'), value: 'auto' },
+                                { label: __('Square (1:1)', 'wpzoom-portfolio'), value: '1' },
+                                { label: __('Landscape (16:9)', 'wpzoom-portfolio'), value: '1.777' },
+                                { label: __('Landscape (4:3)', 'wpzoom-portfolio'), value: '1.333' },
+                                { label: __('Portrait (3:4)', 'wpzoom-portfolio'), value: '0.75' },
+                                { label: __('Portrait (9:16)', 'wpzoom-portfolio'), value: '0.5625' }
+                            ]}
+                            help={aspectRatio === 'auto' ?
+                                __('Choose the aspect ratio for all images. When set to "Auto", you can control image height manually.', 'wpzoom-portfolio') :
+                                __('Choose the aspect ratio for all images. Image height will be automatically determined by the aspect ratio.', 'wpzoom-portfolio')}
+                        />
+                    )}
+
+                    {/* Show info text for masonry layout */}
+                    {layout === 'masonry' && (
+                        <p style={{
+                            fontStyle: 'italic',
+                            color: '#666',
+                            fontSize: '13px',
+                            margin: '0 0 16px 0',
+                            padding: '12px',
+                            backgroundColor: '#f8f9fa',
+                            borderRadius: '4px'
+                        }}>
+                            {__('In masonry layout, images maintain their natural dimensions for an organic flow.', 'wpzoom-portfolio')}
+                        </p>
+                    )}
 
                     <HorizontalRule />
 
@@ -261,9 +300,16 @@ const Edit = ({ attributes, setAttributes }) => {
                         {__('No images selected. Use the block settings to add images.', 'wpzoom-portfolio')}
                     </div>
                 ) : (
-                    <div className={`wpzoom-gallery-grid columns-${columns}`} style={{ gap: gap + 'px' }}>
+                        <div
+                            className={`wpzoom-gallery-grid wpzoom-gallery-${layout} columns-${columns}`}
+                            style={layout === 'masonry' ? { columnGap: gap + 'px' } : { gap: gap + 'px' }}
+                        >
                         {images.map((image) => (
-                            <div key={image.id} className={`wpzoom-gallery-item hover-${hoverEffect}${enableLightbox ? ' lightbox-enabled' : ''}`}>
+                            <div
+                                key={image.id}
+                                className={`wpzoom-gallery-item hover-${hoverEffect}${enableLightbox ? ' lightbox-enabled' : ''}`}
+                                style={layout === 'masonry' ? { marginBottom: gap + 'px' } : {}}
+                            >
                                 <img src={image.url} alt={image.alt} style={getImageStyles()} />
                                 {enableLightbox && (
                                     <div 
@@ -294,7 +340,8 @@ const Edit = ({ attributes, setAttributes }) => {
 
 const Save = ({ attributes }) => {
     const {
-        images,
+        images, 
+        layout,
         columns,
         gap,
         imageSize,
@@ -303,7 +350,7 @@ const Save = ({ attributes }) => {
         borderRadiusUnit,
         hoverEffect,
         enableLightbox,
-        showCaptions
+        showCaptions 
     } = attributes;
 
     if (images.length === 0) {
@@ -318,6 +365,12 @@ const Save = ({ attributes }) => {
             objectFit: 'cover'
         };
 
+        // For masonry layout, let images keep their natural dimensions
+        if (layout === 'masonry') {
+            return baseStyles;
+        }
+
+        // For grid layout, apply height and aspect ratio controls
         if (aspectRatio === 'auto') {
             // When aspect ratio is auto, use the set height
             baseStyles.height = imageSize + 'px';
@@ -332,7 +385,10 @@ const Save = ({ attributes }) => {
 
     return (
         <div className={`wpzoom-image-gallery-block${enableLightbox ? ' use-lightbox' : ''}`}>
-            <div className={`wpzoom-gallery-grid columns-${columns}`} style={{ gap: gap + 'px' }}>
+            <div
+                className={`wpzoom-gallery-grid wpzoom-gallery-${layout} columns-${columns}`}
+                style={layout === 'masonry' ? { columnGap: gap + 'px' } : { gap: gap + 'px' }}
+            >
                 {images.map((image) => {
                     const imageElement = (
                         <img src={image.url} alt={image.alt} style={getImageStyles()} />
@@ -340,7 +396,11 @@ const Save = ({ attributes }) => {
 
                     if (enableLightbox) {
                         return (
-                            <div key={image.id} className={`wpzoom-gallery-item hover-${hoverEffect}`}>
+                            <div
+                                key={image.id}
+                                className={`wpzoom-gallery-item hover-${hoverEffect}`}
+                                style={layout === 'masonry' ? { marginBottom: gap + 'px' } : {}}
+                            >
                                 <a
                                     href={image.fullUrl}
                                     className="wpzoom-lightbox-link"
@@ -361,7 +421,11 @@ const Save = ({ attributes }) => {
                         );
                     } else {
                         return (
-                            <div key={image.id} className={`wpzoom-gallery-item hover-${hoverEffect}`}>
+                            <div
+                                key={image.id}
+                                className={`wpzoom-gallery-item hover-${hoverEffect}`}
+                                style={layout === 'masonry' ? { marginBottom: gap + 'px' } : {}}
+                            >
                                 {imageElement}
                                 {hoverEffect === 'overlay-caption' && (
                                     <div
@@ -389,6 +453,10 @@ registerBlockType('wpzoom-blocks/image-gallery', {
         images: {
             type: 'array',
             default: []
+        },
+        layout: {
+            type: 'string',
+            default: 'grid'
         },
         columns: {
             type: 'number',

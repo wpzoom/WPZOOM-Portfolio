@@ -16,7 +16,22 @@
     padding: 0;
 }
 
-/* Dynamic column classes */
+/* Masonry Layout */
+.wpzoom-gallery-grid.wpzoom-gallery-masonry {
+    display: block;
+    column-gap: 15px;
+    /* Will be overridden by inline styles */
+}
+
+.wpzoom-gallery-masonry .wpzoom-gallery-item {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 15px;
+    /* Will be overridden by inline styles */
+    break-inside: avoid;
+}
+
+/* Dynamic column classes - Default for Grid Layout */
 .wpzoom-gallery-grid.columns-1 {
     grid-template-columns: 1fr;
 }
@@ -41,6 +56,36 @@
     grid-template-columns: repeat(6, 1fr);
 }
 
+/* Override for Masonry Layout */
+.wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-1 {
+    column-count: 1;
+    grid-template-columns: none;
+}
+
+.wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-2 {
+    column-count: 2;
+    grid-template-columns: none;
+}
+
+.wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-3 {
+    column-count: 3;
+    grid-template-columns: none;
+}
+
+.wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-4 {
+    column-count: 4;
+    grid-template-columns: none;
+}
+
+.wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-5 {
+    column-count: 5;
+    grid-template-columns: none;
+}
+
+.wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-6 {
+    column-count: 6;
+    grid-template-columns: none;
+}
 .wpzoom-gallery-item {
     position: relative;
     overflow: hidden;
@@ -162,8 +207,14 @@
     /* Height, aspect-ratio and border-radius will be set via inline styles */
 }
 
+/* Ensure masonry images maintain natural dimensions */
+.wpzoom-gallery-masonry .wpzoom-gallery-item img {
+    height: auto !important;
+    aspect-ratio: unset !important;
+}
 /* Responsive behavior - reduce columns on smaller screens */
 @media (max-width: 768px) {
+    /* Grid Layout Responsive */
     .wpzoom-gallery-grid.columns-4,
     .wpzoom-gallery-grid.columns-5,
     .wpzoom-gallery-grid.columns-6 {
@@ -173,9 +224,22 @@
     .wpzoom-gallery-grid.columns-3 {
         grid-template-columns: repeat(2, 1fr);
     }
+                /* Masonry Layout Responsive - Override */
+                .wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-4,
+                .wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-5,
+                .wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-6 {
+                    column-count: 3;
+                    grid-template-columns: none;
+                }
+        
+                .wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-3 {
+                    column-count: 2;
+                    grid-template-columns: none;
+                }
 }
 
 @media (max-width: 480px) {
+    /* Grid Layout Responsive */
     .wpzoom-gallery-grid.columns-3,
     .wpzoom-gallery-grid.columns-4,
     .wpzoom-gallery-grid.columns-5,
@@ -187,4 +251,17 @@
         grid-template-columns: 1fr;
     }
     
+                /* Masonry Layout Responsive - Override */
+                .wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-3,
+                .wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-4,
+                .wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-5,
+                .wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-6 {
+                    column-count: 1;
+                    grid-template-columns: none;
+                }
+        
+                .wpzoom-gallery-grid.wpzoom-gallery-masonry.columns-2 {
+                    column-count: 1;
+                    grid-template-columns: none;
+                }
 }

@@ -1,0 +1,93 @@
+/* Image Gallery Block Editor Styles */
+
+.wpzb-button-select {
+	.components-radio-control__group-wrapper {
+		display: flex;
+		flex-direction: row;
+		gap: 0;
+
+		.components-base-control__label {
+			flex: 0 0 100%;
+		}
+
+        .components-h-stack {
+            flex-direction: row;
+            gap: 0;
+        }
+
+		.components-radio-control__option {
+			position: relative;
+			flex-basis: 50%; /* 2 options instead of 3 */
+			flex-grow: 1;
+			text-align: center;
+			padding: 8px;
+			margin: 0;
+			display: flex;
+			justify-content: center;
+
+			.components-radio-control__input {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				height: 100%;
+				width: 100%;
+				padding: 0;
+				border-radius: 0;
+				margin: 0;
+
+				&::before {
+					display: none;
+				}
+
+				&:checked + label,
+                &:checked + label::before {
+					color: #fff;
+				}
+			}
+
+			&:nth-child(1) .components-radio-control__input {
+				border-top-left-radius: 5px;
+				border-bottom-left-radius: 5px;
+				border-right: 0;
+			}
+
+			&:last-child .components-radio-control__input {
+				border-top-right-radius: 5px;
+				border-bottom-right-radius: 5px;
+			}
+
+			label {
+				position: relative;
+				z-index: 2;
+			}
+		}
+	}
+
+	&.wpzb-button-select-icons {
+		.components-radio-control__group-wrapper {
+			.components-radio-control__option {
+				input {
+					max-width: 100%;
+				}
+				label::before {
+					display: block;
+					font-family: 'dashicons';
+					font-size: 30px;
+					line-height: 1;
+				}
+	
+				/* Grid Layout Icon */
+				&:nth-child(1) label::before {
+					content: '\f509'; /* Grid/Overlay icon */
+				}
+	
+				/* Masonry Layout Icon */
+				&:nth-child(2) label::before {
+					content: '\f489'; /* Masonry icon */
+				}
+			}
+		}
+	}
+} 
