@@ -29,6 +29,18 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
             type: 'string',
             default: 'auto'
         },
+        borderRadius: {
+            type: 'number',
+            default: 4
+        },
+        borderRadiusUnit: {
+            type: 'string',
+            default: 'px'
+        },
+        hoverEffect: {
+            type: 'string',
+            default: 'scale-up'
+        },
         enableLightbox: {
             type: 'boolean',
             default: true
@@ -40,7 +52,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 	},
 	edit: function( props ) {
 		const { attributes, setAttributes } = props;
-        const { images, columns, gap, imageSize, aspectRatio, enableLightbox, showCaptions } = attributes;
+        const { images, columns, gap, imageSize, aspectRatio, borderRadius, borderRadiusUnit, hoverEffect, enableLightbox, showCaptions } = attributes;
 
 		const onSelectImages = function( selectedImages ) {
             // Store the image data we need (id, url, alt, caption, full size)
@@ -130,9 +142,57 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
                             { label: __('Portrait (3:4)', 'wpzoom-portfolio'), value: '0.75' },
                             { label: __('Portrait (9:16)', 'wpzoom-portfolio'), value: '0.5625' }
                         ],
-                        help: aspectRatio === 'auto' ?
+                        help: aspectRatio === 'auto' ? 
                             __('Choose the aspect ratio for all images. When set to "Auto", you can control image height manually.', 'wpzoom-portfolio') :
                             __('Choose the aspect ratio for all images. Image height will be automatically determined by the aspect ratio.', 'wpzoom-portfolio')
+                    }),
+
+                    wp.element.createElement(HorizontalRule),
+
+                    // Border Radius Control
+                    wp.element.createElement('div', {
+                        style: {
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                            marginBottom: '16px'
+                        }
+                    },
+                        wp.element.createElement('div', { style: { flex: '1' } },
+                            wp.element.createElement(RangeControl, {
+                                label: __('Border Radius', 'wpzoom-portfolio'),
+                                value: borderRadius,
+                                onChange: function (value) { setAttributes({ borderRadius: value }); },
+                                min: 0,
+                                max: 100,
+                                help: __('Adjust the roundness of image corners.', 'wpzoom-portfolio')
+                            })
+                        ),
+                        wp.element.createElement('div', { style: { marginTop: '20px' } },
+                            wp.element.createElement(SelectControl, {
+                                value: borderRadiusUnit,
+                                onChange: function (value) { setAttributes({ borderRadiusUnit: value }); },
+                                options: [
+                                    { label: 'px', value: 'px' },
+                                    { label: '%', value: '%' }
+                                ],
+                                style: { minWidth: '60px' }
+                            })
+                        )
+                    ),
+
+                    wp.element.createElement(HorizontalRule),
+
+                    wp.element.createElement(SelectControl, {
+                        label: __('Hover Effect', 'wpzoom-portfolio'),
+                        value: hoverEffect,
+                        onChange: function (value) { setAttributes({ hoverEffect: value }); },
+                        options: [
+                            { label: __('Scale Up', 'wpzoom-portfolio'), value: 'scale-up' },
+                            { label: __('Scale Down', 'wpzoom-portfolio'), value: 'scale-down' },
+                            { label: __('Grayscale to Color', 'wpzoom-portfolio'), value: 'grayscale' }
+                        ],
+                        help: __('Choose the hover animation effect for gallery images.', 'wpzoom-portfolio')
                     }),
 
                     wp.element.createElement(HorizontalRule),
@@ -172,7 +232,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
                         const getImageStyles = function () {
                             const baseStyles = {
                                 width: '100%',
-                                borderRadius: '4px',
+                                borderRadius: borderRadius + borderRadiusUnit,
                                 objectFit: 'cover'
                             };
 
@@ -190,7 +250,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 
 						return wp.element.createElement( 'div', {
 							key: image.id,
-                            className: 'wpzoom-gallery-item' + (enableLightbox ? ' lightbox-enabled' : '')
+                            className: 'wpzoom-gallery-item hover-' + hoverEffect + (enableLightbox ? ' lightbox-enabled' : '')
 						},
 							wp.element.createElement( 'img', {
 								src: image.url,
@@ -211,7 +271,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    borderRadius: '4px'
+                                    borderRadius: borderRadius + borderRadiusUnit
                                 }
                             },
                                 wp.element.createElement('span', {
@@ -230,7 +290,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 	},
 	save: function( props ) {
 		const { attributes } = props;
-        const { images, columns, gap, imageSize, aspectRatio, enableLightbox, showCaptions } = attributes;
+        const { images, columns, gap, imageSize, aspectRatio, borderRadius, borderRadiusUnit, hoverEffect, enableLightbox, showCaptions } = attributes;
 
 		if ( images.length === 0 ) {
 			return null;
@@ -247,7 +307,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
                 const getImageStyles = function () {
                     const baseStyles = {
                         width: '100%',
-                        borderRadius: '4px',
+                        borderRadius: borderRadius + borderRadiusUnit,
                         objectFit: 'cover'
                     };
 
@@ -272,7 +332,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
                 if (enableLightbox) {
                     return wp.element.createElement('div', {
                         key: image.id,
-                        className: 'wpzoom-gallery-item'
+                        className: 'wpzoom-gallery-item hover-' + hoverEffect
                     },
                         wp.element.createElement('a', {
                             href: image.fullUrl,
@@ -284,7 +344,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
                 } else {
                     return wp.element.createElement('div', {
                         key: image.id,
-                        className: 'wpzoom-gallery-item'
+                        className: 'wpzoom-gallery-item hover-' + hoverEffect
                     }, imageElement);
                 }
 			})

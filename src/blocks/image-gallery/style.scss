@@ -40,8 +40,26 @@
     transition: transform 0.3s ease;
 }
 
-.wpzoom-gallery-item:hover {
+/* Hover Effects */
+.wpzoom-gallery-item.hover-scale-up:hover {
     transform: scale(1.02);
+}
+
+.wpzoom-gallery-item.hover-scale-down {
+    transition: transform 0.3s ease;
+}
+
+.wpzoom-gallery-item.hover-scale-down:hover {
+    transform: scale(0.98);
+}
+
+.wpzoom-gallery-item.hover-grayscale img {
+    filter: grayscale(100%);
+    transition: filter 0.3s ease;
+}
+
+.wpzoom-gallery-item.hover-grayscale:hover img {
+    filter: grayscale(0%);
 }
 
 /* Lightbox functionality */
@@ -67,8 +85,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
     z-index: 2;
+    /* Border-radius will be set via inline styles to match images */
 }
 
 .wpzoom-gallery-item:hover .wpzoom-lightbox-overlay {
@@ -84,9 +102,8 @@
 .wpzoom-gallery-item img {
     width: 100%;
     object-fit: cover;
-    border-radius: 4px;
     display: block;
-    /* Height and aspect-ratio will be set via inline styles */
+    /* Height, aspect-ratio and border-radius will be set via inline styles */
 }
 
 /* Responsive behavior - reduce columns on smaller screens */
