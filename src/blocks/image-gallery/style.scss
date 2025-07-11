@@ -4,12 +4,35 @@
 
 .wpzoom-gallery-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
     gap: 15px;
     margin: 0;
     padding: 0;
 }
 
+/* Dynamic column classes */
+.wpzoom-gallery-grid.columns-1 {
+    grid-template-columns: 1fr;
+}
+
+.wpzoom-gallery-grid.columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.wpzoom-gallery-grid.columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.wpzoom-gallery-grid.columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.wpzoom-gallery-grid.columns-5 {
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.wpzoom-gallery-grid.columns-6 {
+    grid-template-columns: repeat(6, 1fr);
+}
 .wpzoom-gallery-item {
     position: relative;
     overflow: hidden;
@@ -65,26 +88,42 @@
     display: block;
 }
 
-/* Responsive: 2 columns on tablet */
+/* Responsive behavior - reduce columns on smaller screens */
 @media (max-width: 768px) {
-    .wpzoom-gallery-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+    .wpzoom-gallery-grid.columns-4,
+    .wpzoom-gallery-grid.columns-5,
+    .wpzoom-gallery-grid.columns-6 {
+        grid-template-columns: repeat(3, 1fr);
     }
     
-    .wpzoom-gallery-item img {
-        height: 150px;
+    .wpzoom-gallery-grid.columns-3 {
+        grid-template-columns: repeat(2, 1fr);
+        .wpzoom-gallery-grid {
+            gap: 10px;
+        }
+        
+        .wpzoom-gallery-item img {
+            height: 150px;
+        }
     }
 }
 
-/* Responsive: 1 column on mobile */
 @media (max-width: 480px) {
-    .wpzoom-gallery-grid {
+    .wpzoom-gallery-grid.columns-3,
+    .wpzoom-gallery-grid.columns-4,
+    .wpzoom-gallery-grid.columns-5,
+    .wpzoom-gallery-grid.columns-6 {
         grid-template-columns: 1fr;
-        gap: 8px;
+        .wpzoom-gallery-grid.columns-2 {
+            grid-template-columns: 1fr;
+        }
+        
+        .wpzoom-gallery-grid {
+            gap: 8px;
+        }
+        
+        .wpzoom-gallery-item img {
+            height: 200px;
+        }
     }
-    
-    .wpzoom-gallery-item img {
-        height: 200px;
-    }
-} 
+}

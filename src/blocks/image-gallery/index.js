@@ -1,17 +1,21 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { PanelBody, Button, ToggleControl, HorizontalRule } from '@wordpress/components';
+import { PanelBody, Button, ToggleControl, HorizontalRule, RangeControl } from '@wordpress/components';
 
 registerBlockType( 'wpzoom-blocks/image-gallery', {
 	title: __( 'Image Gallery', 'wpzoom-portfolio' ),
 	description: __( 'A simple image gallery block.', 'wpzoom-portfolio' ),
 	icon: 'format-gallery',
 	category: 'wpzoom-blocks',
-	attributes: {
+    attributes: {
 		images: {
 			type: 'array',
 			default: []
+        },
+        columns: {
+            type: 'number',
+            default: 3
         },
         enableLightbox: {
             type: 'boolean',
@@ -24,7 +28,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 	},
 	edit: function( props ) {
 		const { attributes, setAttributes } = props;
-        const { images, enableLightbox, showCaptions } = attributes;
+        const { images, columns, enableLightbox, showCaptions } = attributes;
 
 		const onSelectImages = function( selectedImages ) {
             // Store the image data we need (id, url, alt, caption, full size)
@@ -72,6 +76,17 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 
                     wp.element.createElement(HorizontalRule),
 
+                    wp.element.createElement(RangeControl, {
+                        label: __('Number of Columns', 'wpzoom-portfolio'),
+                        value: columns,
+                        onChange: function (value) { setAttributes({ columns: value }); },
+                        min: 1,
+                        max: 6,
+                        help: __('Choose how many columns to display in the gallery grid.', 'wpzoom-portfolio')
+                    }),
+
+                    wp.element.createElement(HorizontalRule),
+
                     wp.element.createElement(ToggleControl, {
                         label: __('Enable Lightbox', 'wpzoom-portfolio'),
                         checked: enableLightbox,
@@ -100,7 +115,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 						}
 					}, __( 'No images selected. Use the block settings to add images.', 'wpzoom-portfolio' ) ) :
 					wp.element.createElement( 'div', {
-						className: 'wpzoom-gallery-grid'
+                        className: 'wpzoom-gallery-grid columns-' + columns
 					}, images.map( function( image, index ) {
 						return wp.element.createElement( 'div', {
 							key: image.id,
@@ -149,7 +164,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 	},
 	save: function( props ) {
 		const { attributes } = props;
-        const { images, enableLightbox, showCaptions } = attributes;
+        const { images, columns, enableLightbox, showCaptions } = attributes;
 
 		if ( images.length === 0 ) {
 			return null;
@@ -159,7 +174,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
             className: 'wpzoom-image-gallery-block' + (enableLightbox ? ' use-lightbox' : '')
 		},
 			wp.element.createElement( 'div', {
-				className: 'wpzoom-gallery-grid'
+                className: 'wpzoom-gallery-grid columns-' + columns
 			}, images.map( function( image ) {
                 const imageElement = wp.element.createElement('img', {
                     src: image.url,
