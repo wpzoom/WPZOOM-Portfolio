@@ -2,8 +2,9 @@ import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import {
     InspectorControls,
-    MediaUpload,
-    MediaUploadCheck
+    MediaUpload, 
+    MediaUploadCheck,
+    PanelColorSettings
 } from '@wordpress/block-editor';
 import {
     PanelBody,
@@ -13,6 +14,20 @@ import {
     RangeControl,
     SelectControl
 } from '@wordpress/components';
+
+/**
+ * Internal dependencies
+ */
+import {
+    blockColors,
+    secondaryColors
+} from '../portfolio/colors-palette';
+import {
+    colorIcon,
+    fieldsIcon,
+    layoutIcon,
+    settingsIcon
+} from '../../icons';
 
 const Edit = ({ attributes, setAttributes }) => {
     const {
@@ -62,10 +77,12 @@ const Edit = ({ attributes, setAttributes }) => {
 
     return (
         <>
-            <InspectorControls>
-                <PanelBody
-                    title={__('Gallery Settings', 'wpzoom-portfolio')}
-                    initialOpen={true}
+            <InspectorControls group="settings">
+                <PanelBody 
+                    icon={fieldsIcon}
+                    title={__('Gallery Content', 'wpzoom-portfolio')}
+                    initialOpen={true} 
+                    className="wpzb-settings-panel"
                 >
                     <MediaUploadCheck>
                         <MediaUpload
@@ -75,12 +92,9 @@ const Edit = ({ attributes, setAttributes }) => {
                             gallery={true}
                             value={images.map(img => img.id)}
                             render={({ open }) => (
-                                <Button
-                                    onClick={open}
-                                    variant="primary"
-                                >
+                                <Button onClick={open} variant="primary">
                                     {images.length === 0 ?
-                                        __('Select Images', 'wpzoom-portfolio') :
+                                        __('Select Images', 'wpzoom-portfolio') : 
                                         __(`Edit Gallery (${images.length} images)`, 'wpzoom-portfolio')
                                     }
                                 </Button>
@@ -98,9 +112,14 @@ const Edit = ({ attributes, setAttributes }) => {
                             {__('Clear All', 'wpzoom-portfolio')}
                         </Button>
                     )}
+                </PanelBody>
 
-                    <HorizontalRule />
-
+                <PanelBody
+                    icon={layoutIcon}
+                    title={__('Layout', 'wpzoom-portfolio')}
+                    initialOpen={false}
+                    className="wpzb-settings-panel"
+                >
                     <RangeControl
                         label={__('Number of Columns', 'wpzoom-portfolio')}
                         value={columns}
@@ -109,6 +128,8 @@ const Edit = ({ attributes, setAttributes }) => {
                         max={6}
                         help={__('Choose how many columns to display in the gallery grid.', 'wpzoom-portfolio')}
                     />
+
+                    <HorizontalRule />
 
                     <RangeControl
                         label={__('Gap Between Images', 'wpzoom-portfolio')}
@@ -145,7 +166,7 @@ const Edit = ({ attributes, setAttributes }) => {
                             { label: __('Portrait (3:4)', 'wpzoom-portfolio'), value: '0.75' },
                             { label: __('Portrait (9:16)', 'wpzoom-portfolio'), value: '0.5625' }
                         ]}
-                        help={aspectRatio === 'auto' ?
+                        help={aspectRatio === 'auto' ? 
                             __('Choose the aspect ratio for all images. When set to "Auto", you can control image height manually.', 'wpzoom-portfolio') :
                             __('Choose the aspect ratio for all images. Image height will be automatically determined by the aspect ratio.', 'wpzoom-portfolio')}
                     />
@@ -155,7 +176,7 @@ const Edit = ({ attributes, setAttributes }) => {
                     {/* Border Radius Control */}
                     <div style={{
                         display: 'flex',
-                        alignItems: 'center',
+                        alignItems: 'center', 
                         gap: '10px',
                         marginBottom: '16px'
                     }}>
@@ -181,9 +202,14 @@ const Edit = ({ attributes, setAttributes }) => {
                             />
                         </div>
                     </div>
+                </PanelBody>
 
-                    <HorizontalRule />
-
+                <PanelBody
+                    icon={settingsIcon}
+                    title={__('Other Settings', 'wpzoom-portfolio')}
+                    initialOpen={false}
+                    className="wpzb-settings-panel"
+                >
                     <SelectControl
                         label={__('Hover Effect', 'wpzoom-portfolio')}
                         value={hoverEffect}
@@ -215,6 +241,16 @@ const Edit = ({ attributes, setAttributes }) => {
                             onChange={(value) => setAttributes({ showCaptions: value })}
                         />
                     )}
+                </PanelBody>
+            </InspectorControls>
+
+            <InspectorControls group="styles">
+                <PanelBody
+                    title={__('Colors', 'wpzoom-portfolio')}
+                    initialOpen={false}
+                    className="wpzb-settings-panel"
+                >
+                    <p>{__('Color customizations will be available in a future version.', 'wpzoom-portfolio')}</p>
                 </PanelBody>
             </InspectorControls>
 
