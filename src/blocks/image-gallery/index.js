@@ -191,7 +191,11 @@ const Edit = ({ attributes, setAttributes }) => {
                         options={[
                             { label: __('Scale Up', 'wpzoom-portfolio'), value: 'scale-up' },
                             { label: __('Scale Down', 'wpzoom-portfolio'), value: 'scale-down' },
-                            { label: __('Grayscale to Color', 'wpzoom-portfolio'), value: 'grayscale' }
+                            { label: __('Grayscale to Color', 'wpzoom-portfolio'), value: 'grayscale' },
+                            { label: __('Blur to Sharp', 'wpzoom-portfolio'), value: 'blur' },
+                            { label: __('Shadow', 'wpzoom-portfolio'), value: 'shadow' },
+                            { label: __('Scale Up + Shadow', 'wpzoom-portfolio'), value: 'scale-shadow' },
+                            { label: __('Overlay + Caption', 'wpzoom-portfolio'), value: 'overlay-caption' }
                         ]}
                         help={__('Choose the hover animation effect for gallery images.', 'wpzoom-portfolio')}
                     />
@@ -217,12 +221,7 @@ const Edit = ({ attributes, setAttributes }) => {
             {/* Block Content - Image Grid */}
             <div className="wpzoom-image-gallery-block">
                 {images.length === 0 ? (
-                    <div style={{
-                        padding: '40px',
-                        border: '2px dashed #ccc',
-                        textAlign: 'center',
-                        color: '#666'
-                    }}>
+                    <div className="wpzoom-gallery-empty-state">
                         {__('No images selected. Use the block settings to add images.', 'wpzoom-portfolio')}
                     </div>
                 ) : (
@@ -231,30 +230,21 @@ const Edit = ({ attributes, setAttributes }) => {
                             <div key={image.id} className={`wpzoom-gallery-item hover-${hoverEffect}${enableLightbox ? ' lightbox-enabled' : ''}`}>
                                 <img src={image.url} alt={image.alt} style={getImageStyles()} />
                                 {enableLightbox && (
-                                    <div
+                                    <div 
                                         className="wpzoom-lightbox-overlay"
-                                        style={{
-                                            position: 'absolute',
-                                            top: 0,
-                                            left: 0,
-                                            right: 0,
-                                            bottom: 0,
-                                            backgroundColor: 'rgba(0,0,0,0.3)',
-                                            opacity: 0,
-                                            transition: 'opacity 0.3s',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            borderRadius: borderRadius + borderRadiusUnit
-                                        }}
+                                        style={{ borderRadius: borderRadius + borderRadiusUnit }}
                                     >
-                                        <span style={{
-                                            color: 'white',
-                                            fontSize: '24px',
-                                            fontWeight: 'bold'
-                                        }}>
+                                        <span className="wpzoom-lightbox-icon">
                                             🔍
                                         </span>
+                                    </div>
+                                )}
+                                {hoverEffect === 'overlay-caption' && (
+                                    <div
+                                        className="wpzoom-caption-overlay"
+                                        style={{ borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}` }}
+                                    >
+                                        {image.caption || image.alt || __('Image', 'wpzoom-portfolio')}
                                     </div>
                                 )}
                             </div>
@@ -323,12 +313,28 @@ const Save = ({ attributes }) => {
                                 >
                                     {imageElement}
                                 </a>
+                                {hoverEffect === 'overlay-caption' && (
+                                    <div
+                                        className="wpzoom-caption-overlay"
+                                        style={{ borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}` }}
+                                    >
+                                        {image.caption || image.alt || 'Image'}
+                                    </div>
+                                )}
                             </div>
                         );
                     } else {
                         return (
                             <div key={image.id} className={`wpzoom-gallery-item hover-${hoverEffect}`}>
                                 {imageElement}
+                                {hoverEffect === 'overlay-caption' && (
+                                    <div
+                                        className="wpzoom-caption-overlay"
+                                        style={{ borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}` }}
+                                    >
+                                        {image.caption || image.alt || 'Image'}
+                                    </div>
+                                )}
                             </div>
                         );
                     }
