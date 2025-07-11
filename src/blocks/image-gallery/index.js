@@ -17,6 +17,10 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
             type: 'number',
             default: 3
         },
+        gap: {
+            type: 'number',
+            default: 15
+        },
         enableLightbox: {
             type: 'boolean',
             default: true
@@ -28,7 +32,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 	},
 	edit: function( props ) {
 		const { attributes, setAttributes } = props;
-        const { images, columns, enableLightbox, showCaptions } = attributes;
+        const { images, columns, gap, enableLightbox, showCaptions } = attributes;
 
 		const onSelectImages = function( selectedImages ) {
             // Store the image data we need (id, url, alt, caption, full size)
@@ -85,6 +89,15 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
                         help: __('Choose how many columns to display in the gallery grid.', 'wpzoom-portfolio')
                     }),
 
+                    wp.element.createElement(RangeControl, {
+                        label: __('Gap Between Images', 'wpzoom-portfolio'),
+                        value: gap,
+                        onChange: function (value) { setAttributes({ gap: value }); },
+                        min: 0,
+                        max: 50,
+                        help: __('Adjust the spacing between images in pixels.', 'wpzoom-portfolio')
+                    }),
+
                     wp.element.createElement(HorizontalRule),
 
                     wp.element.createElement(ToggleControl, {
@@ -115,7 +128,8 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 						}
 					}, __( 'No images selected. Use the block settings to add images.', 'wpzoom-portfolio' ) ) :
 					wp.element.createElement( 'div', {
-                        className: 'wpzoom-gallery-grid columns-' + columns
+                        className: 'wpzoom-gallery-grid columns-' + columns,
+                        style: { gap: gap + 'px' }
 					}, images.map( function( image, index ) {
 						return wp.element.createElement( 'div', {
 							key: image.id,
@@ -164,7 +178,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 	},
 	save: function( props ) {
 		const { attributes } = props;
-        const { images, columns, enableLightbox, showCaptions } = attributes;
+        const { images, columns, gap, enableLightbox, showCaptions } = attributes;
 
 		if ( images.length === 0 ) {
 			return null;
@@ -174,7 +188,8 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
             className: 'wpzoom-image-gallery-block' + (enableLightbox ? ' use-lightbox' : '')
 		},
 			wp.element.createElement( 'div', {
-                className: 'wpzoom-gallery-grid columns-' + columns
+                className: 'wpzoom-gallery-grid columns-' + columns,
+                style: { gap: gap + 'px' }
 			}, images.map( function( image ) {
                 const imageElement = wp.element.createElement('img', {
                     src: image.url,

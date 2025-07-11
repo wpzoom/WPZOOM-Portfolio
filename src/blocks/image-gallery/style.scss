@@ -4,7 +4,7 @@
 
 .wpzoom-gallery-grid {
     display: grid;
-    gap: 15px;
+    gap: 15px; /* Default gap, will be overridden by inline styles */
     margin: 0;
     padding: 0;
 }
@@ -33,6 +33,7 @@
 .wpzoom-gallery-grid.columns-6 {
     grid-template-columns: repeat(6, 1fr);
 }
+
 .wpzoom-gallery-item {
     position: relative;
     overflow: hidden;
@@ -98,13 +99,10 @@
     
     .wpzoom-gallery-grid.columns-3 {
         grid-template-columns: repeat(2, 1fr);
-        .wpzoom-gallery-grid {
-            gap: 10px;
-        }
-        
-        .wpzoom-gallery-item img {
-            height: 150px;
-        }
+    }
+    
+    .wpzoom-gallery-item img {
+        height: 150px;
     }
 }
 
@@ -114,16 +112,13 @@
     .wpzoom-gallery-grid.columns-5,
     .wpzoom-gallery-grid.columns-6 {
         grid-template-columns: 1fr;
-        .wpzoom-gallery-grid.columns-2 {
-            grid-template-columns: 1fr;
-        }
-        
-        .wpzoom-gallery-grid {
-            gap: 8px;
-        }
-        
-        .wpzoom-gallery-item img {
-            height: 200px;
-        }
     }
-}
+    
+    .wpzoom-gallery-grid.columns-2 {
+        grid-template-columns: 1fr;
+    }
+    
+    .wpzoom-gallery-item img {
+        height: 200px;
+    }
+} 

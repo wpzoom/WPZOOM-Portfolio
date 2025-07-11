@@ -62,6 +62,7 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 			$should_enqueue =
 				has_block( 'wpzoom-blocks/portfolio' ) ||
 				has_block( 'wpzoom-blocks/portfolio-layouts' ) ||
+				has_block('wpzoom-blocks/image-gallery') ||
 				is_tax( 'portfolio' ) ||
 				self::has_wpzoom_portfolio_shortcode();
 
