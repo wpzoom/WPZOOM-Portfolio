@@ -1,7 +1,7 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
-import { PanelBody, Button, ToggleControl, HorizontalRule, RangeControl } from '@wordpress/components';
+import { PanelBody, Button, ToggleControl, HorizontalRule, RangeControl, SelectControl } from '@wordpress/components';
 
 registerBlockType( 'wpzoom-blocks/image-gallery', {
 	title: __( 'Image Gallery', 'wpzoom-portfolio' ),
@@ -21,6 +21,14 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
             type: 'number',
             default: 15
         },
+        imageSize: {
+            type: 'number',
+            default: 200
+        },
+        aspectRatio: {
+            type: 'string',
+            default: 'auto'
+        },
         enableLightbox: {
             type: 'boolean',
             default: true
@@ -32,7 +40,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 	},
 	edit: function( props ) {
 		const { attributes, setAttributes } = props;
-        const { images, columns, gap, enableLightbox, showCaptions } = attributes;
+        const { images, columns, gap, imageSize, aspectRatio, enableLightbox, showCaptions } = attributes;
 
 		const onSelectImages = function( selectedImages ) {
             // Store the image data we need (id, url, alt, caption, full size)
@@ -100,6 +108,35 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 
                     wp.element.createElement(HorizontalRule),
 
+                    // Only show image height control when aspect ratio is "auto"
+                    aspectRatio === 'auto' && wp.element.createElement(RangeControl, {
+                        label: __('Image Height', 'wpzoom-portfolio'),
+                        value: imageSize,
+                        onChange: function (value) { setAttributes({ imageSize: value }); },
+                        min: 100,
+                        max: 500,
+                        help: __('Set the height of images in pixels.', 'wpzoom-portfolio')
+                    }),
+
+                    wp.element.createElement(SelectControl, {
+                        label: __('Aspect Ratio', 'wpzoom-portfolio'),
+                        value: aspectRatio,
+                        onChange: function (value) { setAttributes({ aspectRatio: value }); },
+                        options: [
+                            { label: __('Auto (Original)', 'wpzoom-portfolio'), value: 'auto' },
+                            { label: __('Square (1:1)', 'wpzoom-portfolio'), value: '1' },
+                            { label: __('Landscape (16:9)', 'wpzoom-portfolio'), value: '1.777' },
+                            { label: __('Landscape (4:3)', 'wpzoom-portfolio'), value: '1.333' },
+                            { label: __('Portrait (3:4)', 'wpzoom-portfolio'), value: '0.75' },
+                            { label: __('Portrait (9:16)', 'wpzoom-portfolio'), value: '0.5625' }
+                        ],
+                        help: aspectRatio === 'auto' ?
+                            __('Choose the aspect ratio for all images. When set to "Auto", you can control image height manually.', 'wpzoom-portfolio') :
+                            __('Choose the aspect ratio for all images. Image height will be automatically determined by the aspect ratio.', 'wpzoom-portfolio')
+                    }),
+
+                    wp.element.createElement(HorizontalRule),
+
                     wp.element.createElement(ToggleControl, {
                         label: __('Enable Lightbox', 'wpzoom-portfolio'),
                         checked: enableLightbox,
@@ -131,6 +168,26 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
                         className: 'wpzoom-gallery-grid columns-' + columns,
                         style: { gap: gap + 'px' }
 					}, images.map( function( image, index ) {
+                        // Calculate image styles based on aspect ratio and size
+                        const getImageStyles = function () {
+                            const baseStyles = {
+                                width: '100%',
+                                borderRadius: '4px',
+                                objectFit: 'cover'
+                            };
+
+                            if (aspectRatio === 'auto') {
+                                // When aspect ratio is auto, use the set height
+                                baseStyles.height = imageSize + 'px';
+                            } else {
+                                // When aspect ratio is set, let CSS aspect-ratio handle it
+                                baseStyles.aspectRatio = aspectRatio;
+                                // Don't set height, let it be determined by aspect ratio
+                            }
+
+                            return baseStyles;
+                        };
+
 						return wp.element.createElement( 'div', {
 							key: image.id,
                             className: 'wpzoom-gallery-item' + (enableLightbox ? ' lightbox-enabled' : '')
@@ -138,12 +195,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 							wp.element.createElement( 'img', {
 								src: image.url,
 								alt: image.alt,
-								style: { 
-									width: '100%', 
-									height: '200px', 
-									objectFit: 'cover',
-									borderRadius: '4px'
-								}
+                                style: getImageStyles()
                             }),
                             enableLightbox && wp.element.createElement('div', {
                                 className: 'wpzoom-lightbox-overlay',
@@ -178,7 +230,7 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
 	},
 	save: function( props ) {
 		const { attributes } = props;
-        const { images, columns, gap, enableLightbox, showCaptions } = attributes;
+        const { images, columns, gap, imageSize, aspectRatio, enableLightbox, showCaptions } = attributes;
 
 		if ( images.length === 0 ) {
 			return null;
@@ -191,9 +243,30 @@ registerBlockType( 'wpzoom-blocks/image-gallery', {
                 className: 'wpzoom-gallery-grid columns-' + columns,
                 style: { gap: gap + 'px' }
 			}, images.map( function( image ) {
+                // Calculate image styles based on aspect ratio and size
+                const getImageStyles = function () {
+                    const baseStyles = {
+                        width: '100%',
+                        borderRadius: '4px',
+                        objectFit: 'cover'
+                    };
+
+                    if (aspectRatio === 'auto') {
+                        // When aspect ratio is auto, use the set height
+                        baseStyles.height = imageSize + 'px';
+                    } else {
+                        // When aspect ratio is set, let CSS aspect-ratio handle it
+                        baseStyles.aspectRatio = aspectRatio;
+                        // Don't set height, let it be determined by aspect ratio
+                    }
+
+                    return baseStyles;
+                };
+
                 const imageElement = wp.element.createElement('img', {
                     src: image.url,
-                    alt: image.alt
+                    alt: image.alt,
+                    style: getImageStyles()
                 });
 
                 if (enableLightbox) {

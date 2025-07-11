@@ -83,10 +83,10 @@
 
 .wpzoom-gallery-item img {
     width: 100%;
-    height: 200px;
     object-fit: cover;
     border-radius: 4px;
     display: block;
+    /* Height and aspect-ratio will be set via inline styles */
 }
 
 /* Responsive behavior - reduce columns on smaller screens */
@@ -99,10 +99,6 @@
     
     .wpzoom-gallery-grid.columns-3 {
         grid-template-columns: repeat(2, 1fr);
-    }
-    
-    .wpzoom-gallery-item img {
-        height: 150px;
     }
 }
 
@@ -118,7 +114,4 @@
         grid-template-columns: 1fr;
     }
     
-    .wpzoom-gallery-item img {
-        height: 200px;
-    }
-} 
+}
