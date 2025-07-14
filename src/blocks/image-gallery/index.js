@@ -37,6 +37,7 @@ const Edit = ({ attributes, setAttributes }) => {
         columns,
         gap,
         imageSize,
+        imageQuality,
         aspectRatio,
         borderRadius,
         borderRadiusUnit,
@@ -46,15 +47,73 @@ const Edit = ({ attributes, setAttributes }) => {
     } = attributes;
 
     const onSelectImages = (selectedImages) => {
-    // Store the image data we need (id, url, alt, caption, full size)
-        const imageData = selectedImages.map(img => ({
-            id: img.id,
-            url: img.sizes && img.sizes.medium ? img.sizes.medium.url : img.url,
-            fullUrl: img.url, // Full size for lightbox
-            alt: img.alt || '',
-            caption: img.caption || ''
-        }));
+        // Store the image data we need (id, url, alt, caption, full size)
+        const imageData = selectedImages.map(img => {
+            // Debug: Log the image data to see what's available
+            console.log('Image data from WordPress:', {
+                id: img.id,
+                url: img.url,
+                sizes: img.sizes,
+                currentQuality: imageQuality
+            });
+
+            // Get the URL for the selected quality, fallback to full size
+            let displayUrl = img.url; // Default to full size (original)
+
+            // WordPress stores sizes in img.sizes object
+            // Check if the requested size exists in the sizes object
+            if (imageQuality !== 'full' && img.sizes && img.sizes[imageQuality] && img.sizes[imageQuality].url) {
+                displayUrl = img.sizes[imageQuality].url;
+                console.log(`Using ${imageQuality} size:`, displayUrl);
+            } else {
+                console.log(`${imageQuality} size not available, using full size:`, displayUrl);
+            }
+
+            return {
+                id: img.id,
+                url: displayUrl,
+                fullUrl: img.url, // Always full size for lightbox
+                alt: img.alt || '',
+                caption: img.caption || '',
+                // Store all available sizes for future quality changes
+                sizes: img.sizes || {}
+            };
+        });
         setAttributes({ images: imageData });
+    };
+
+    // Update image URLs when quality setting changes
+    const updateImageQuality = (newQuality) => {
+        console.log('Updating image quality to:', newQuality);
+
+        if (images.length === 0) {
+            setAttributes({ imageQuality: newQuality });
+            return;
+        }
+
+        const updatedImages = images.map(img => {
+            console.log('Updating image:', img.id, 'Available sizes:', Object.keys(img.sizes || {}));
+
+            let displayUrl = img.fullUrl; // Default to full size
+
+            // Check if the requested size exists in the sizes object
+            if (newQuality !== 'full' && img.sizes && img.sizes[newQuality] && img.sizes[newQuality].url) {
+                displayUrl = img.sizes[newQuality].url;
+                console.log(`Using ${newQuality} size for image ${img.id}:`, displayUrl);
+            } else {
+                console.log(`${newQuality} size not available for image ${img.id}, using full size:`, displayUrl);
+            }
+
+            return {
+                ...img,
+                url: displayUrl
+            };
+        });
+
+        setAttributes({
+            imageQuality: newQuality,
+            images: updatedImages
+        });
     };
 
     // Calculate image styles based on aspect ratio and size
@@ -120,6 +179,22 @@ const Edit = ({ attributes, setAttributes }) => {
                             {__('Clear All', 'wpzoom-portfolio')}
                         </Button>
                     )}
+
+                    <HorizontalRule />
+
+                    <SelectControl
+                        label={__('Image Quality', 'wpzoom-portfolio')}
+                        value={imageQuality}
+                        onChange={updateImageQuality}
+                        options={[
+                            { label: __('Thumbnail (150px)', 'wpzoom-portfolio'), value: 'thumbnail' },
+                            { label: __('Medium (300px)', 'wpzoom-portfolio'), value: 'medium' },
+                            { label: __('Medium Large (768px)', 'wpzoom-portfolio'), value: 'medium_large' },
+                            { label: __('Large (1024px)', 'wpzoom-portfolio'), value: 'large' },
+                            { label: __('Full Size (Original)', 'wpzoom-portfolio'), value: 'full' }
+                        ]}
+                        help={__('Choose image quality for gallery display. Lightbox will always show full size images.', 'wpzoom-portfolio')}
+                    />
                 </PanelBody>
 
                 <PanelBody
@@ -345,6 +420,7 @@ const Save = ({ attributes }) => {
         columns,
         gap,
         imageSize,
+        imageQuality,
         aspectRatio,
         borderRadius,
         borderRadiusUnit,
@@ -469,6 +545,10 @@ registerBlockType('wpzoom-blocks/image-gallery', {
         imageSize: {
             type: 'number',
             default: 200
+        },
+        imageQuality: {
+            type: 'string',
+            default: 'medium'
         },
         aspectRatio: {
             type: 'string',
