@@ -13,7 +13,8 @@ import {
     HorizontalRule,
     RangeControl,
     SelectControl,
-    RadioControl
+    RadioControl,
+    Placeholder
 } from '@wordpress/components';
 
 /**
@@ -371,9 +372,28 @@ const Edit = ({ attributes, setAttributes }) => {
             {/* Block Content - Image Grid */}
             <div className="wpzoom-image-gallery-block">
                 {images.length === 0 ? (
-                    <div className="wpzoom-gallery-empty-state">
-                        {__('No images selected. Use the block settings to add images.', 'wpzoom-portfolio')}
-                    </div>
+                    <MediaUploadCheck>
+                        <MediaUpload
+                            onSelect={onSelectImages}
+                            allowedTypes={['image']}
+                            multiple={true}
+                            gallery={true}
+                            render={({ open }) => (
+                                <Placeholder
+                                    icon="format-gallery"
+                                    label={__('Image Gallery', 'wpzoom-portfolio')}
+                                    instructions={__('Click to select images for your gallery.', 'wpzoom-portfolio')}
+                                >
+                                    <Button
+                                        onClick={open}
+                                        variant="primary"
+                                    >
+                                        {__('Add Images', 'wpzoom-portfolio')}
+                                    </Button>
+                                </Placeholder>
+                            )}
+                        />
+                    </MediaUploadCheck>
                 ) : (
                         <div
                             className={`wpzoom-gallery-grid wpzoom-gallery-${layout} columns-${columns}`}
