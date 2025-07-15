@@ -59,15 +59,25 @@ const Edit = ({ attributes, setAttributes }) => {
                 displayUrl = img.sizes[imageQuality].url;
             }
 
+            // Try to get image dimensions from multiple sources
+            let imageWidth = img.width || null;
+            let imageHeight = img.height || null;
+
+            // If main dimensions are missing, try to get from full size in sizes object
+            if ((!imageWidth || !imageHeight) && img.sizes && img.sizes.full) {
+                imageWidth = img.sizes.full.width || imageWidth;
+                imageHeight = img.sizes.full.height || imageHeight;
+            }
+
             return {
                 id: img.id,
                 url: displayUrl,
                 fullUrl: img.url, // Always full size for lightbox
                 alt: img.alt || '',
                 caption: img.caption || '',
-                // Store image dimensions for PhotoSwipe
-                width: img.width || 1920,
-                height: img.height || 1280,
+                // Store actual image dimensions for PhotoSwipe
+                width: imageWidth,
+                height: imageHeight,
                 // Store all available sizes for future quality changes
                 sizes: img.sizes || {}
             };
@@ -488,8 +498,8 @@ const Save = ({ attributes }) => {
                                 <a
                                     href={image.fullUrl}
                                     className="wpzoom-photoswipe-item"
-                                    data-pswp-width={image.width || 1920}
-                                    data-pswp-height={image.height || 1280}
+                                    data-pswp-width={image.width || ''}
+                                    data-pswp-height={image.height || ''}
                                     data-pswp-caption={showCaptions ? (image.caption || image.alt || '') : ''}
                                 >
                                     {imageElement}

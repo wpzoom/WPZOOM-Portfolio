@@ -103,23 +103,25 @@
 
                 // Get image data from DOM attributes
                 dataSource: function (thumbnailElement, index) {
-                    const width = parseInt(thumbnailElement.dataset.pswpWidth) || 1200;
-                    const height = parseInt(thumbnailElement.dataset.pswpHeight) || 800;
+                    const width = parseInt(thumbnailElement.dataset.pswpWidth) || null;
+                    const height = parseInt(thumbnailElement.dataset.pswpHeight) || null;
                     const caption = thumbnailElement.dataset.pswpCaption || '';
 
-                    console.log('Loading image data:', {
-                        src: thumbnailElement.href,
-                        width: width,
-                        height: height,
-                        caption: caption
-                    });
-
-                    return {
+                    const imageData = {
                         src: thumbnailElement.href,
                         width: width,
                         height: height,
                         alt: caption
                     };
+
+                    // If dimensions are missing, PhotoSwipe will load the image to get real dimensions
+                    if (!width || !height) {
+                        console.log('Missing dimensions for image, PhotoSwipe will auto-detect:', thumbnailElement.href);
+                    } else {
+                        console.log('Loading image data with dimensions:', imageData);
+                    }
+
+                    return imageData;
                 }
             });
             
