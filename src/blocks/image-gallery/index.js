@@ -48,16 +48,8 @@ const Edit = ({ attributes, setAttributes }) => {
     } = attributes;
 
     const onSelectImages = (selectedImages) => {
-        // Store the image data we need (id, url, alt, caption, full size)
+        // Store the image data we need (id, url, alt, caption, full size, dimensions)
         const imageData = selectedImages.map(img => {
-            // Debug: Log the image data to see what's available
-            console.log('Image data from WordPress:', {
-                id: img.id,
-                url: img.url,
-                sizes: img.sizes,
-                currentQuality: imageQuality
-            });
-
             // Get the URL for the selected quality, fallback to full size
             let displayUrl = img.url; // Default to full size (original)
 
@@ -65,9 +57,6 @@ const Edit = ({ attributes, setAttributes }) => {
             // Check if the requested size exists in the sizes object
             if (imageQuality !== 'full' && img.sizes && img.sizes[imageQuality] && img.sizes[imageQuality].url) {
                 displayUrl = img.sizes[imageQuality].url;
-                console.log(`Using ${imageQuality} size:`, displayUrl);
-            } else {
-                console.log(`${imageQuality} size not available, using full size:`, displayUrl);
             }
 
             return {
@@ -76,6 +65,9 @@ const Edit = ({ attributes, setAttributes }) => {
                 fullUrl: img.url, // Always full size for lightbox
                 alt: img.alt || '',
                 caption: img.caption || '',
+                // Store image dimensions for PhotoSwipe
+                width: img.width || 1920,
+                height: img.height || 1280,
                 // Store all available sizes for future quality changes
                 sizes: img.sizes || {}
             };
@@ -85,16 +77,12 @@ const Edit = ({ attributes, setAttributes }) => {
 
     // Update image URLs when quality setting changes
     const updateImageQuality = (newQuality) => {
-        console.log('Updating image quality to:', newQuality);
-
         if (images.length === 0) {
             setAttributes({ imageQuality: newQuality });
             return;
         }
 
         const updatedImages = images.map(img => {
-            console.log('Updating image:', img.id, 'Available sizes:', Object.keys(img.sizes || {}));
-
             let displayUrl = img.fullUrl; // Default to full size
 
             // Check if the requested size exists in the sizes object
@@ -480,9 +468,9 @@ const Save = ({ attributes }) => {
     };
 
     return (
-        <div className={`wpzoom-image-gallery-block${enableLightbox ? ' use-lightbox' : ''}`}>
+        <div className={`wpzoom-image-gallery-block${enableLightbox ? ' use-photoswipe' : ''}`}>
             <div
-                className={`wpzoom-gallery-grid wpzoom-gallery-${layout} columns-${columns}`}
+                className={`wpzoom-gallery-grid wpzoom-gallery-${layout} columns-${columns}${enableLightbox ? ' wpzoom-photoswipe-gallery' : ''}`}
                 style={layout === 'masonry' ? { columnGap: gap + 'px' } : { gap: gap + 'px' }}
             >
                 {images.map((image) => {
@@ -499,9 +487,10 @@ const Save = ({ attributes }) => {
                             >
                                 <a
                                     href={image.fullUrl}
-                                    className="wpzoom-lightbox-link"
-                                    data-title={showCaptions ? image.caption : ''}
-                                    data-lightbox="wpzoom-gallery"
+                                    className="wpzoom-photoswipe-item"
+                                    data-pswp-width={image.width || 1920}
+                                    data-pswp-height={image.height || 1280}
+                                    data-pswp-caption={showCaptions ? (image.caption || image.alt || '') : ''}
                                 >
                                     {imageElement}
                                 </a>

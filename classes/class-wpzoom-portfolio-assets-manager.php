@@ -1,10 +1,10 @@
 <?php
 /**
- * WPZOOM Portfolio Assets Manager
- *
- * @since   1.3.2
- * @package WPZOOM_Portfolio
- */
+* WPZOOM Portfolio Assets Manager
+*
+* @since   1.3.2
+* @package WPZOOM_Portfolio
+*/
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,106 +12,137 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
-
+	
 	/**
-	 * Main WPZOOM_Portfolio_Assets_Manager Class.
-	 *
-	 * @since 1.3.2
-	 */
+	* Main WPZOOM_Portfolio_Assets_Manager Class.
+	*
+	* @since 1.3.2
+	*/
 	class WPZOOM_Portfolio_Assets_Manager {
-
+		
 		/**
-		 * This class instance.
-		 *
-		 * @var WPZOOM_Portfolio_Assets_Manager
-		 * @since 1.3.2
-		 */
+		* This class instance.
+		*
+		* @var WPZOOM_Portfolio_Assets_Manager
+		* @since 1.3.2
+		*/
 		private static $instance;
-
+		
 		/**
-		 * Provides singleton instance.
-		 *
-		 * @since 1.3.2
-		 * @return self instance
-		 */
+		* Provides singleton instance.
+		*
+		* @since 1.3.2
+		* @return self instance
+		*/
 		public static function instance() {			
-
+			
 			if ( null === self::$instance ) {
 				self::$instance = new WPZOOM_Portfolio_Assets_Manager();
 			}
-
+			
 			return self::$instance;
 		}
-
+		
 		/**
-		 * The Constructor.
-		 */
+		* The Constructor.
+		*/
 		public function __construct() {
-
+			
 			add_action( 'enqueue_block_assets', array( $this, 'enqueue_frontend_styles' ) );
 			add_action( 'enqueue_block_assets', array( $this, 'enqueue_google_fonts' ) );
 			
 			//Enqueue google fonts to editor
 			add_action( 'enqueue_block_editor_assets', array( $this, 'load_google_fonts_to_editor' ), 1 );
 			
-
+			
 		}
-
-		public function enqueue_frontend_styles() {
 		
-			$should_enqueue =
-				has_block( 'wpzoom-blocks/portfolio' ) ||
-				has_block( 'wpzoom-blocks/portfolio-layouts' ) ||
-				has_block('wpzoom-blocks/image-gallery') ||
-				is_tax( 'portfolio' ) ||
+		public function enqueue_frontend_styles() {
+			// Check for image-gallery block specifically for PhotoSwipe
+			$has_image_gallery = has_block('wpzoom-blocks/image-gallery');
+
+			// Check for other blocks that use Magnific Popup
+			$should_enqueue_magnific =
+				has_block('wpzoom-blocks/portfolio') ||
+				has_block('wpzoom-blocks/portfolio-layouts') ||
+				is_tax('portfolio') ||
 				self::has_wpzoom_portfolio_shortcode();
 
-			if( ! $should_enqueue ) {
+			// If neither image gallery nor other blocks are present, don't enqueue anything
+			if (!$has_image_gallery && !$should_enqueue_magnific) {
 				return;
 			}
 
-			wp_enqueue_style( 
-				'magnificPopup', 
-				WPZOOM_PORTFOLIO_URL . 'assets/css/magnific-popup.css', 
-				array(), 
-				WPZOOM_PORTFOLIO_VERSION
-			);
+			// Enqueue PhotoSwipe for image-gallery block
+			if ($has_image_gallery) {
+				wp_enqueue_style(
+					'photoswipe',
+					WPZOOM_PORTFOLIO_URL . 'assets/css/photoswipe.css',
+					array(),
+					WPZOOM_PORTFOLIO_VERSION
+				);
 
-			wp_enqueue_script( 
-				'magnificPopup', 
-				WPZOOM_PORTFOLIO_URL . 'assets/js/jquery.magnific-popup.min.js', 
-				array( 'jquery' ), 
-				WPZOOM_PORTFOLIO_VERSION,
-				true 
-			);
+				wp_enqueue_script(
+					'photoswipe',
+					WPZOOM_PORTFOLIO_URL . 'assets/js/photoswipe.umd.min.js',
+					array(),
+					WPZOOM_PORTFOLIO_VERSION,
+					true
+				);
 
-			wp_enqueue_script( 
-				'wpzoom-portfolio-block',
-				WPZOOM_PORTFOLIO_URL . 'assets/js/wpzoom-portfolio.js',
-				array( 'jquery', 'wp-util' ), 
-				WPZOOM_PORTFOLIO_VERSION,
-				true 
-			);
+				wp_enqueue_script(
+					'photoswipe-lightbox',
+					WPZOOM_PORTFOLIO_URL . 'assets/js/photoswipe-lightbox.umd.min.js',
+					array('photoswipe'),
+					WPZOOM_PORTFOLIO_VERSION,
+					true
+				);
+			}
 
-			wp_localize_script( 
-				'wpzoom-portfolio-block',
-				'WPZoomPortfolioBlock', 
-				array(
-					'ajaxURL'       => admin_url( 'admin-ajax.php' ),
-					'loadingString' => esc_html__( 'Loading...', 'wpzoom-portfolio' )
-				) 
-			);
+			// Enqueue Magnific Popup for other blocks
+			if ($should_enqueue_magnific) {
+				wp_enqueue_style(
+					'magnificPopup',
+					WPZOOM_PORTFOLIO_URL . 'assets/css/magnific-popup.css',
+					array(),
+					WPZOOM_PORTFOLIO_VERSION
+				);
 
+				wp_enqueue_script(
+					'magnificPopup',
+					WPZOOM_PORTFOLIO_URL . 'assets/js/jquery.magnific-popup.min.js',
+					array('jquery'),
+					WPZOOM_PORTFOLIO_VERSION,
+					true
+				);
+
+				wp_enqueue_script(
+					'wpzoom-portfolio-block',
+					WPZOOM_PORTFOLIO_URL . 'assets/js/wpzoom-portfolio.js',
+					array('jquery', 'wp-util'),
+					WPZOOM_PORTFOLIO_VERSION,
+					true
+				);
+
+				wp_localize_script(
+					'wpzoom-portfolio-block',
+					'WPZoomPortfolioBlock',
+					array(
+						'ajaxURL' => admin_url('admin-ajax.php'),
+						'loadingString' => esc_html__('Loading...', 'wpzoom-portfolio')
+					)
+				);
+			}
 		}
-
+		
 		/**
-		 * Check the post content has wpzoom portfolio shortcode
-		 *
-		 * @since  1.3.2
-		 * @param  int         $post_id The post ID.
-		 * @param  boolean|int $content The post content.
-		 * @return boolean     Return true if post content has portfolio shortcode, else return false.
-		 */
+		* Check the post content has wpzoom portfolio shortcode
+		*
+		* @since  1.3.2
+		* @param  int         $post_id The post ID.
+		* @param  boolean|int $content The post content.
+		* @return boolean     Return true if post content has portfolio shortcode, else return false.
+		*/
 		public static function has_wpzoom_portfolio_shortcode( $post_id = 0, $content = '' ) {
 			
 			$post_id = $post_id > 0 ? $post_id : get_the_ID();
@@ -119,7 +150,7 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 			if ( empty( $content ) ) {
 				$content = get_post_field( 'post_content', $post_id );
 			}
-
+			
 			if ( $content ) {			
 				if ( has_shortcode( $content, 'wpzoom_block_portfolio' ) || has_shortcode( $content, 'wpzoom_portfolio_layout' ) ) {
 					return true;
@@ -127,26 +158,26 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 			}
 			return false;
 		}
-
+		
 		/**
-		 * Load google fonts for the block
-		 *
-		 * @since  1.3.2
-		 */
+		* Load google fonts for the block
+		*
+		* @since  1.3.2
+		*/
 		public function enqueue_google_fonts() {
-
+			
 			global $post;
-
+			
 			if ( ! isset( $post ) || ! is_object( $post ) ) {
 				return;
 			}
-
+			
 			$google_fonts = $wp_google_fonts = $font_families = array();
-
+			
 			$blocks = parse_blocks( $post->post_content );
-
+			
 			foreach ( $blocks as $index => $block ) {
-
+				
 				if ( 'wpzoom-blocks/portfolio' === $block['blockName'] ) {
 					if( isset( $block['attrs']['fontFamily'] ) && 'Default' != $block['attrs']['fontFamily'] ) {
 						$wp_google_fonts[] = $block['attrs']['fontFamily'];
@@ -161,13 +192,13 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 						$google_fonts[] = $block['attrs']['btnFontFamily'];
 					}
 				}
-
+				
 			}
-
+			
 			if( empty( $google_fonts ) && empty( $wp_google_fonts ) ) {
 				return;
 			}
-
+			
 			if( !empty( $wp_google_fonts ) ) {
 				if( function_exists( 'wp_enqueue_fonts' ) ) {
 					wp_enqueue_fonts( $wp_google_fonts );
@@ -182,12 +213,12 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 					
 					$font_families[] = $google_font . ':wght@300;400;500;600;700';
 				}
-	
+				
 				$fonts_url = add_query_arg( array(
 					'family' => implode( '&family=', $font_families ),
 					'display' => 'swap',
 				), 'https://fonts.googleapis.com/css2' );
-	
+				
 				wp_enqueue_style(
 					'wpzoom-portfolio-block-google-fonts',
 					wptt_get_webfont_url( esc_url_raw( $fonts_url ) ),
@@ -195,22 +226,18 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 					WPZOOM_PORTFOLIO_VERSION
 				);
 			}
-
 		}
-
+		
 		public function load_google_fonts_to_editor() {
-
+			
 			wp_enqueue_style( 
 				'wpzoom-portfolio-google-fonts', 
 				WPZOOM_PORTFOLIO_URL . '/assets/admin/css/editor-google-fonts.css',
 				array(), 
 				WPZOOM_PORTFOLIO_VERSION
 			);
-
 		}
-
 	}
-
 }
 
 WPZOOM_Portfolio_Assets_Manager::instance();
