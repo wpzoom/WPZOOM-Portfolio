@@ -452,9 +452,6 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									/>
 								}
 
-
-
-                                { ( layout == 'grid' || layout == 'masonry' ) &&
 								<RangeControl
 									label={ __( 'Columns Gap', 'wpzoom-portfolio' ) }
 									max={ 100 }
@@ -462,7 +459,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 									onChange={ ( value ) => setAttributes( { columnsGap: value } ) }
 									value={ columnsGap }
 								/>
-                                }
+
 								<ToggleControl
 									label={ __( 'Show View All Button', 'wpzoom-portfolio' ) }
 									checked={ showViewAll }

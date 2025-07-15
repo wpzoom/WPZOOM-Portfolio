@@ -671,15 +671,15 @@ class WPZOOM_Blocks_Portfolio {
 
 		}
 
-		//Set Column gap
-		$columns_gap = isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) && $layout !== 'list' ? '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_items-list { grid-gap:' . $attr['columnsGap'] . 'px; }' : '';
+		//Set Column gap  
+		$columns_gap = isset($attr['columnsGap']) && (0 !== $attr['columnsGap']) ? '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_items-list { gap:' . $attr['columnsGap'] . 'px; }' : '';
 
 		if( isset( $attr[ 'columnsGap' ] ) && ( 0 !== $attr[ 'columnsGap' ] ) ) {
 			if( isset( $attr[ 'columnsAmount' ] ) && ! empty( $attr[ 'columnsAmount' ] ) ) {
 				switch( $attr[ 'columnsAmount' ] ) {
 
 					case 1:
-						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-1 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { margin-botton: ' . $attr['columnsGap'] . 'px }';
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-1 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { margin-bottom: ' . $attr['columnsGap'] . 'px }';
 					break;
 						
 					case 2:
@@ -695,7 +695,7 @@ class WPZOOM_Blocks_Portfolio {
 					break;
 
 					case 5:
-						$masonry_selectors = '.wpzoom-blocks_portfolio-.' . $class_unique . '.layout-masonry.columns-5 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(20% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] .'px ' . $attr['columnsGap'] .'px 0}';
+						$masonry_selectors = '.wpzoom-blocks_portfolio-block.' . $class_unique . '.layout-masonry.columns-5 .wpzoom-blocks_portfolio-block_items-list .wpzoom-blocks_portfolio-block_item { width: calc(20% - ' . $attr['columnsGap'] . 'px); margin:0 ' . $attr['columnsGap'] . 'px ' . $attr['columnsGap'] . 'px 0}';
 					break;
 
 					case 6:
