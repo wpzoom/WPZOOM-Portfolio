@@ -316,9 +316,6 @@ const Edit = ({ attributes, setAttributes }) => {
                                         className="wpzoom-lightbox-overlay"
                                         style={{ borderRadius: borderRadius + borderRadiusUnit }}
                                     >
-                                        <span className="wpzoom-lightbox-icon">
-                                            🔍
-                                        </span>
                                     </div>
                                 )}
                                 {hoverEffect === 'overlay-caption' && (
@@ -476,7 +473,7 @@ registerBlockType('wpzoom-blocks/image-gallery', {
         },
         borderRadius: {
             type: 'number',
-            default: 4
+            default: 0
         },
         borderRadiusUnit: {
             type: 'string',
