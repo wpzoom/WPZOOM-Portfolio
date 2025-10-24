@@ -46,11 +46,10 @@ const Edit = ({ attributes, setAttributes }) => {
     } = attributes;
 
     const onSelectImages = (selectedImages) => {
-    // Store the image data we need (id, url, alt, caption, full size)
+        // Store the image data we need (id, url, alt, caption)
         const imageData = selectedImages.map(img => ({
             id: img.id,
-            url: img.sizes && img.sizes.medium ? img.sizes.medium.url : img.url,
-            fullUrl: img.url, // Full size for lightbox
+            url: img.url,
             alt: img.alt || '',
             caption: img.caption || ''
         }));
@@ -399,7 +398,7 @@ const Save = ({ attributes }) => {
                                 style={layout === 'masonry' ? { marginBottom: gap + 'px' } : {}}
                             >
                                 <a
-                                    href={image.fullUrl}
+                                    href={image.url}
                                     className="wpzoom-lightbox-link"
                                     data-title={showCaptions ? image.caption : ''}
                                     data-lightbox="wpzoom-gallery"
