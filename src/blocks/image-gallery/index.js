@@ -16,9 +16,6 @@ import {
     RadioControl
 } from '@wordpress/components';
 
-/**
- * Internal dependencies
- */
 import {
     blockColors,
     secondaryColors
@@ -46,7 +43,6 @@ const Edit = ({ attributes, setAttributes }) => {
     } = attributes;
 
     const onSelectImages = (selectedImages) => {
-        // Store the image data we need (id, url, alt, caption)
         const imageData = selectedImages.map(img => ({
             id: img.id,
             url: img.url,
@@ -56,27 +52,21 @@ const Edit = ({ attributes, setAttributes }) => {
         setAttributes({ images: imageData });
     };
 
-    // Calculate image styles based on aspect ratio and size
     const getImageStyles = () => {
         const baseStyles = {
             width: '100%',
-            borderRadius: borderRadius + borderRadiusUnit,
-            objectFit: 'cover'
+            borderRadius: borderRadius + borderRadiusUnit
         };
 
-        // For masonry layout, let images keep their natural dimensions
         if (layout === 'masonry') {
             return baseStyles;
         }
 
-        // For grid layout, apply height and aspect ratio controls
         if (aspectRatio === 'auto') {
-            // When aspect ratio is auto, use the set height
-            baseStyles.height = imageSize + 'px';
+            baseStyles.height = 'auto';
         } else {
-            // When aspect ratio is set, let CSS aspect-ratio handle it
             baseStyles.aspectRatio = aspectRatio;
-            // Don't set height, let it be determined by aspect ratio
+            baseStyles.objectFit = 'cover';
         }
 
         return baseStyles;
@@ -162,19 +152,6 @@ const Edit = ({ attributes, setAttributes }) => {
 
                     <HorizontalRule />
 
-                    {/* Only show image height control when aspect ratio is "auto" AND layout is grid */}
-                    {layout === 'grid' && aspectRatio === 'auto' && (
-                        <RangeControl
-                            label={__('Image Height', 'wpzoom-portfolio')}
-                            value={imageSize}
-                            onChange={(value) => setAttributes({ imageSize: value })}
-                            min={100}
-                            max={500}
-                            help={__('Set the height of images in pixels.', 'wpzoom-portfolio')}
-                        />
-                    )}
-
-                    {/* Only show aspect ratio control for grid layout */}
                     {layout === 'grid' && (
                         <SelectControl
                             label={__('Aspect Ratio', 'wpzoom-portfolio')}
@@ -189,12 +166,11 @@ const Edit = ({ attributes, setAttributes }) => {
                                 { label: __('Portrait (9:16)', 'wpzoom-portfolio'), value: '0.5625' }
                             ]}
                             help={aspectRatio === 'auto' ?
-                                __('Choose the aspect ratio for all images. When set to "Auto", you can control image height manually.', 'wpzoom-portfolio') :
-                                __('Choose the aspect ratio for all images. Image height will be automatically determined by the aspect ratio.', 'wpzoom-portfolio')}
+                                __('Images will maintain their original aspect ratios.', 'wpzoom-portfolio') :
+                                __('All images will be cropped to match the selected aspect ratio.', 'wpzoom-portfolio')}
                         />
                     )}
 
-                    {/* Show info text for masonry layout */}
                     {layout === 'masonry' && (
                         <p style={{
                             fontStyle: 'italic',
@@ -211,7 +187,6 @@ const Edit = ({ attributes, setAttributes }) => {
 
                     <HorizontalRule />
 
-                    {/* Border Radius Control */}
                     <div style={{
                         display: 'flex',
                         alignItems: 'center', 
@@ -292,7 +267,6 @@ const Edit = ({ attributes, setAttributes }) => {
                 </PanelBody>
             </InspectorControls>
 
-            {/* Block Content - Image Grid */}
             <div className="wpzoom-image-gallery-block">
                 {images.length === 0 ? (
                     <div className="wpzoom-gallery-empty-state">
@@ -306,25 +280,27 @@ const Edit = ({ attributes, setAttributes }) => {
                         {images.map((image) => (
                             <div
                                 key={image.id}
-                                className={`wpzoom-gallery-item hover-${hoverEffect}${enableLightbox ? ' lightbox-enabled' : ''}`}
+                                className="wpzoom-gallery-item"
                                 style={layout === 'masonry' ? { marginBottom: gap + 'px' } : {}}
                             >
-                                <img src={image.url} alt={image.alt} style={getImageStyles()} />
-                                {enableLightbox && (
-                                    <div 
-                                        className="wpzoom-lightbox-overlay"
-                                        style={{ borderRadius: borderRadius + borderRadiusUnit }}
-                                    >
-                                    </div>
-                                )}
-                                {hoverEffect === 'overlay-caption' && (
-                                    <div
-                                        className="wpzoom-caption-overlay"
-                                        style={{ borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}` }}
-                                    >
-                                        {image.caption || image.alt || __('Image', 'wpzoom-portfolio')}
-                                    </div>
-                                )}
+                                <div className={`wpzoom-gallery-item-inner hover-${hoverEffect}${enableLightbox ? ' lightbox-enabled' : ''}`}>
+                                    <img src={image.url} alt={image.alt} style={getImageStyles()} />
+                                    {enableLightbox && (
+                                        <div
+                                            className="wpzoom-lightbox-overlay"
+                                            style={{ borderRadius: borderRadius + borderRadiusUnit }}
+                                        >
+                                        </div>
+                                    )}
+                                    {hoverEffect === 'overlay-caption' && (
+                                        <div
+                                            className="wpzoom-caption-overlay"
+                                            style={{ borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}` }}
+                                        >
+                                            {image.caption || image.alt || __('Image', 'wpzoom-portfolio')}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         ))}
                     </div>
@@ -353,27 +329,21 @@ const Save = ({ attributes }) => {
         return null;
     }
 
-    // Calculate image styles based on aspect ratio and size
     const getImageStyles = () => {
         const baseStyles = {
             width: '100%',
-            borderRadius: borderRadius + borderRadiusUnit,
-            objectFit: 'cover'
+            borderRadius: borderRadius + borderRadiusUnit
         };
 
-        // For masonry layout, let images keep their natural dimensions
         if (layout === 'masonry') {
             return baseStyles;
         }
 
-        // For grid layout, apply height and aspect ratio controls
         if (aspectRatio === 'auto') {
-            // When aspect ratio is auto, use the set height
-            baseStyles.height = imageSize + 'px';
+            baseStyles.height = 'auto';
         } else {
-            // When aspect ratio is set, let CSS aspect-ratio handle it
             baseStyles.aspectRatio = aspectRatio;
-            // Don't set height, let it be determined by aspect ratio
+            baseStyles.objectFit = 'cover';
         }
 
         return baseStyles;
@@ -394,43 +364,47 @@ const Save = ({ attributes }) => {
                         return (
                             <div
                                 key={image.id}
-                                className={`wpzoom-gallery-item hover-${hoverEffect}`}
+                                className="wpzoom-gallery-item"
                                 style={layout === 'masonry' ? { marginBottom: gap + 'px' } : {}}
                             >
-                                <a
-                                    href={image.url}
-                                    className="wpzoom-lightbox-link"
-                                    data-title={showCaptions ? image.caption : ''}
-                                    data-lightbox="wpzoom-gallery"
-                                >
-                                    {imageElement}
-                                </a>
-                                {hoverEffect === 'overlay-caption' && (
-                                    <div
-                                        className="wpzoom-caption-overlay"
-                                        style={{ borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}` }}
+                                <div className={`wpzoom-gallery-item-inner hover-${hoverEffect}`}>
+                                    <a
+                                        href={image.url}
+                                        className="wpzoom-lightbox-link"
+                                        data-title={showCaptions ? image.caption : ''}
+                                        data-lightbox="wpzoom-gallery"
                                     >
-                                        {image.caption || image.alt || 'Image'}
-                                    </div>
-                                )}
+                                        {imageElement}
+                                    </a>
+                                    {hoverEffect === 'overlay-caption' && (
+                                        <div
+                                            className="wpzoom-caption-overlay"
+                                            style={{ borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}` }}
+                                        >
+                                            {image.caption || image.alt || 'Image'}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         );
                     } else {
                         return (
                             <div
                                 key={image.id}
-                                className={`wpzoom-gallery-item hover-${hoverEffect}`}
+                                className="wpzoom-gallery-item"
                                 style={layout === 'masonry' ? { marginBottom: gap + 'px' } : {}}
                             >
-                                {imageElement}
-                                {hoverEffect === 'overlay-caption' && (
-                                    <div
-                                        className="wpzoom-caption-overlay"
-                                        style={{ borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}` }}
-                                    >
-                                        {image.caption || image.alt || 'Image'}
-                                    </div>
-                                )}
+                                <div className={`wpzoom-gallery-item-inner hover-${hoverEffect}`}>
+                                    {imageElement}
+                                    {hoverEffect === 'overlay-caption' && (
+                                        <div
+                                            className="wpzoom-caption-overlay"
+                                            style={{ borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}` }}
+                                        >
+                                            {image.caption || image.alt || 'Image'}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         );
                     }

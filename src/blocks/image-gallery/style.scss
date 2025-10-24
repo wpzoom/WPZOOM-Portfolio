@@ -86,79 +86,90 @@
     column-count: 6;
     grid-template-columns: none;
 }
-.wpzoom-gallery-item {
+.wpzoom-gallery-item-inner {
     position: relative;
     overflow: hidden;
-    transition: transform 0.3s ease;
+    display: inline-block;
 }
 
 /* Hover Effects */
-.wpzoom-gallery-item.hover-scale-up:hover {
-    transform: scale(1.02);
-}
-
-.wpzoom-gallery-item.hover-scale-down {
+.wpzoom-gallery-item-inner.hover-scale-up img {
     transition: transform 0.3s ease;
 }
 
-.wpzoom-gallery-item.hover-scale-down:hover {
-    transform: scale(0.98);
+.wpzoom-gallery-item-inner.hover-scale-up:hover img {
+    transform: scale(1.05);
 }
 
-.wpzoom-gallery-item.hover-grayscale img {
+.wpzoom-gallery-item-inner.hover-scale-down img {
+    transition: transform 0.3s ease;
+}
+
+.wpzoom-gallery-item-inner.hover-scale-down:hover img {
+    transform: scale(0.95);
+}
+
+.wpzoom-gallery-item-inner.hover-grayscale img {
     filter: grayscale(100%);
     transition: filter 0.3s ease;
 }
 
-.wpzoom-gallery-item.hover-grayscale:hover img {
+.wpzoom-gallery-item-inner.hover-grayscale:hover img {
     filter: grayscale(0%);
 }
 
 /* Blur to Sharp Effect */
-.wpzoom-gallery-item.hover-blur img {
+.wpzoom-gallery-item-inner.hover-blur img {
     filter: blur(2px);
     transition: filter 0.3s ease;
 }
 
-.wpzoom-gallery-item.hover-blur:hover img {
+.wpzoom-gallery-item-inner.hover-blur:hover img {
     filter: blur(0px);
 }
 
 /* Shadow Effect */
-.wpzoom-gallery-item.hover-shadow {
+.wpzoom-gallery-item-inner.hover-shadow {
     transition: box-shadow 0.3s ease;
 }
 
-.wpzoom-gallery-item.hover-shadow:hover {
+.wpzoom-gallery-item-inner.hover-shadow:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
 /* Scale Up + Shadow Combination Effect */
-.wpzoom-gallery-item.hover-scale-shadow {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.wpzoom-gallery-item-inner.hover-scale-shadow {
+    transition: box-shadow 0.3s ease;
 }
 
-.wpzoom-gallery-item.hover-scale-shadow:hover {
-    transform: scale(1.02);
+.wpzoom-gallery-item-inner.hover-scale-shadow img {
+    transition: transform 0.3s ease;
+}
+
+.wpzoom-gallery-item-inner.hover-scale-shadow:hover {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
+.wpzoom-gallery-item-inner.hover-scale-shadow:hover img {
+    transform: scale(1.05);
+}
+
 /* Overlay + Caption Effect */
-.wpzoom-gallery-item.hover-overlay-caption:hover .wpzoom-caption-overlay {
+.wpzoom-gallery-item-inner.hover-overlay-caption:hover .wpzoom-caption-overlay {
     transform: translateY(0);
 }
 /* Lightbox functionality */
-.wpzoom-gallery-item.lightbox-enabled {
+.wpzoom-gallery-item-inner.lightbox-enabled {
     cursor: pointer;
 }
 
-.wpzoom-gallery-item .wpzoom-lightbox-link {
+.wpzoom-gallery-item-inner .wpzoom-lightbox-link {
     display: block;
     text-decoration: none;
     position: relative;
 }
 
-.wpzoom-gallery-item .wpzoom-lightbox-overlay {
+.wpzoom-gallery-item-inner .wpzoom-lightbox-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -174,12 +185,12 @@
     /* Border-radius will be set via inline styles to match images */
 }
 
-.wpzoom-gallery-item:hover .wpzoom-lightbox-overlay {
+.wpzoom-gallery-item-inner:hover .wpzoom-lightbox-overlay {
     opacity: 1;
 }
 
 /* Caption overlay for overlay-caption hover effect */
-.wpzoom-gallery-item .wpzoom-caption-overlay {
+.wpzoom-gallery-item-inner .wpzoom-caption-overlay {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -194,7 +205,8 @@
     transition: transform 0.3s ease;
     /* Border-radius will be set via inline styles to match images */
 }
-.wpzoom-gallery-item img {
+
+.wpzoom-gallery-item-inner img {
     width: 100%;
     object-fit: cover;
     display: block;
@@ -202,7 +214,7 @@
 }
 
 /* Ensure masonry images maintain natural dimensions */
-.wpzoom-gallery-masonry .wpzoom-gallery-item img {
+.wpzoom-gallery-masonry .wpzoom-gallery-item-inner img {
     height: auto !important;
     aspect-ratio: unset !important;
 }
