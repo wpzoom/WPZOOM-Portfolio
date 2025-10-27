@@ -214,6 +214,7 @@ class WPZOOM_Blocks {
 		$should_enqueue =
 		has_block( 'wpzoom-blocks/portfolio' ) ||
 		has_block( 'wpzoom-blocks/portfolio-layouts' ) ||
+			has_block('wpzoom-blocks/image-gallery') ||
 		is_tax( 'portfolio' ) ||
 		WPZOOM_Portfolio_Assets_Manager::has_wpzoom_portfolio_shortcode();
 
@@ -222,6 +223,7 @@ class WPZOOM_Blocks {
 		}
 
 		wp_enqueue_script( 'masonry' );
+		wp_enqueue_script('imagesloaded');
 
 		wp_enqueue_script( 'wpzoom-blocks-js-script-main' ); 
 		wp_enqueue_style( 'wpzoom-blocks-css-style-main' );
@@ -281,6 +283,12 @@ class WPZOOM_Blocks {
 					$func = 'js' == $ext ? 'wp_register_script' : 'wp_register_style';
 					$url = trailingslashit( 'main' == $slug_ ? $this->main_dir_url : $this->blocks_dir_url . $slug ) . "$name.$ext";
 					$depends = 'js' == $ext ? $asset[ 'dependencies' ] : array();
+
+					// Add masonry dependencies for image-gallery script
+					if ('js' == $ext && 'script' == $name && 'image_gallery' == $slug_) {
+						$depends = array_merge($depends, array('jquery', 'masonry', 'imagesloaded'));
+					}
+
 					$func( "wpzoom-blocks-$ext-$name-$slug_", $url, $depends, $asset[ 'version' ], ( 'main' != $slug_ && 'js' == $ext ) );
 
 					// If the file in the current iteration is a script...

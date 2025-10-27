@@ -1,19 +1,9 @@
-/**
- * Initialize Magnific Popup for WPZOOM Image Gallery blocks
- */
 (function($) {
     'use strict';
-    
-    // Initialize when DOM is ready
+
     $(document).ready(function() {
         initializeGalleryLightbox();
-    });
-    
-    // Also initialize after Gutenberg block updates (for editor preview)
-    $(document).on('DOMNodeInserted', function(e) {
-        if ($(e.target).find('.wpzoom-image-gallery-block.use-lightbox').length) {
-            setTimeout(initializeGalleryLightbox, 100);
-        }
+        initializeGalleryMasonry();
     });
     
     function initializeGalleryLightbox() {
@@ -64,4 +54,22 @@
         });
     }
     
-})(jQuery); 
+    function initializeGalleryMasonry() {
+        if (typeof Masonry === 'undefined' || typeof imagesLoaded === 'undefined') {
+            return;
+        }
+
+        $('.wpzoom-gallery-masonry').each(function () {
+            var el = this;
+
+            var masonryInstance = new Masonry(el, {
+                itemSelector: '.wpzoom-gallery-item'
+            });
+
+            imagesLoaded(el).on('progress', function () {
+                masonryInstance.layout();
+            });
+        });
+    }
+
+})(jQuery);

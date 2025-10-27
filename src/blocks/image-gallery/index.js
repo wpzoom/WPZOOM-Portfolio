@@ -275,7 +275,7 @@ const Edit = ({ attributes, setAttributes }) => {
                 ) : (
                         <div
                             className={`wpzoom-gallery-grid wpzoom-gallery-${layout} columns-${columns}`}
-                            style={layout === 'masonry' ? { columnGap: gap + 'px' } : { gap: gap + 'px' }}
+                            style={layout === 'masonry' ? {} : { gap: gap + 'px' }}
                         >
                         {images.map((image) => (
                             <div
@@ -353,7 +353,7 @@ const Save = ({ attributes }) => {
         <div className={`wpzoom-image-gallery-block${enableLightbox ? ' use-lightbox' : ''}`}>
             <div
                 className={`wpzoom-gallery-grid wpzoom-gallery-${layout} columns-${columns}`}
-                style={layout === 'masonry' ? { columnGap: gap + 'px' } : { gap: gap + 'px' }}
+                style={layout === 'masonry' ? {} : { gap: gap + 'px' }}
             >
                 {images.map((image) => {
                     const imageElement = (

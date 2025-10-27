@@ -20,6 +20,18 @@
                 });
             }
         });
+
+        // Image Gallery: apply Masonry in editor as well
+        let galleryContainers = document.getElementsByClassName('wpzoom-gallery-masonry');
+        [].forEach.call(galleryContainers, function (el) {
+            var msnry = new Masonry(el, {
+                itemSelector: '.wpzoom-gallery-item'
+            });
+
+            imagesLoaded(el).on('progress', function () {
+                msnry.layout();
+            });
+        });
     }
 
     // Run Masonry initially
