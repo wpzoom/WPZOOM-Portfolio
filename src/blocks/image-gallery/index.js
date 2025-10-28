@@ -277,11 +277,17 @@ const Edit = ({ attributes, setAttributes }) => {
                             className={`wpzoom-gallery-grid wpzoom-gallery-${layout} columns-${columns}`}
                             style={layout === 'masonry' ? {} : { gap: gap + 'px' }}
                         >
+                            {layout === 'masonry' && (
+                                <>
+                                    <div className="wpzoom-masonry-sizer" style={{ width: `calc((100% - ${(columns - 1) * gap}px) / ${columns})` }}></div>
+                                    <div className="wpzoom-masonry-gutter-sizer" style={{ width: gap + 'px' }}></div>
+                                </>
+                            )}
                         {images.map((image) => (
                             <div
                                 key={image.id}
                                 className="wpzoom-gallery-item"
-                                style={layout === 'masonry' ? { marginBottom: gap + 'px' } : {}}
+                                style={layout === 'masonry' ? { marginBottom: gap + 'px', width: `calc((100% - ${(columns - 1) * gap}px) / ${columns})` } : {}}
                             >
                                 <div className={`wpzoom-gallery-item-inner hover-${hoverEffect}${enableLightbox ? ' lightbox-enabled' : ''}`}>
                                     <img src={image.url} alt={image.alt} style={getImageStyles()} />
@@ -355,6 +361,12 @@ const Save = ({ attributes }) => {
                 className={`wpzoom-gallery-grid wpzoom-gallery-${layout} columns-${columns}`}
                 style={layout === 'masonry' ? {} : { gap: gap + 'px' }}
             >
+                {layout === 'masonry' && (
+                    <>
+                        <div className="wpzoom-masonry-sizer" style={{ width: `calc((100% - ${(columns - 1) * gap}px) / ${columns})` }}></div>
+                        <div className="wpzoom-masonry-gutter-sizer" style={{ width: gap + 'px' }}></div>
+                    </>
+                )}
                 {images.map((image) => {
                     const imageElement = (
                         <img src={image.url} alt={image.alt} style={getImageStyles()} />
@@ -365,7 +377,7 @@ const Save = ({ attributes }) => {
                             <div
                                 key={image.id}
                                 className="wpzoom-gallery-item"
-                                style={layout === 'masonry' ? { marginBottom: gap + 'px' } : {}}
+                                style={layout === 'masonry' ? { marginBottom: gap + 'px', width: `calc((100% - ${(columns - 1) * gap}px) / ${columns})` } : {}}
                             >
                                 <div className={`wpzoom-gallery-item-inner hover-${hoverEffect}`}>
                                     <a
@@ -392,7 +404,7 @@ const Save = ({ attributes }) => {
                             <div
                                 key={image.id}
                                 className="wpzoom-gallery-item"
-                                style={layout === 'masonry' ? { marginBottom: gap + 'px' } : {}}
+                                style={layout === 'masonry' ? { marginBottom: gap + 'px', width: `calc((100% - ${(columns - 1) * gap}px) / ${columns})` } : {}}
                             >
                                 <div className={`wpzoom-gallery-item-inner hover-${hoverEffect}`}>
                                     {imageElement}

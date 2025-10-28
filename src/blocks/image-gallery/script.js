@@ -55,15 +55,30 @@
     }
     
     function initializeGalleryMasonry() {
+        // Skip inside the block editor iframe; editor script manages Masonry there
+        if (
+            typeof wp !== 'undefined' &&
+            wp.data &&
+            wp.data.subscribe &&
+            document.querySelector('.block-editor-block-list__layout')
+        ) {
+            return;
+        }
+
         if (typeof Masonry === 'undefined' || typeof imagesLoaded === 'undefined') {
             return;
         }
 
         $('.wpzoom-gallery-masonry').each(function () {
             var el = this;
+            var sizer = el.querySelector('.wpzoom-masonry-sizer');
+            var gutterSizer = el.querySelector('.wpzoom-masonry-gutter-sizer');
 
             var masonryInstance = new Masonry(el, {
-                itemSelector: '.wpzoom-gallery-item'
+                itemSelector: '.wpzoom-gallery-item',
+                percentPosition: true,
+                columnWidth: el.querySelector('.wpzoom-masonry-sizer') || '.wpzoom-gallery-item',
+                gutter: el.querySelector('.wpzoom-masonry-gutter-sizer') || 0
             });
 
             imagesLoaded(el).on('progress', function () {

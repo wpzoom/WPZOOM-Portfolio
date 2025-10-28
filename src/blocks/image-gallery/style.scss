@@ -28,7 +28,15 @@
     vertical-align: top;
         box-sizing: border-box;
     }
-    
+
+/* Masonry sizers (no height, just width references) */
+.wpzoom-gallery-masonry .wpzoom-masonry-sizer,
+.wpzoom-gallery-masonry .wpzoom-masonry-gutter-sizer {
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
     /* Masonry columns - percent widths like Portfolio block */
     .wpzoom-gallery-masonry.columns-1 .wpzoom-gallery-item {
     width: 100%;

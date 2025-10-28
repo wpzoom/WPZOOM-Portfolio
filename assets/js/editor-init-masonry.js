@@ -24,13 +24,37 @@
         // Image Gallery: apply Masonry in editor as well
         let galleryContainers = document.getElementsByClassName('wpzoom-gallery-masonry');
         [].forEach.call(galleryContainers, function (el) {
-            var msnry = new Masonry(el, {
-                itemSelector: '.wpzoom-gallery-item'
-            });
+            var existing = Masonry.data(el);
+            var sizer = el.querySelector('.wpzoom-masonry-sizer');
+            var gutterSizer = el.querySelector('.wpzoom-masonry-gutter-sizer');
+            var options = {
+                itemSelector: '.wpzoom-gallery-item',
+                percentPosition: true,
+                columnWidth: sizer || '.wpzoom-gallery-item',
+                gutter: gutterSizer || 0
+            };
 
-            imagesLoaded(el).on('progress', function () {
-                msnry.layout();
-            });
+
+
+            if (!existing) {
+                existing = new Masonry(el, options);
+            } else {
+                existing.options = Object.assign(existing.options || {}, options);
+                existing.layout();
+            }
+
+
+
+            imagesLoaded(el).on('progress', function () { existing.layout(); });
+        });
+
+        // Image Gallery: destroy Masonry when switching back to grid
+        let nonMasonryGalleries = document.querySelectorAll('.wpzoom-gallery-grid:not(.wpzoom-gallery-masonry)');
+        [].forEach.call(nonMasonryGalleries, function (el) {
+            var existing = Masonry.data(el);
+            if (existing) {
+                existing.destroy();
+            }
         });
     }
 
