@@ -47,10 +47,13 @@
     color: #007aff;
     
     &::after {
-        font-size: 24px;
-        font-weight: bold;
-        line-height: 1;
-        font-family: Arial, sans-serif;
+        content: '';
+        width: 100%;
+        height: 100%;
+        display: block;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
     }
     
     &.swiper-button-disabled {
@@ -62,13 +65,13 @@
 
 .swiper-button-next {
     &::after {
-        content: '›'; // Right pointing single angle quotation mark (Unicode)
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M27,22L27,22L5,44l-2.1-2.1L22.8,22L2.9,2.1L5,0L27,22L27,22z" fill="%23ffffff"/><path d="M24,22L6,40l-1.4-1.4L20.2,22L4.6,5.4L6,4L24,22z" fill="%23ffffff"/></svg>');
     }
 }
 
 .swiper-button-prev {
     &::after {
-        content: '‹'; // Left pointing single angle quotation mark (Unicode)
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M0,22L22,0l2.1,2.1L4.2,22l19.9,19.9L22,44L0,22L0,22L0,22z" fill="%23ffffff"/><path d="M3,22L21,4l1.4,1.4L6.8,22l15.6,16.6L21,40L3,22z" fill="%23ffffff"/></svg>');
     }
 }
 
@@ -127,7 +130,7 @@
         img {
             display: block;
             width: 100%;
-            height: auto;
+            max-width: 100%;
             transition: transform 0.3s ease;
         }
 
@@ -137,6 +140,13 @@
             position: relative;
             cursor: pointer;
             outline: none;
+            width: 100%;
+            height: 100%;
+
+            img {
+                width: 100%;
+                height: 100%;
+            }
 
             &:hover img {
                 transform: scale(1.02);
@@ -169,10 +179,11 @@
         color: #ffffff;
         transition: all 0.3s ease;
         opacity: 0.8;
+        border-radius: 0; // Explicitly no border radius for default
 
         &::after {
-            font-size: 20px;
-            font-weight: bold;
+            width: 20px;
+            height: 20px;
         }
 
         &:hover {
@@ -194,18 +205,44 @@
         right: 10px;
     }
 
+    // Arrow Style: Default (explicit)
+    &.arrow-style-default {
+        .swiper-button-prev,
+        .swiper-button-next {
+            width: 50px !important;
+            height: 50px !important;
+            border-radius: 0 !important;
+            background-color: transparent !important;
+            
+            &::after {
+                width: 22px;
+                height: 22px;
+            }
+        }
+
+        .swiper-button-prev {
+            left: 10px;
+        }
+
+        .swiper-button-next {
+            right: 10px;
+        }
+    }
+
     // Arrow Style: Circle
     &.arrow-style-circle {
         .swiper-button-prev,
         .swiper-button-next {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            width: 50px !important;
+            height: 50px !important;
+            border-radius: 50% !important;
             background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
 
             &::after {
-                font-size: 18px;
+                width: 22px;
+                height: 22px;
             }
 
             &:hover {
@@ -214,11 +251,11 @@
         }
 
         .swiper-button-prev {
-            left: 15px;
+            left: 10px;
         }
 
         .swiper-button-next {
-            right: 15px;
+            right: 10px;
         }
     }
 
@@ -226,14 +263,16 @@
     &.arrow-style-square {
         .swiper-button-prev,
         .swiper-button-next {
-            width: 50px;
-            height: 50px;
-            border-radius: 4px;
+            width: 50px !important;
+            height: 50px !important;
+            border-radius: 0 !important;
             background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
 
             &::after {
-                font-size: 18px;
+                width: 22px;
+                height: 22px;
             }
 
             &:hover {
@@ -242,11 +281,11 @@
         }
 
         .swiper-button-prev {
-            left: 15px;
+            left: 10px;
         }
 
         .swiper-button-next {
-            right: 15px;
+            right: 10px;
         }
     }
 
@@ -322,7 +361,8 @@
             margin-top: -18px;
 
             &::after {
-                font-size: 16px;
+                width: 16px;
+                height: 16px;
             }
         }
 
@@ -334,20 +374,53 @@
             right: 5px;
         }
 
-        &.arrow-style-circle,
-        &.arrow-style-square {
+        &.arrow-style-default {
             .swiper-button-prev,
             .swiper-button-next {
-                width: 40px;
-                height: 40px;
+                width: 40px !important;
+                height: 40px !important;
             }
 
             .swiper-button-prev {
-                left: 10px;
+                left: 5px;
             }
 
             .swiper-button-next {
-                right: 10px;
+                right: 5px;
+            }
+        }
+
+        &.arrow-style-circle {
+            .swiper-button-prev,
+            .swiper-button-next {
+                width: 40px !important;
+                height: 40px !important;
+                border-radius: 50% !important;
+            }
+
+            .swiper-button-prev {
+                left: 5px;
+            }
+
+            .swiper-button-next {
+                right: 5px;
+            }
+        }
+        
+        &.arrow-style-square {
+            .swiper-button-prev,
+            .swiper-button-next {
+                width: 40px !important;
+                height: 40px !important;
+                border-radius: 0 !important;
+            }
+
+            .swiper-button-prev {
+                left: 5px;
+            }
+
+            .swiper-button-next {
+                right: 5px;
             }
         }
 
@@ -372,16 +445,34 @@
             margin-top: -16px;
 
             &::after {
-                font-size: 14px;
+                width: 14px;
+                height: 14px;
             }
         }
 
-        &.arrow-style-circle,
+        &.arrow-style-default {
+            .swiper-button-prev,
+            .swiper-button-next {
+                width: 36px !important;
+                height: 36px !important;
+            }
+        }
+
+        &.arrow-style-circle {
+            .swiper-button-prev,
+            .swiper-button-next {
+                width: 36px !important;
+                height: 36px !important;
+                border-radius: 50% !important;
+            }
+        }
+        
         &.arrow-style-square {
             .swiper-button-prev,
             .swiper-button-next {
-                width: 36px;
-                height: 36px;
+                width: 36px !important;
+                height: 36px !important;
+                border-radius: 0 !important;
             }
         }
     }

@@ -49,6 +49,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
         slidesToShowTablet,
         slidesToShowMobile,
         slideHeight,
+        fixedHeight,
         imageFit,
         // Other Settings
         enableLightbox,
@@ -77,7 +78,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
         };
 
         if (slideHeight === 'fixed') {
-            styles.height = '400px';
+            styles.height = fixedHeight + 'px';
         }
 
         return styles;
@@ -90,7 +91,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
         };
 
         if (slideHeight === 'fixed') {
-            styles.height = '400px';
+            styles.height = fixedHeight + 'px';
             styles.objectFit = imageFit;
         } else {
             styles.height = 'auto';
@@ -382,6 +383,16 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                     {slideHeight === 'fixed' && (
                         <>
                             <HorizontalRule />
+                            <RangeControl
+                                label={__('Fixed Height (px)', 'wpzoom-portfolio')}
+                                value={fixedHeight}
+                                onChange={(value) => setAttributes({ fixedHeight: value })}
+                                min={200}
+                                max={1200}
+                                step={10}
+                                help={__('Set the height for all slides in pixels.', 'wpzoom-portfolio')}
+                            />
+                            <HorizontalRule />
                             <SelectControl
                                 label={__('Image Fit', 'wpzoom-portfolio')}
                                 value={imageFit}
@@ -507,7 +518,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                 )}
             </InspectorControls>
 
-            <div className="wpzoom-image-slideshow-block">
+            <div className={`wpzoom-image-slideshow-block arrow-style-${arrowStyle} dots-position-${dotsPosition}`}>
                 {images.length === 0 ? (
                     <div className="wpzoom-slideshow-empty-state">
                         {__('No images selected. Use the block settings to add images to your slideshow.', 'wpzoom-portfolio')}
@@ -516,7 +527,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                     <div className="wpzoom-slideshow-editor-preview">
                         <div 
                             ref={containerRef}
-                            className={`swiper wpzoom-slideshow-container arrow-style-${arrowStyle} dots-position-${dotsPosition}`}
+                            className="swiper wpzoom-slideshow-container"
                         >
                             <div className="swiper-wrapper">
                                 {images.map((image) => (
@@ -564,6 +575,7 @@ const Save = ({ attributes }) => {
         slidesToShowTablet,
         slidesToShowMobile,
         slideHeight,
+        fixedHeight,
         imageFit,
         enableLightbox,
         borderRadius,
@@ -592,6 +604,7 @@ const Save = ({ attributes }) => {
         slidesToShowTablet,
         slidesToShowMobile,
         slideHeight,
+        fixedHeight,
         imageFit,
         borderRadius: borderRadius + borderRadiusUnit,
         arrowColor,
@@ -603,12 +616,15 @@ const Save = ({ attributes }) => {
     const getImageStyles = () => {
         const styles = {
             width: '100%',
-            borderRadius: borderRadius + borderRadiusUnit
+            borderRadius: borderRadius + borderRadiusUnit,
+            display: 'block'
         };
 
         if (slideHeight === 'fixed') {
-            styles.height = '400px';
+            styles.height = fixedHeight + 'px';
             styles.objectFit = imageFit;
+        } else {
+            styles.height = 'auto';
         }
 
         return styles;
@@ -727,7 +743,11 @@ registerBlockType('wpzoom-blocks/image-slideshow', {
         },
         slideHeight: {
             type: 'string',
-            default: 'auto'
+            default: 'fixed'
+        },
+        fixedHeight: {
+            type: 'number',
+            default: 650
         },
         imageFit: {
             type: 'string',
