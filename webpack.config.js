@@ -52,7 +52,10 @@ module.exports = {
 					},
 					{
 						loader: 'sass-loader',
-						options: { sourceMap: ! production }
+						options: {
+							sourceMap: ! production,
+							implementation: require('sass')
+						}
 					}
 				]
 			}

@@ -1,0 +1,435 @@
+/**
+ * Frontend Styles for Image Slideshow Block
+ */
+
+// Essential Swiper core styles
+.swiper {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    z-index: 1;
+}
+
+.swiper-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    display: flex;
+    transition-property: transform;
+    box-sizing: content-box;
+}
+
+.swiper-slide {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition-property: transform;
+}
+
+// Swiper navigation arrows
+.swiper-button-next,
+.swiper-button-prev {
+    position: absolute;
+    top: 50%;
+    width: 27px;
+    height: 44px;
+    margin-top: -22px;
+    z-index: 10;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #007aff;
+    
+    &::after {
+        font-family: swiper-icons;
+        font-size: 24px;
+        text-transform: none!important;
+        letter-spacing: 0;
+        font-variant: initial;
+        line-height: 1;
+    }
+    
+    &.swiper-button-disabled {
+        opacity: 0.35;
+        cursor: auto;
+        pointer-events: none;
+    }
+}
+
+.swiper-button-next {
+    &::after {
+        content: 'next';
+    }
+}
+
+.swiper-button-prev {
+    &::after {
+        content: 'prev';
+    }
+}
+
+// Swiper pagination
+.swiper-pagination {
+    position: absolute;
+    text-align: center;
+    transition: 0.3s opacity;
+    transform: translate3d(0, 0, 0);
+    z-index: 10;
+}
+
+.swiper-pagination-bullet {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    border-radius: 50%;
+    background: #000;
+    opacity: 0.2;
+}
+
+.swiper-pagination-bullet-active {
+    opacity: 1;
+    background: var(--swiper-pagination-color, var(--swiper-theme-color));
+}
+
+// Block specific styles
+.wpzoom-image-slideshow-block {
+    position: relative;
+    width: 100%;
+    margin: 0 auto;
+
+    // Swiper container
+    .wpzoom-slideshow-container {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    // Swiper wrapper
+    .swiper-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+    // Individual slide
+    .swiper-slide {
+        position: relative;
+        width: 100%;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+
+        img {
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: transform 0.3s ease;
+        }
+
+        // Lightbox link styling
+        .wpzoom-lightbox-link {
+            display: block;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+
+            &:hover img {
+                transform: scale(1.02);
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0);
+                transition: background 0.3s ease;
+                pointer-events: none;
+            }
+
+            &:hover::after {
+                background: rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
+
+    // Navigation arrows - Default style
+    .swiper-button-prev,
+    .swiper-button-next {
+        width: 44px;
+        height: 44px;
+        margin-top: -22px;
+        color: #ffffff;
+        transition: all 0.3s ease;
+        opacity: 0.8;
+
+        &::after {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        &:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        &.swiper-button-disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+    }
+
+    .swiper-button-prev {
+        left: 10px;
+    }
+
+    .swiper-button-next {
+        right: 10px;
+    }
+
+    // Arrow Style: Circle
+    &.arrow-style-circle {
+        .swiper-button-prev,
+        .swiper-button-next {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+
+            &::after {
+                font-size: 18px;
+            }
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+        }
+
+        .swiper-button-prev {
+            left: 15px;
+        }
+
+        .swiper-button-next {
+            right: 15px;
+        }
+    }
+
+    // Arrow Style: Square
+    &.arrow-style-square {
+        .swiper-button-prev,
+        .swiper-button-next {
+            width: 50px;
+            height: 50px;
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+
+            &::after {
+                font-size: 18px;
+            }
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.8);
+            }
+        }
+
+        .swiper-button-prev {
+            left: 15px;
+        }
+
+        .swiper-button-next {
+            right: 15px;
+        }
+    }
+
+    // Pagination dots
+    .swiper-pagination {
+        position: relative;
+        margin-top: 20px;
+        bottom: auto;
+
+        .swiper-pagination-bullet {
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            background-color: #cccccc;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+            cursor: pointer;
+
+            &:hover {
+                opacity: 0.8;
+                transform: scale(1.2);
+            }
+
+            &.swiper-pagination-bullet-active {
+                background-color: #000000;
+                opacity: 1;
+                transform: scale(1.3);
+            }
+        }
+    }
+
+    // Dots position: Top
+    &.dots-position-top {
+        .wpzoom-slideshow-container {
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        .swiper-pagination {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+    }
+
+    // Dots position: Bottom (default)
+    &.dots-position-bottom {
+        .swiper-pagination {
+            margin-top: 20px;
+            margin-bottom: 0;
+        }
+    }
+
+    // Fixed height slides
+    .swiper-slide {
+        &.slide-height-fixed {
+            height: 400px;
+
+            img {
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .wpzoom-image-slideshow-block {
+        .swiper-button-prev,
+        .swiper-button-next {
+            width: 36px;
+            height: 36px;
+            margin-top: -18px;
+
+            &::after {
+                font-size: 16px;
+            }
+        }
+
+        .swiper-button-prev {
+            left: 5px;
+        }
+
+        .swiper-button-next {
+            right: 5px;
+        }
+
+        &.arrow-style-circle,
+        &.arrow-style-square {
+            .swiper-button-prev,
+            .swiper-button-next {
+                width: 40px;
+                height: 40px;
+            }
+
+            .swiper-button-prev {
+                left: 10px;
+            }
+
+            .swiper-button-next {
+                right: 10px;
+            }
+        }
+
+        .swiper-pagination {
+            margin-top: 15px;
+
+            .swiper-pagination-bullet {
+                width: 8px;
+                height: 8px;
+                margin: 0 4px;
+            }
+        }
+    }
+}
+
+@media (max-width: 480px) {
+    .wpzoom-image-slideshow-block {
+        .swiper-button-prev,
+        .swiper-button-next {
+            width: 32px;
+            height: 32px;
+            margin-top: -16px;
+
+            &::after {
+                font-size: 14px;
+            }
+        }
+
+        &.arrow-style-circle,
+        &.arrow-style-square {
+            .swiper-button-prev,
+            .swiper-button-next {
+                width: 36px;
+                height: 36px;
+            }
+        }
+    }
+}
+
+// Loading state
+.wpzoom-image-slideshow-block {
+    &.swiper-loading {
+        min-height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        &::before {
+            content: '';
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+// Accessibility - keyboard focus
+.wpzoom-image-slideshow-block {
+    .swiper-slide:focus,
+    .swiper-button-prev:focus,
+    .swiper-button-next:focus,
+    .swiper-pagination-bullet:focus {
+        outline: 2px solid #0073aa;
+        outline-offset: 2px;
+    }
+
+    .swiper-slide:focus-visible,
+    .swiper-button-prev:focus-visible,
+    .swiper-button-next:focus-visible,
+    .swiper-pagination-bullet:focus-visible {
+        outline: 2px solid #0073aa;
+        outline-offset: 2px;
+    }
+}
+

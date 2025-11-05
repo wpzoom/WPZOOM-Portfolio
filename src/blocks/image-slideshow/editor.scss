@@ -1,0 +1,226 @@
+/**
+ * Editor Styles for Image Slideshow Block
+ */
+
+.wp-block-wpzoom-blocks-image-slideshow {
+    .wpzoom-image-slideshow-block {
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        background: #ffffff;
+
+        // Empty state styling
+        .wpzoom-slideshow-empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            background: #f8f9fa;
+            border: 2px dashed #d0d5dd;
+            border-radius: 8px;
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        // Preview container
+        .wpzoom-slideshow-preview {
+            .wpzoom-slideshow-slides {
+                display: flex;
+                gap: 15px;
+                overflow: hidden;
+                border-radius: 4px;
+
+                .wpzoom-slideshow-slide {
+                    flex-shrink: 0;
+                    position: relative;
+
+                    .wpzoom-slideshow-slide-inner {
+                        position: relative;
+                        overflow: hidden;
+
+                        img {
+                            display: block;
+                            width: 100%;
+                            height: auto;
+                            transition: transform 0.3s ease;
+                        }
+
+                        &:hover img {
+                            transform: scale(1.02);
+                        }
+                    }
+                }
+
+                // Slide count display
+                &.slides-1 .wpzoom-slideshow-slide {
+                    flex: 0 0 100%;
+                }
+
+                &.slides-2 .wpzoom-slideshow-slide {
+                    flex: 0 0 calc(50% - 7.5px);
+                }
+
+                &.slides-3 .wpzoom-slideshow-slide {
+                    flex: 0 0 calc(33.333% - 10px);
+                }
+
+                &.slides-4 .wpzoom-slideshow-slide {
+                    flex: 0 0 calc(25% - 11.25px);
+                }
+            }
+        }
+    }
+}
+
+// Sidebar panel customizations
+.wpzb-settings-panel {
+    .components-panel__body-title {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    // Color picker styling
+    input[type="color"] {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        cursor: pointer;
+        padding: 2px;
+
+        &:hover {
+            border-color: #999;
+        }
+    }
+
+    // Range control enhancements
+    .components-range-control {
+        .components-range-control__slider {
+            background: linear-gradient(to right, #0073aa 0%, #0073aa 50%, #ddd 50%, #ddd 100%);
+        }
+    }
+
+    // Toggle control spacing
+    .components-toggle-control {
+        margin-bottom: 16px;
+
+        .components-base-control__help {
+            margin-top: 4px;
+            font-size: 12px;
+            color: #757575;
+        }
+    }
+
+    // Select control styling
+    .components-select-control {
+        margin-bottom: 16px;
+
+        select {
+            min-height: 36px;
+        }
+    }
+
+    // Radio control styling
+    .components-radio-control {
+        .components-radio-control__option {
+            margin-bottom: 8px;
+        }
+    }
+}
+
+// Responsive preview in editor
+@media (max-width: 782px) {
+    .wp-block-wpzoom-blocks-image-slideshow {
+        .wpzoom-image-slideshow-block {
+            padding: 15px;
+
+            .wpzoom-slideshow-preview {
+                .wpzoom-slideshow-slides {
+                    gap: 10px;
+
+                    &.slides-3,
+                    &.slides-4 {
+                        .wpzoom-slideshow-slide {
+                            flex: 0 0 calc(50% - 5px);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Block toolbar customizations
+.block-editor-block-toolbar {
+    .components-toolbar-group {
+        .components-button {
+            &.is-pressed {
+                background: #0073aa;
+                color: #fff;
+            }
+        }
+    }
+}
+
+// Inspector controls customizations for this block
+.block-editor-block-inspector {
+    .wpzoom-image-slideshow-block {
+        // Settings groups
+        .components-panel__body {
+            border-bottom: 1px solid #e0e0e0;
+
+            &:last-child {
+                border-bottom: none;
+            }
+
+            // Panel icons
+            .components-panel__icon {
+                margin-right: 8px;
+                color: #0073aa;
+            }
+        }
+
+        // Help text styling
+        .components-base-control__help {
+            font-size: 12px;
+            font-style: italic;
+            color: #757575;
+            margin-top: 4px;
+        }
+
+        // Button group spacing
+        .components-button-group {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 16px;
+        }
+    }
+}
+
+// Media upload button styling
+.wpzoom-image-slideshow-block {
+    .components-button {
+        &.is-primary {
+            background: #0073aa;
+            border-color: #0073aa;
+            color: #fff;
+
+            &:hover {
+                background: #005a87;
+                border-color: #005a87;
+            }
+        }
+
+        &.is-secondary {
+            &.is-destructive {
+                color: #cc1818;
+                border-color: #cc1818;
+
+                &:hover {
+                    background: #cc1818;
+                    color: #fff;
+                    border-color: #cc1818;
+                }
+            }
+        }
+    }
+}
+
