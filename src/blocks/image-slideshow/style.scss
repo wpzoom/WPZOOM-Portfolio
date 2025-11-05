@@ -47,12 +47,10 @@
     color: #007aff;
     
     &::after {
-        font-family: swiper-icons;
         font-size: 24px;
-        text-transform: none!important;
-        letter-spacing: 0;
-        font-variant: initial;
+        font-weight: bold;
         line-height: 1;
+        font-family: Arial, sans-serif;
     }
     
     &.swiper-button-disabled {
@@ -64,13 +62,13 @@
 
 .swiper-button-next {
     &::after {
-        content: 'next';
+        content: '›'; // Right pointing single angle quotation mark (Unicode)
     }
 }
 
 .swiper-button-prev {
     &::after {
-        content: 'prev';
+        content: '‹'; // Left pointing single angle quotation mark (Unicode)
     }
 }
 

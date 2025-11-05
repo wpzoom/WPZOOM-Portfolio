@@ -1,5 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
+import { useEffect, useRef } from '@wordpress/element';
 import {
     InspectorControls,
     MediaUpload,
@@ -15,6 +16,9 @@ import {
     RadioControl
 } from '@wordpress/components';
 
+import Swiper from 'swiper';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+
 import {
     blockColors,
     secondaryColors
@@ -26,7 +30,7 @@ import {
     settingsIcon
 } from '../../icons';
 
-const Edit = ({ attributes, setAttributes }) => {
+const Edit = ({ attributes, setAttributes, clientId }) => {
     const {
         images,
         // Slideshow Settings
@@ -94,6 +98,83 @@ const Edit = ({ attributes, setAttributes }) => {
 
         return styles;
     };
+
+    // Reference for Swiper instance
+    const swiperRef = useRef(null);
+    const containerRef = useRef(null);
+
+    // Initialize Swiper in the editor
+    useEffect(() => {
+        if (!containerRef.current || images.length === 0) return;
+
+        // Destroy existing instance
+        if (swiperRef.current) {
+            swiperRef.current.destroy(true, true);
+        }
+
+        // Small delay to ensure DOM is ready
+        setTimeout(() => {
+            if (!containerRef.current) return;
+
+            swiperRef.current = new Swiper(containerRef.current, {
+                modules: [Navigation, Pagination, Autoplay],
+                slidesPerView: slidesToShow,
+                spaceBetween: 15,
+                loop: infiniteLoop && images.length > slidesToShow,
+                speed: transitionSpeed,
+                autoplay: autoplay ? {
+                    delay: autoplaySpeed,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: pauseOnHover
+                } : false,
+                navigation: showArrows ? {
+                    nextEl: '.editor-swiper-button-next',
+                    prevEl: '.editor-swiper-button-prev',
+                } : false,
+                pagination: showDots ? {
+                    el: '.editor-swiper-pagination',
+                    clickable: true,
+                } : false,
+                on: {
+                    init: function() {
+                        // Apply custom colors after init
+                        applyEditorCustomColors();
+                    }
+                }
+            });
+        }, 100);
+
+        // Cleanup
+        return () => {
+            if (swiperRef.current) {
+                swiperRef.current.destroy(true, true);
+                swiperRef.current = null;
+            }
+        };
+    }, [images, slidesToShow, infiniteLoop, transitionSpeed, autoplay, autoplaySpeed, pauseOnHover, showArrows, showDots, dotsPosition]);
+
+    // Apply custom colors
+    const applyEditorCustomColors = () => {
+        if (!containerRef.current) return;
+
+        const prevArrow = containerRef.current.querySelector('.editor-swiper-button-prev');
+        const nextArrow = containerRef.current.querySelector('.editor-swiper-button-next');
+
+        if (prevArrow && nextArrow && showArrows) {
+            prevArrow.style.color = arrowColor;
+            nextArrow.style.color = arrowColor;
+            
+            if (arrowStyle !== 'default') {
+                prevArrow.style.backgroundColor = arrowBackground;
+                nextArrow.style.backgroundColor = arrowBackground;
+            }
+        }
+    };
+
+    // Re-apply colors when they change
+    useEffect(() => {
+        applyEditorCustomColors();
+    }, [arrowColor, arrowBackground, arrowStyle, dotColor, dotActiveColor]);
 
     return (
         <>
@@ -432,47 +513,34 @@ const Edit = ({ attributes, setAttributes }) => {
                         {__('No images selected. Use the block settings to add images to your slideshow.', 'wpzoom-portfolio')}
                     </div>
                 ) : (
-                    <div className="wpzoom-slideshow-preview">
-                        <p style={{
-                            textAlign: 'center',
-                            padding: '12px',
-                            backgroundColor: '#f0f0f1',
-                            borderRadius: '4px',
-                            marginBottom: '16px',
-                            fontSize: '13px'
-                        }}>
-                            {__('Slideshow Preview - The slider will be functional on the frontend.', 'wpzoom-portfolio')}
-                        </p>
-                        <div
-                            className={`wpzoom-slideshow-slides slides-${slidesToShow}`}
-                            style={{ display: 'flex', gap: '15px', overflow: 'hidden' }}
+                    <div className="wpzoom-slideshow-editor-preview">
+                        <div 
+                            ref={containerRef}
+                            className={`swiper wpzoom-slideshow-container arrow-style-${arrowStyle} dots-position-${dotsPosition}`}
                         >
-                            {images.slice(0, slidesToShow).map((image, index) => (
-                                <div
-                                    key={image.id}
-                                    className="wpzoom-slideshow-slide"
-                                    style={{ flex: `0 0 ${100 / slidesToShow}%` }}
-                                >
-                                    <div className="wpzoom-slideshow-slide-inner">
+                            <div className="swiper-wrapper">
+                                {images.map((image) => (
+                                    <div key={image.id} className="swiper-slide">
                                         <img
                                             src={image.url}
                                             alt={image.alt}
                                             style={getImageStyles()}
                                         />
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
+
+                            {showArrows && (
+                                <>
+                                    <div className="swiper-button-prev editor-swiper-button-prev"></div>
+                                    <div className="swiper-button-next editor-swiper-button-next"></div>
+                                </>
+                            )}
+
+                            {showDots && (
+                                <div className="swiper-pagination editor-swiper-pagination"></div>
+                            )}
                         </div>
-                        {images.length > slidesToShow && (
-                            <p style={{
-                                textAlign: 'center',
-                                marginTop: '12px',
-                                fontSize: '12px',
-                                color: '#666'
-                            }}>
-                                {__(`Showing ${slidesToShow} of ${images.length} slides`, 'wpzoom-portfolio')}
-                            </p>
-                        )}
                     </div>
                 )}
             </div>
