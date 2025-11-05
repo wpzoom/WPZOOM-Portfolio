@@ -63,6 +63,7 @@ if ( ! class_exists( 'WPZOOM_Portfolio_Assets_Manager' ) ) {
 				has_block( 'wpzoom-blocks/portfolio' ) ||
 				has_block( 'wpzoom-blocks/portfolio-layouts' ) ||
 				has_block('wpzoom-blocks/image-gallery') ||
+				has_block('wpzoom-blocks/image-slideshow') ||
 				is_tax( 'portfolio' ) ||
 				self::has_wpzoom_portfolio_shortcode();
 
