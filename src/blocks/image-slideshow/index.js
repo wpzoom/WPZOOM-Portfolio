@@ -521,7 +521,33 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
             <div className={`wpzoom-image-slideshow-block arrow-style-${arrowStyle} dots-position-${dotsPosition}`}>
                 {images.length === 0 ? (
                     <div className="wpzoom-slideshow-empty-state">
-                        {__('No images selected. Use the block settings to add images to your slideshow.', 'wpzoom-portfolio')}
+                        <div className="wpzoom-slideshow-empty-header">
+                            <span className="dashicons dashicons-images-alt2"></span>
+                            <h3 className="wpzoom-slideshow-empty-title">
+                                {__('Image Slideshow', 'wpzoom-portfolio')}
+                            </h3>
+                        </div>
+                        <p className="wpzoom-slideshow-empty-description">
+                            {__('Add images to create a slideshow', 'wpzoom-portfolio')}
+                        </p>
+                        <MediaUploadCheck>
+                            <MediaUpload
+                                onSelect={onSelectImages}
+                                allowedTypes={['image']}
+                                multiple
+                                gallery
+                                value={images.map(img => img.id)}
+                                render={({ open }) => (
+                                    <Button
+                                        onClick={open}
+                                        variant="primary"
+                                        className="wpzoom-slideshow-empty-button"
+                                    >
+                                        {__('Add Images', 'wpzoom-portfolio')}
+                                    </Button>
+                                )}
+                            />
+                        </MediaUploadCheck>
                     </div>
                 ) : (
                     <div className="wpzoom-slideshow-editor-preview">
