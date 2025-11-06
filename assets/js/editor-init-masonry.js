@@ -40,12 +40,16 @@
                 existing = new Masonry(el, options);
             } else {
                 existing.options = Object.assign(existing.options || {}, options);
+                existing.reloadItems();
                 existing.layout();
             }
 
 
 
-            imagesLoaded(el).on('progress', function () { existing.layout(); });
+            imagesLoaded(el).on('always', function () {
+                existing.reloadItems();
+                existing.layout();
+            });
         });
 
         // Image Gallery: destroy Masonry when switching back to grid
