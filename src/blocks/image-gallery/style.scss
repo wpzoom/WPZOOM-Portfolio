@@ -2,13 +2,6 @@
     margin: 20px 0;
 }
 
-/* Empty state when no images are selected */
-.wpzoom-gallery-empty-state {
-    padding: 40px;
-    border: 2px dashed #ccc;
-    text-align: center;
-    color: #666;
-}
 .wpzoom-gallery-grid {
     display: grid;
     gap: 15px; /* Default gap, will be overridden by inline styles */
