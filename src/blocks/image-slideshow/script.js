@@ -34,9 +34,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Autoplay
             autoplay: settings.autoplay ? {
-                delay: settings.autoplaySpeed,
+                delay: settings.scrollStyle === 'smooth' ? 0 : settings.autoplaySpeed,
                 disableOnInteraction: false,
-                pauseOnMouseEnter: settings.pauseOnHover
+                pauseOnMouseEnter: settings.pauseOnHover,
+                reverseDirection: settings.scrollDirection === 'right'
             } : false,
 
             // Navigation arrows
@@ -109,6 +110,13 @@ document.addEventListener('DOMContentLoaded', function () {
             observeParents: true,
             observeSlideChildren: true
         };
+
+        // Add smooth class for linear timing
+        if (settings.scrollStyle === 'smooth') {
+            container.classList.add('smooth-scroll');
+        } else {
+            container.classList.remove('smooth-scroll');
+        }
 
         // Initialize Swiper
         const swiper = new Swiper(container, swiperConfig);

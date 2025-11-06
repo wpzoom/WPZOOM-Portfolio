@@ -117,7 +117,13 @@
                 border-radius: 4px;
             }
         }
-        
+
+                                // Linear timing for smooth scroll (editor)
+                                .wpzoom-slideshow-container.smooth-scroll {
+                                    .swiper-wrapper {
+                                        transition-timing-function: linear !important;
+                                    }
+                                }
         // Arrow styles for editor - now targeting parent element
         &.arrow-style-default {
             .swiper-button-prev,

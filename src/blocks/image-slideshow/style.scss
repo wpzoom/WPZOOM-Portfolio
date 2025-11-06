@@ -117,6 +117,12 @@
         align-items: center;
     }
 
+                // Linear timing for smooth scroll
+                .wpzoom-slideshow-container.smooth-scroll {
+                    .swiper-wrapper {
+                        transition-timing-function: linear !important;
+                    }
+                }
     // Individual slide
     .swiper-slide {
         position: relative;

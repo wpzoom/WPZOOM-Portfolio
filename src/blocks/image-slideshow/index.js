@@ -1,6 +1,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
-import { useEffect, useRef } from '@wordpress/element';
+import { useEffect, useRef, useMemo } from '@wordpress/element';
 import {
     InspectorControls,
     MediaUpload,
@@ -37,6 +37,8 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
         autoplay,
         autoplaySpeed,
         transitionSpeed,
+        scrollStyle,
+        scrollDirection,
         infiniteLoop,
         pauseOnHover,
         // Navigation Settings
@@ -104,6 +106,24 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
     const swiperRef = useRef(null);
     const containerRef = useRef(null);
 
+    // Force full remount of Swiper container in editor when key settings change
+    const editorSwiperKey = useMemo(() => (
+        [
+            images.length,
+            slidesToShow,
+            transitionSpeed,
+            autoplay ? 1 : 0,
+            autoplaySpeed,
+            scrollStyle,
+            scrollDirection,
+            infiniteLoop ? 1 : 0,
+            pauseOnHover ? 1 : 0,
+            showArrows ? 1 : 0,
+            showDots ? 1 : 0,
+            dotsPosition
+        ].join('|')
+    ), [images.length, slidesToShow, transitionSpeed, autoplay, autoplaySpeed, scrollStyle, scrollDirection, infiniteLoop, pauseOnHover, showArrows, showDots, dotsPosition]);
+
     // Initialize Swiper in the editor
     useEffect(() => {
         if (!containerRef.current || images.length === 0) return;
@@ -117,6 +137,13 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
         setTimeout(() => {
             if (!containerRef.current) return;
 
+            // Toggle smooth class for linear timing
+            if (scrollStyle === 'smooth') {
+                containerRef.current.classList.add('smooth-scroll');
+            } else {
+                containerRef.current.classList.remove('smooth-scroll');
+            }
+
             swiperRef.current = new Swiper(containerRef.current, {
                 modules: [Navigation, Pagination, Autoplay],
                 slidesPerView: slidesToShow,
@@ -124,9 +151,10 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                 loop: infiniteLoop && images.length > slidesToShow,
                 speed: transitionSpeed,
                 autoplay: autoplay ? {
-                    delay: autoplaySpeed,
+                    delay: scrollStyle === 'smooth' ? 0 : autoplaySpeed,
                     disableOnInteraction: false,
-                    pauseOnMouseEnter: pauseOnHover
+                    pauseOnMouseEnter: pauseOnHover,
+                    reverseDirection: scrollDirection === 'right'
                 } : false,
                 navigation: showArrows ? {
                     nextEl: '.editor-swiper-button-next',
@@ -136,6 +164,9 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                     el: '.editor-swiper-pagination',
                     clickable: true,
                 } : false,
+                observer: true,
+                observeParents: true,
+                observeSlideChildren: true,
                 on: {
                     init: function() {
                         // Apply custom colors after init
@@ -152,7 +183,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                 swiperRef.current = null;
             }
         };
-    }, [images, slidesToShow, infiniteLoop, transitionSpeed, autoplay, autoplaySpeed, pauseOnHover, showArrows, showDots, dotsPosition]);
+    }, [images, slidesToShow, infiniteLoop, transitionSpeed, autoplay, autoplaySpeed, scrollStyle, scrollDirection, pauseOnHover, showArrows, showDots, dotsPosition]);
 
     // Apply custom colors
     const applyEditorCustomColors = () => {
@@ -232,15 +263,43 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                     {autoplay && (
                         <>
                             <HorizontalRule />
-                            <RangeControl
-                                label={__('Autoplay Speed (ms)', 'wpzoom-portfolio')}
-                                value={autoplaySpeed}
-                                onChange={(value) => setAttributes({ autoplaySpeed: value })}
-                                min={1000}
-                                max={10000}
-                                step={500}
-                                help={__('Time between slide transitions.', 'wpzoom-portfolio')}
+                            <SelectControl
+                                label={__('Scroll Style', 'wpzoom-portfolio')}
+                                value={scrollStyle}
+                                onChange={(value) => setAttributes({ scrollStyle: value })}
+                                options={[
+                                    { label: __('Default (pause between slides)', 'wpzoom-portfolio'), value: 'default' },
+                                    { label: __('Smooth (continuous scroll)', 'wpzoom-portfolio'), value: 'smooth' }
+                                ]}
+                                help={__('Choose between stepped or continuous scrolling.', 'wpzoom-portfolio')}
                             />
+
+                            <HorizontalRule />
+                            <RadioControl
+                                label={__('Scroll Direction', 'wpzoom-portfolio')}
+                                selected={scrollDirection}
+                                options={[
+                                    { label: __('Left', 'wpzoom-portfolio'), value: 'left' },
+                                    { label: __('Right', 'wpzoom-portfolio'), value: 'right' }
+                                ]}
+                                onChange={(value) => setAttributes({ scrollDirection: value })}
+                                help={__('Direction of automatic scrolling.', 'wpzoom-portfolio')}
+                            />
+
+                            {scrollStyle !== 'smooth' && (
+                                <>
+                                    <HorizontalRule />
+                                    <RangeControl
+                                        label={__('Autoplay Delay (ms)', 'wpzoom-portfolio')}
+                                        value={autoplaySpeed}
+                                        onChange={(value) => setAttributes({ autoplaySpeed: value })}
+                                        min={1000}
+                                        max={10000}
+                                        step={500}
+                                        help={__('Time between slide transitions.', 'wpzoom-portfolio')}
+                                    />
+                                </>
+                            )}
                         </>
                     )}
 
@@ -518,7 +577,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                 )}
             </InspectorControls>
 
-            <div className={`wpzoom-image-slideshow-block arrow-style-${arrowStyle} dots-position-${dotsPosition}`}>
+            <div className={`wpzoom-image-slideshow-block arrow-style-${arrowStyle} dots-position-${dotsPosition} scroll-style-${scrollStyle} scroll-direction-${scrollDirection}`}>
                 {images.length === 0 ? (
                     <div className="wpzoom-slideshow-empty-state">
                         <div className="wpzoom-slideshow-empty-header">
@@ -552,6 +611,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                 ) : (
                     <div className="wpzoom-slideshow-editor-preview">
                         <div 
+                                key={editorSwiperKey}
                             ref={containerRef}
                             className="swiper wpzoom-slideshow-container"
                         >
@@ -591,6 +651,8 @@ const Save = ({ attributes }) => {
         autoplay,
         autoplaySpeed,
         transitionSpeed,
+        scrollStyle,
+        scrollDirection,
         infiniteLoop,
         pauseOnHover,
         showArrows,
@@ -620,6 +682,8 @@ const Save = ({ attributes }) => {
         autoplay,
         autoplaySpeed,
         transitionSpeed,
+        scrollStyle,
+        scrollDirection,
         infiniteLoop,
         pauseOnHover,
         showArrows,
@@ -658,7 +722,7 @@ const Save = ({ attributes }) => {
 
     return (
         <div
-            className={`wpzoom-image-slideshow-block${enableLightbox ? ' use-lightbox' : ''} arrow-style-${arrowStyle} dots-position-${dotsPosition}`}
+            className={`wpzoom-image-slideshow-block${enableLightbox ? ' use-lightbox' : ''} arrow-style-${arrowStyle} dots-position-${dotsPosition} scroll-style-${scrollStyle} scroll-direction-${scrollDirection}`}
             data-slideshow-settings={JSON.stringify(slideshowSettings)}
         >
             <div className="swiper wpzoom-slideshow-container">
@@ -728,6 +792,14 @@ registerBlockType('wpzoom-blocks/image-slideshow', {
         transitionSpeed: {
             type: 'number',
             default: 600
+        },
+        scrollStyle: {
+            type: 'string',
+            default: 'default'
+        },
+        scrollDirection: {
+            type: 'string',
+            default: 'left'
         },
         infiniteLoop: {
             type: 'boolean',
