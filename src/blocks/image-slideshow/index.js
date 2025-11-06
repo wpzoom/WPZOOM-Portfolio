@@ -50,6 +50,9 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
         slidesToShow,
         slidesToShowTablet,
         slidesToShowMobile,
+        spaceBetween,
+        spaceBetweenTablet,
+        spaceBetweenMobile,
         slideHeight,
         fixedHeight,
         imageFit,
@@ -147,7 +150,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
             swiperRef.current = new Swiper(containerRef.current, {
                 modules: [Navigation, Pagination, Autoplay],
                 slidesPerView: slidesToShow,
-                spaceBetween: 15,
+                spaceBetween: spaceBetween,
                 loop: infiniteLoop && images.length > slidesToShow,
                 speed: transitionSpeed,
                 autoplay: autoplay ? {
@@ -164,6 +167,11 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                     el: '.editor-swiper-pagination',
                     clickable: true,
                 } : false,
+                breakpoints: {
+                    320: { spaceBetween: spaceBetweenMobile },
+                    768: { spaceBetween: spaceBetweenTablet },
+                    1024: { spaceBetween: spaceBetween }
+                },
                 observer: true,
                 observeParents: true,
                 observeSlideChildren: true,
@@ -183,7 +191,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                 swiperRef.current = null;
             }
         };
-    }, [images, slidesToShow, infiniteLoop, transitionSpeed, autoplay, autoplaySpeed, scrollStyle, scrollDirection, pauseOnHover, showArrows, showDots, dotsPosition]);
+    }, [images, slidesToShow, infiniteLoop, transitionSpeed, autoplay, autoplaySpeed, scrollStyle, scrollDirection, pauseOnHover, showArrows, showDots, dotsPosition, spaceBetween, spaceBetweenTablet, spaceBetweenMobile]);
 
     // Apply custom colors
     const applyEditorCustomColors = () => {
@@ -191,6 +199,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
 
         const prevArrow = containerRef.current.querySelector('.editor-swiper-button-prev');
         const nextArrow = containerRef.current.querySelector('.editor-swiper-button-next');
+        const paginationEl = containerRef.current.querySelector('.editor-swiper-pagination');
 
         if (prevArrow && nextArrow && showArrows) {
             prevArrow.style.color = arrowColor;
@@ -200,6 +209,12 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                 prevArrow.style.backgroundColor = arrowBackground;
                 nextArrow.style.backgroundColor = arrowBackground;
             }
+        }
+
+        // Set CSS variables for dots colors in editor
+        if (paginationEl && showDots) {
+            containerRef.current.style.setProperty('--wpzoom-dot-color', dotColor);
+            containerRef.current.style.setProperty('--wpzoom-dot-active-color', dotActiveColor);
         }
     };
 
@@ -392,35 +407,62 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                     initialOpen={false}
                     className="wpzb-settings-panel"
                 >
+                    <p style={{ margin: '6px 0 8px', fontWeight: 600, fontSize: '12px' }}>{__('Desktop', 'wpzoom-portfolio')}</p>
                     <RangeControl
-                        label={__('Slides to Show (Desktop)', 'wpzoom-portfolio')}
+                        label={__('Slides to Show', 'wpzoom-portfolio')}
                         value={slidesToShow}
                         onChange={(value) => setAttributes({ slidesToShow: value })}
                         min={1}
                         max={4}
-                        help={__('Number of slides visible at once on desktop.', 'wpzoom-portfolio')}
+                    />
+
+                    <RangeControl
+                        label={__('Spacing', 'wpzoom-portfolio')}
+                        value={spaceBetween}
+                        onChange={(value) => setAttributes({ spaceBetween: value })}
+                        min={0}
+                        max={100}
+                        step={1}
                     />
 
                     <HorizontalRule />
 
+                    <p style={{ margin: '6px 0 8px', fontWeight: 600, fontSize: '12px' }}>{__('Tablet', 'wpzoom-portfolio')}</p>
                     <RangeControl
-                        label={__('Slides to Show (Tablet)', 'wpzoom-portfolio')}
+                        label={__('Slides to Show', 'wpzoom-portfolio')}
                         value={slidesToShowTablet}
                         onChange={(value) => setAttributes({ slidesToShowTablet: value })}
                         min={1}
                         max={3}
-                        help={__('Number of slides visible at once on tablets.', 'wpzoom-portfolio')}
+                    />
+
+                    <RangeControl
+                        label={__('Spacing', 'wpzoom-portfolio')}
+                        value={spaceBetweenTablet}
+                        onChange={(value) => setAttributes({ spaceBetweenTablet: value })}
+                        min={0}
+                        max={100}
+                        step={1}
                     />
 
                     <HorizontalRule />
 
+                    <p style={{ margin: '6px 0 8px', fontWeight: 600, fontSize: '12px' }}>{__('Mobile', 'wpzoom-portfolio')}</p>
                     <RangeControl
-                        label={__('Slides to Show (Mobile)', 'wpzoom-portfolio')}
+                        label={__('Slides to Show', 'wpzoom-portfolio')}
                         value={slidesToShowMobile}
                         onChange={(value) => setAttributes({ slidesToShowMobile: value })}
                         min={1}
                         max={2}
-                        help={__('Number of slides visible at once on mobile.', 'wpzoom-portfolio')}
+                    />
+
+                    <RangeControl
+                        label={__('Spacing', 'wpzoom-portfolio')}
+                        value={spaceBetweenMobile}
+                        onChange={(value) => setAttributes({ spaceBetweenMobile: value })}
+                        min={0}
+                        max={60}
+                        step={1}
                     />
 
                     <HorizontalRule />
@@ -662,6 +704,9 @@ const Save = ({ attributes }) => {
         slidesToShow,
         slidesToShowTablet,
         slidesToShowMobile,
+        spaceBetween,
+        spaceBetweenTablet,
+        spaceBetweenMobile,
         slideHeight,
         fixedHeight,
         imageFit,
@@ -693,6 +738,9 @@ const Save = ({ attributes }) => {
         slidesToShow,
         slidesToShowTablet,
         slidesToShowMobile,
+        spaceBetween,
+        spaceBetweenTablet,
+        spaceBetweenMobile,
         slideHeight,
         fixedHeight,
         imageFit,
@@ -838,6 +886,18 @@ registerBlockType('wpzoom-blocks/image-slideshow', {
         slidesToShowMobile: {
             type: 'number',
             default: 1
+        },
+        spaceBetween: {
+            type: 'number',
+            default: 15
+        },
+        spaceBetweenTablet: {
+            type: 'number',
+            default: 15
+        },
+        spaceBetweenMobile: {
+            type: 'number',
+            default: 10
         },
         slideHeight: {
             type: 'string',

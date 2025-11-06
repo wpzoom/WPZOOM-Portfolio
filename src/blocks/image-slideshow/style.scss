@@ -1,6 +1,6 @@
 /**
- * Frontend Styles for Image Slideshow Block
- */
+* Frontend Styles for Image Slideshow Block
+*/
 
 // Essential Swiper core styles
 .swiper {
@@ -51,9 +51,13 @@
         width: 100%;
         height: 100%;
         display: block;
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
+        background-color: currentColor;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
     }
     
     &.swiper-button-disabled {
@@ -65,13 +69,15 @@
 
 .swiper-button-next {
     &::after {
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M27,22L27,22L5,44l-2.1-2.1L22.8,22L2.9,2.1L5,0L27,22L27,22z" fill="%23ffffff"/><path d="M24,22L6,40l-1.4-1.4L20.2,22L4.6,5.4L6,4L24,22z" fill="%23ffffff"/></svg>');
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M27,22L27,22L5,44l-2.1-2.1L22.8,22L2.9,2.1L5,0L27,22L27,22z"/><path d="M24,22L6,40l-1.4-1.4L20.2,22L4.6,5.4L6,4L24,22z"/></svg>');
+        mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M27,22L27,22L5,44l-2.1-2.1L22.8,22L2.9,2.1L5,0L27,22L27,22z"/><path d="M24,22L6,40l-1.4-1.4L20.2,22L4.6,5.4L6,4L24,22z"/></svg>');
     }
 }
 
 .swiper-button-prev {
     &::after {
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M0,22L22,0l2.1,2.1L4.2,22l19.9,19.9L22,44L0,22L0,22L0,22z" fill="%23ffffff"/><path d="M3,22L21,4l1.4,1.4L6.8,22l15.6,16.6L21,40L3,22z" fill="%23ffffff"/></svg>');
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M0,22L22,0l2.1,2.1L4.2,22l19.9,19.9L22,44L0,22L0,22L0,22z"/><path d="M3,22L21,4l1.4,1.4L6.8,22l15.6,16.6L21,40L3,22z"/></svg>');
+        mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M0,22L22,0l2.1,2.1L4.2,22l19.9,19.9L22,44L0,22L0,22L0,22z"/><path d="M3,22L21,4l1.4,1.4L6.8,22l15.6,16.6L21,40L3,22z"/></svg>');
     }
 }
 
@@ -103,26 +109,26 @@
     position: relative;
     width: 100%;
     margin: 0 auto;
-
+    
     // Swiper container
     .wpzoom-slideshow-container {
         position: relative;
         width: 100%;
         overflow: hidden;
     }
-
+    
     // Swiper wrapper
     .swiper-wrapper {
         display: flex;
         align-items: center;
     }
-
-                // Linear timing for smooth scroll
-                .wpzoom-slideshow-container.smooth-scroll {
-                    .swiper-wrapper {
-                        transition-timing-function: linear !important;
-                    }
-                }
+    
+    // Linear timing for smooth scroll
+    .wpzoom-slideshow-container.smooth-scroll {
+        .swiper-wrapper {
+            transition-timing-function: linear !important;
+        }
+    }
     // Individual slide
     .swiper-slide {
         position: relative;
@@ -132,14 +138,14 @@
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-
+        
         img {
             display: block;
             width: 100%;
             max-width: 100%;
             transition: transform 0.3s ease;
         }
-
+        
         // Lightbox link styling
         .wpzoom-lightbox-link {
             display: block;
@@ -149,16 +155,16 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-
+            
             img {
                 width: 100%;
                 height: 100%;
             }
-
+            
             &:hover img {
                 transform: scale(1.02);
             }
-
+            
             &::after {
                 content: '';
                 position: absolute;
@@ -170,13 +176,13 @@
                 transition: background 0.3s ease;
                 pointer-events: none;
             }
-
+            
             &:hover::after {
                 background: rgba(0, 0, 0, 0.1);
             }
         }
     }
-
+    
     // Navigation arrows - Default style
     .swiper-button-prev,
     .swiper-button-next {
@@ -187,31 +193,31 @@
         transition: all 0.3s ease;
         opacity: 0.8;
         border-radius: 0; // Explicitly no border radius for default
-
+        
         &::after {
             width: 20px;
             height: 20px;
         }
-
+        
         &:hover {
             opacity: 1;
             transform: scale(1.1);
         }
-
+        
         &.swiper-button-disabled {
             opacity: 0.35;
             cursor: not-allowed;
         }
     }
-
+    
     .swiper-button-prev {
         left: 10px;
     }
-
+    
     .swiper-button-next {
         right: 10px;
     }
-
+    
     // Arrow Style: Default (explicit)
     &.arrow-style-default {
         .swiper-button-prev,
@@ -226,16 +232,16 @@
                 height: 22px;
             }
         }
-
+        
         .swiper-button-prev {
             left: 10px;
         }
-
+        
         .swiper-button-next {
             right: 10px;
         }
     }
-
+    
     // Arrow Style: Circle
     &.arrow-style-circle {
         .swiper-button-prev,
@@ -246,26 +252,26 @@
             background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
-
+            
             &::after {
                 width: 22px;
                 height: 22px;
             }
-
+            
             &:hover {
                 background-color: rgba(0, 0, 0, 0.8);
             }
         }
-
+        
         .swiper-button-prev {
             left: 10px;
         }
-
+        
         .swiper-button-next {
             right: 10px;
         }
     }
-
+    
     // Arrow Style: Square
     &.arrow-style-square {
         .swiper-button-prev,
@@ -276,67 +282,67 @@
             background-color: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
-
+            
             &::after {
                 width: 22px;
                 height: 22px;
             }
-
+            
             &:hover {
                 background-color: rgba(0, 0, 0, 0.8);
             }
         }
-
+        
         .swiper-button-prev {
             left: 10px;
         }
-
+        
         .swiper-button-next {
             right: 10px;
         }
     }
-
+    
     // Pagination dots
     .swiper-pagination {
         position: relative;
         margin-top: 20px;
         bottom: auto;
-
+        
         .swiper-pagination-bullet {
             width: 10px;
             height: 10px;
             margin: 0 5px;
-            background-color: #cccccc;
+            background-color: var(--wpzoom-dot-color, #cccccc);
             opacity: 0.5;
             transition: all 0.3s ease;
             cursor: pointer;
-
+            
             &:hover {
                 opacity: 0.8;
                 transform: scale(1.2);
             }
-
+            
             &.swiper-pagination-bullet-active {
-                background-color: #000000;
+                background-color: var(--wpzoom-dot-active-color, #000000);
                 opacity: 1;
                 transform: scale(1.3);
             }
         }
     }
-
+    
     // Dots position: Top
     &.dots-position-top {
         .wpzoom-slideshow-container {
             display: flex;
             flex-direction: column-reverse;
         }
-
+        
         .swiper-pagination {
             margin-top: 0;
             margin-bottom: 20px;
         }
     }
-
+    
     // Dots position: Bottom (default)
     &.dots-position-bottom {
         .swiper-pagination {
@@ -344,12 +350,12 @@
             margin-bottom: 0;
         }
     }
-
+    
     // Fixed height slides
     .swiper-slide {
         &.slide-height-fixed {
             height: 400px;
-
+            
             img {
                 height: 100%;
                 object-fit: cover;
@@ -366,37 +372,37 @@
             width: 36px;
             height: 36px;
             margin-top: -18px;
-
+            
             &::after {
                 width: 16px;
                 height: 16px;
             }
         }
-
+        
         .swiper-button-prev {
             left: 5px;
         }
-
+        
         .swiper-button-next {
             right: 5px;
         }
-
+        
         &.arrow-style-default {
             .swiper-button-prev,
             .swiper-button-next {
                 width: 40px !important;
                 height: 40px !important;
             }
-
+            
             .swiper-button-prev {
                 left: 5px;
             }
-
+            
             .swiper-button-next {
                 right: 5px;
             }
         }
-
+        
         &.arrow-style-circle {
             .swiper-button-prev,
             .swiper-button-next {
@@ -404,11 +410,11 @@
                 height: 40px !important;
                 border-radius: 50% !important;
             }
-
+            
             .swiper-button-prev {
                 left: 5px;
             }
-
+            
             .swiper-button-next {
                 right: 5px;
             }
@@ -421,19 +427,19 @@
                 height: 40px !important;
                 border-radius: 0 !important;
             }
-
+            
             .swiper-button-prev {
                 left: 5px;
             }
-
+            
             .swiper-button-next {
                 right: 5px;
             }
         }
-
+        
         .swiper-pagination {
             margin-top: 15px;
-
+            
             .swiper-pagination-bullet {
                 width: 8px;
                 height: 8px;
@@ -450,13 +456,13 @@
             width: 32px;
             height: 32px;
             margin-top: -16px;
-
+            
             &::after {
                 width: 14px;
                 height: 14px;
             }
         }
-
+        
         &.arrow-style-default {
             .swiper-button-prev,
             .swiper-button-next {
@@ -464,7 +470,7 @@
                 height: 36px !important;
             }
         }
-
+        
         &.arrow-style-circle {
             .swiper-button-prev,
             .swiper-button-next {
@@ -519,7 +525,7 @@
         outline: 2px solid #0073aa;
         outline-offset: 2px;
     }
-
+    
     .swiper-slide:focus-visible,
     .swiper-button-prev:focus-visible,
     .swiper-button-next:focus-visible,

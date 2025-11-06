@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
             loop: settings.infiniteLoop,
             speed: settings.transitionSpeed,
             slidesPerView: settings.slidesToShow,
-            spaceBetween: 15,
+            spaceBetween: settings.spaceBetween,
 
             // Autoplay
             autoplay: settings.autoplay ? {
@@ -58,17 +58,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Mobile
                 320: {
                     slidesPerView: settings.slidesToShowMobile,
-                    spaceBetween: 10
+                    spaceBetween: settings.spaceBetweenMobile
                 },
                 // Tablet
                 768: {
                     slidesPerView: settings.slidesToShowTablet,
-                    spaceBetween: 15
+                    spaceBetween: settings.spaceBetweenTablet
                 },
                 // Desktop
                 1024: {
                     slidesPerView: settings.slidesToShow,
-                    spaceBetween: 15
+                    spaceBetween: settings.spaceBetween
                 }
             },
 
@@ -138,23 +138,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Apply custom dot colors
+        // Apply custom dot colors via CSS variables (simpler and scoping-safe)
         if (settings.showDots) {
-            const style = document.createElement('style');
-            const blockId = 'slideshow-' + Math.random().toString(36).substr(2, 9);
-            block.setAttribute('data-slideshow-id', blockId);
-
-            style.innerHTML = `
-                [data-slideshow-id="${blockId}"] .swiper-pagination-bullet {
-                    background-color: ${settings.dotColor};
-                    opacity: 0.5;
-                }
-                [data-slideshow-id="${blockId}"] .swiper-pagination-bullet-active {
-                    background-color: ${settings.dotActiveColor};
-                    opacity: 1;
-                }
-            `;
-            document.head.appendChild(style);
+            block.style.setProperty('--wpzoom-dot-color', settings.dotColor);
+            block.style.setProperty('--wpzoom-dot-active-color', settings.dotActiveColor);
         }
 
         // Initialize lightbox if enabled

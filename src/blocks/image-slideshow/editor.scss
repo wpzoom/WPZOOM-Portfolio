@@ -49,9 +49,13 @@
         width: 100%;
         height: 100%;
         display: block;
-        background-size: contain;
-        background-position: center;
-        background-repeat: no-repeat;
+        background-color: currentColor;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-position: center;
+        mask-position: center;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
     }
     
     &.swiper-button-disabled {
@@ -64,14 +68,16 @@
 .swiper-button-next {
     right: 10px;
     &::after {
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M27,22L27,22L5,44l-2.1-2.1L22.8,22L2.9,2.1L5,0L27,22L27,22z" fill="%23ffffff"/><path d="M24,22L6,40l-1.4-1.4L20.2,22L4.6,5.4L6,4L24,22z" fill="%23ffffff"/></svg>');
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M27,22L27,22L5,44l-2.1-2.1L22.8,22L2.9,2.1L5,0L27,22L27,22z"/><path d="M24,22L6,40l-1.4-1.4L20.2,22L4.6,5.4L6,4L24,22z"/></svg>');
+        mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M27,22L27,22L5,44l-2.1-2.1L22.8,22L2.9,2.1L5,0L27,22L27,22z"/><path d="M24,22L6,40l-1.4-1.4L20.2,22L4.6,5.4L6,4L24,22z"/></svg>');
     }
 }
 
 .swiper-button-prev {
     left: 10px;
     &::after {
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M0,22L22,0l2.1,2.1L4.2,22l19.9,19.9L22,44L0,22L0,22L0,22z" fill="%23ffffff"/><path d="M3,22L21,4l1.4,1.4L6.8,22l15.6,16.6L21,40L3,22z" fill="%23ffffff"/></svg>');
+        -webkit-mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M0,22L22,0l2.1,2.1L4.2,22l19.9,19.9L22,44L0,22L0,22L0,22z"/><path d="M3,22L21,4l1.4,1.4L6.8,22l15.6,16.6L21,40L3,22z"/></svg>');
+        mask-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 27 44"><path d="M0,22L22,0l2.1,2.1L4.2,22l19.9,19.9L22,44L0,22L0,22L0,22z"/><path d="M3,22L21,4l1.4,1.4L6.8,22l15.6,16.6L21,40L3,22z"/></svg>');
     }
 }
 
@@ -90,20 +96,21 @@
     height: 8px;
     display: inline-block;
     border-radius: 50%;
-    background: #000;
-    opacity: 0.2;
+    background: var(--wpzoom-dot-color, #cccccc);
+    opacity: 0.5;
     margin: 0 4px;
     cursor: pointer;
     transition: all 0.3s ease;
     
     &:hover {
-        opacity: 0.5;
+        opacity: 0.8;
     }
 }
 
 .swiper-pagination-bullet-active {
     opacity: 1;
     transform: scale(1.2);
+    background: var(--wpzoom-dot-active-color, #000000);
 }
 
 .wp-block-wpzoom-blocks-image-slideshow {
@@ -117,13 +124,13 @@
                 border-radius: 4px;
             }
         }
-
-                                // Linear timing for smooth scroll (editor)
-                                .wpzoom-slideshow-container.smooth-scroll {
-                                    .swiper-wrapper {
-                                        transition-timing-function: linear !important;
-                                    }
-                                }
+        
+        // Linear timing for smooth scroll (editor)
+        .wpzoom-slideshow-container.smooth-scroll {
+            .swiper-wrapper {
+                transition-timing-function: linear !important;
+            }
+        }
         // Arrow styles for editor - now targeting parent element
         &.arrow-style-default {
             .swiper-button-prev,
