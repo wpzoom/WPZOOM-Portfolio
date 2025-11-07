@@ -4,7 +4,8 @@ import {
     InspectorControls,
     MediaUpload, 
     MediaUploadCheck,
-    PanelColorSettings
+    PanelColorSettings,
+    useBlockProps
 } from '@wordpress/block-editor';
 import {
     PanelBody,
@@ -71,6 +72,8 @@ const Edit = ({ attributes, setAttributes }) => {
 
         return baseStyles;
     };
+
+    const blockProps = useBlockProps({ className: 'wpzoom-image-gallery-block' });
 
     return (
         <>
@@ -267,7 +270,7 @@ const Edit = ({ attributes, setAttributes }) => {
                 </PanelBody>
             </InspectorControls>
 
-            <div className="wpzoom-image-gallery-block">
+            <div {...blockProps}>
                 {images.length === 0 ? (
                     <div className="wpzoom-gallery-empty-state">
                         <div className="wpzoom-gallery-empty-header">
@@ -377,8 +380,10 @@ const Save = ({ attributes }) => {
         return baseStyles;
     };
 
+    const blockProps = useBlockProps.save({ className: `wpzoom-image-gallery-block${enableLightbox ? ' use-lightbox' : ''}` });
+
     return (
-        <div className={`wpzoom-image-gallery-block${enableLightbox ? ' use-lightbox' : ''}`}>
+        <div {...blockProps}>
             <div
                 className={`wpzoom-gallery-grid wpzoom-gallery-${layout} columns-${columns}`}
                 style={layout === 'masonry' ? {} : { gap: gap + 'px' }}
@@ -453,6 +458,9 @@ registerBlockType('wpzoom-blocks/image-gallery', {
     description: __('A simple image gallery block.', 'wpzoom-portfolio'),
     icon: 'format-gallery',
     category: 'wpzoom-blocks',
+    supports: {
+        align: ['full']
+    },
     attributes: {
         images: {
             type: 'array',

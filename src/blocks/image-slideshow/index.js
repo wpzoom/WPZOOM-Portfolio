@@ -4,8 +4,10 @@ import { useEffect, useRef, useMemo } from '@wordpress/element';
 import {
     InspectorControls,
     MediaUpload,
-    MediaUploadCheck
+    MediaUploadCheck,
+    useBlockProps
 } from '@wordpress/block-editor';
+import { useDispatch } from '@wordpress/data';
 import {
     PanelBody,
     Button,
@@ -64,7 +66,8 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
         arrowColor,
         arrowBackground,
         dotColor,
-        dotActiveColor
+        dotActiveColor,
+        align
     } = attributes;
 
     const onSelectImages = (selectedImages) => {
@@ -123,9 +126,10 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
             pauseOnHover ? 1 : 0,
             showArrows ? 1 : 0,
             showDots ? 1 : 0,
-            dotsPosition
+            dotsPosition,
+            align || ''
         ].join('|')
-    ), [images.length, slidesToShow, transitionSpeed, autoplay, autoplaySpeed, scrollStyle, scrollDirection, infiniteLoop, pauseOnHover, showArrows, showDots, dotsPosition]);
+    ), [images.length, slidesToShow, transitionSpeed, autoplay, autoplaySpeed, scrollStyle, scrollDirection, infiniteLoop, pauseOnHover, showArrows, showDots, dotsPosition, align]);
 
     // Initialize Swiper in the editor
     useEffect(() => {
@@ -191,7 +195,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                 swiperRef.current = null;
             }
         };
-    }, [images, slidesToShow, infiniteLoop, transitionSpeed, autoplay, autoplaySpeed, scrollStyle, scrollDirection, pauseOnHover, showArrows, showDots, dotsPosition, spaceBetween, spaceBetweenTablet, spaceBetweenMobile]);
+    }, [images, slidesToShow, infiniteLoop, transitionSpeed, autoplay, autoplaySpeed, scrollStyle, scrollDirection, pauseOnHover, showArrows, showDots, dotsPosition, spaceBetween, spaceBetweenTablet, spaceBetweenMobile, align]);
 
     // Apply custom colors
     const applyEditorCustomColors = () => {
@@ -222,6 +226,14 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
     useEffect(() => {
         applyEditorCustomColors();
     }, [arrowColor, arrowBackground, arrowStyle, dotColor, dotActiveColor]);
+
+    const { selectBlock } = useDispatch('core/block-editor');
+
+    const blockProps = useBlockProps({
+        className: `wpzoom-image-slideshow-block arrow-style-${arrowStyle} dots-position-${dotsPosition} scroll-style-${scrollStyle} scroll-direction-${scrollDirection}`,
+        onMouseDownCapture: () => selectBlock(clientId),
+        onClick: (e) => e.stopPropagation()
+    });
 
     return (
         <>
@@ -619,7 +631,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                 )}
             </InspectorControls>
 
-            <div className={`wpzoom-image-slideshow-block arrow-style-${arrowStyle} dots-position-${dotsPosition} scroll-style-${scrollStyle} scroll-direction-${scrollDirection}`}>
+            <div {...blockProps}>
                 {images.length === 0 ? (
                     <div className="wpzoom-slideshow-empty-state">
                         <div className="wpzoom-slideshow-empty-header">
@@ -656,6 +668,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                                 key={editorSwiperKey}
                             ref={containerRef}
                             className="swiper wpzoom-slideshow-container"
+                                style={{ pointerEvents: 'none' }}
                         >
                             <div className="swiper-wrapper">
                                 {images.map((image) => (
@@ -670,14 +683,14 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                             </div>
 
                             {showArrows && (
-                                <>
+                                    <div style={{ pointerEvents: 'auto' }}>
                                     <div className="swiper-button-prev editor-swiper-button-prev"></div>
                                     <div className="swiper-button-next editor-swiper-button-next"></div>
-                                </>
+                                    </div>
                             )}
 
                             {showDots && (
-                                <div className="swiper-pagination editor-swiper-pagination"></div>
+                                    <div className="swiper-pagination editor-swiper-pagination" style={{ pointerEvents: 'auto' }}></div>
                             )}
                         </div>
                     </div>
@@ -768,9 +781,13 @@ const Save = ({ attributes }) => {
         return styles;
     };
 
+    const blockProps = useBlockProps.save({
+        className: `wpzoom-image-slideshow-block${enableLightbox ? ' use-lightbox' : ''} arrow-style-${arrowStyle} dots-position-${dotsPosition} scroll-style-${scrollStyle} scroll-direction-${scrollDirection}`
+    });
+
     return (
         <div
-            className={`wpzoom-image-slideshow-block${enableLightbox ? ' use-lightbox' : ''} arrow-style-${arrowStyle} dots-position-${dotsPosition} scroll-style-${scrollStyle} scroll-direction-${scrollDirection}`}
+            {...blockProps}
             data-slideshow-settings={JSON.stringify(slideshowSettings)}
         >
             <div className="swiper wpzoom-slideshow-container">
@@ -823,6 +840,9 @@ registerBlockType('wpzoom-blocks/image-slideshow', {
     description: __('Display images in a beautiful, responsive slideshow with autoplay and navigation.', 'wpzoom-portfolio'),
     icon: 'images-alt2',
     category: 'wpzoom-blocks',
+    supports: {
+        align: ['full']
+    },
     attributes: {
         images: {
             type: 'array',
