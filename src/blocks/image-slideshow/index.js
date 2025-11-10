@@ -7,7 +7,6 @@ import {
     MediaUploadCheck,
     useBlockProps
 } from '@wordpress/block-editor';
-import { useDispatch } from '@wordpress/data';
 import {
     PanelBody,
     Button,
@@ -157,6 +156,10 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                 spaceBetween: spaceBetween,
                 loop: infiniteLoop && images.length > slidesToShow,
                 speed: transitionSpeed,
+                // Disable touch interactions in the editor to avoid interfering with block DnD
+                allowTouchMove: false,
+                simulateTouch: false,
+                grabCursor: false,
                 autoplay: autoplay ? {
                     delay: scrollStyle === 'smooth' ? 0 : autoplaySpeed,
                     disableOnInteraction: false,
@@ -227,12 +230,8 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
         applyEditorCustomColors();
     }, [arrowColor, arrowBackground, arrowStyle, dotColor, dotActiveColor]);
 
-    const { selectBlock } = useDispatch('core/block-editor');
-
     const blockProps = useBlockProps({
         className: `wpzoom-image-slideshow-block arrow-style-${arrowStyle} dots-position-${dotsPosition} scroll-style-${scrollStyle} scroll-direction-${scrollDirection}`,
-        onMouseDownCapture: () => selectBlock(clientId),
-        onClick: (e) => e.stopPropagation()
     });
 
     return (
@@ -667,7 +666,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                             key={editorSwiperKey}
                             ref={containerRef}
                             className="swiper wpzoom-slideshow-container"
-                            style={{ pointerEvents: 'none' }}
+                            contentEditable={false}
                         >
                             <div className="swiper-wrapper">
                                 {images.map((image) => (
@@ -676,6 +675,8 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                                             src={image.url}
                                             alt={image.alt}
                                             style={getImageStyles()}
+                                            draggable={false}
+                                            onDragStart={(e) => e.preventDefault()}
                                         />
                                     </div>
                                 ))}
@@ -834,6 +835,7 @@ const Save = ({ attributes }) => {
 };
 
 registerBlockType('wpzoom-blocks/image-slideshow', {
+    apiVersion: 2,
     title: __('Image Slideshow', 'wpzoom-portfolio'),
     description: __('Display images in a beautiful, responsive slideshow with autoplay and navigation.', 'wpzoom-portfolio'),
     icon: 'images-alt2',

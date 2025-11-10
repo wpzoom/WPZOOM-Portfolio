@@ -301,6 +301,7 @@ const Edit = ({ attributes, setAttributes }) => {
                         <div
                             className={`wpzoom-gallery-grid wpzoom-gallery-${layout} columns-${columns}`}
                             style={layout === 'masonry' ? {} : { gap: gap + 'px' }}
+                            contentEditable={false}
                         >
                             {layout === 'masonry' && (
                                 <>
@@ -315,7 +316,7 @@ const Edit = ({ attributes, setAttributes }) => {
                                 style={layout === 'masonry' ? { marginBottom: gap + 'px', width: `calc((100% - ${(columns - 1) * gap}px) / ${columns})` } : {}}
                             >
                                 <div className={`wpzoom-gallery-item-inner hover-${hoverEffect}${enableLightbox ? ' lightbox-enabled' : ''}`}>
-                                    <img src={image.url} alt={image.alt} style={getImageStyles()} />
+                                    <img src={image.url} alt={image.alt} style={getImageStyles()} draggable={false} onDragStart={(e) => e.preventDefault()} />
                                     {enableLightbox && (
                                         <div
                                             className="wpzoom-lightbox-overlay"
@@ -454,6 +455,7 @@ const Save = ({ attributes }) => {
 };
 
 registerBlockType('wpzoom-blocks/image-gallery', {
+    apiVersion: 2,
     title: __('Image Gallery', 'wpzoom-portfolio'),
     description: __('A simple image gallery block.', 'wpzoom-portfolio'),
     icon: 'format-gallery',

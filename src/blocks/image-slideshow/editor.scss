@@ -412,6 +412,12 @@
 
 // Media upload button styling
 .wpzoom-image-slideshow-block {
+    // Prevent native image dragging in editor to avoid conflicting with block DnD
+    img {
+        -webkit-user-drag: none;
+        user-drag: none;
+    }
+
     .components-button {
         &.is-primary {
             background: #0073aa;

@@ -92,6 +92,14 @@
 	}
 } 
 
+/* Prevent native image dragging in editor to avoid conflicting with block DnD */
+.wpzoom-image-gallery-block {
+	img {
+		-webkit-user-drag: none;
+		user-drag: none;
+	}
+}
+
 /* Initial state UI to match slideshow block */
 .wpzoom-image-gallery-block {
 	.wpzoom-gallery-empty-state {
