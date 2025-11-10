@@ -459,7 +459,7 @@ registerBlockType('wpzoom-blocks/image-gallery', {
     icon: 'format-gallery',
     category: 'wpzoom-blocks',
     supports: {
-        align: ['full']
+        align: ['left', 'center', 'right', 'wide', 'full']
     },
     attributes: {
         images: {

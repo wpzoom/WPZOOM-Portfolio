@@ -114,25 +114,26 @@
 }
 
 // Ensure alignwide/alignfull use full available width in editor
-.wp-block-wpzoom-blocks-image-slideshow.alignfull,
-.wp-block-wpzoom-blocks-image-slideshow.alignwide {
-    max-width: none;
+// Ensure alignwide/alignfull use full available width in editor (correct selector for editor wrapper)
+.editor-styles-wrapper .wp-block.alignfull.wpzoom-image-slideshow-block,
+.editor-styles-wrapper .wp-block.alignwide.wpzoom-image-slideshow-block {
+	max-width: none;
+	width: 100%;
 }
 
-.wp-block-wpzoom-blocks-image-slideshow.alignfull .wpzoom-image-slideshow-block,
-.wp-block-wpzoom-blocks-image-slideshow.alignwide .wpzoom-image-slideshow-block {
-    width: 100%;
+// Let core's negative margins handle the bleed; do not force 100vw to avoid lateral shifts
+.editor-styles-wrapper .wp-block.alignfull.wpzoom-image-slideshow-block,
+.editor-styles-wrapper .wp-block.alignwide.wpzoom-image-slideshow-block {
+	max-width: none !important;
+	width: auto;
 }
 
-.wp-block-wpzoom-blocks-image-slideshow.alignfull .wpzoom-slideshow-editor-preview,
-.wp-block-wpzoom-blocks-image-slideshow.alignwide .wpzoom-slideshow-editor-preview {
-    width: 100%;
-}
-
-.wp-block-wpzoom-blocks-image-slideshow.alignfull .swiper,
-.wp-block-wpzoom-blocks-image-slideshow.alignwide .swiper {
-    margin-left: 0;
-    margin-right: 0;
+// Reset inner swiper margins under full/wide
+.editor-styles-wrapper .wp-block.alignfull.wpzoom-image-slideshow-block .swiper,
+.editor-styles-wrapper .wp-block.alignwide.wpzoom-image-slideshow-block .swiper {
+	margin-left: 0;
+	margin-right: 0;
+	width: 100%;
 }
 .wp-block-wpzoom-blocks-image-slideshow {
     .wpzoom-image-slideshow-block {

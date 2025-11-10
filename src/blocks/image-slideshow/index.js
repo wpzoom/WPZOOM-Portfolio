@@ -663,12 +663,11 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                         </MediaUploadCheck>
                     </div>
                 ) : (
-                    <div className="wpzoom-slideshow-editor-preview">
-                        <div 
-                                key={editorSwiperKey}
+                        <div
+                            key={editorSwiperKey}
                             ref={containerRef}
                             className="swiper wpzoom-slideshow-container"
-                                style={{ pointerEvents: 'none' }}
+                            style={{ pointerEvents: 'none' }}
                         >
                             <div className="swiper-wrapper">
                                 {images.map((image) => (
@@ -683,17 +682,16 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                             </div>
 
                             {showArrows && (
-                                    <div style={{ pointerEvents: 'auto' }}>
+                                <div style={{ pointerEvents: 'auto' }}>
                                     <div className="swiper-button-prev editor-swiper-button-prev"></div>
                                     <div className="swiper-button-next editor-swiper-button-next"></div>
-                                    </div>
+                                </div>
                             )}
 
                             {showDots && (
-                                    <div className="swiper-pagination editor-swiper-pagination" style={{ pointerEvents: 'auto' }}></div>
+                                <div className="swiper-pagination editor-swiper-pagination" style={{ pointerEvents: 'auto' }}></div>
                             )}
                         </div>
-                    </div>
                 )}
             </div>
         </>
@@ -841,7 +839,7 @@ registerBlockType('wpzoom-blocks/image-slideshow', {
     icon: 'images-alt2',
     category: 'wpzoom-blocks',
     supports: {
-        align: ['full']
+        align: ['left', 'center', 'right', 'wide', 'full']
     },
     attributes: {
         images: {
