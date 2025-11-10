@@ -101,40 +101,4 @@
 }
 
 /* Initial state UI to match slideshow block */
-.wpzoom-image-gallery-block {
-	.wpzoom-gallery-empty-state {
-		padding: 40px;
-		border: 1px solid #ddd;
-		border-radius: 2px;
-		background: #fff;
-
-		.wpzoom-gallery-empty-header {
-			display: flex;
-			margin-bottom: 16px;
-
-			.dashicons {
-				width: 24px;
-				height: 24px;
-				font-size: 24px;
-				margin-right: 10px;
-				color: #1e1e1e;
-			}
-
-			.wpzoom-gallery-empty-title {
-				margin: 0;
-				font-size: 20px;
-				font-weight: 600;
-				color: #1e1e1e;
-				line-height: 1.4;
-			}
-		}
-
-		.wpzoom-gallery-empty-description {
-			margin: 0 0 24px 0;
-			font-size: 13px;
-			font-weight: 600;
-			color: #646970;
-			line-height: 1.5;
-		}
-	}
-}
+// Removed legacy empty-state styles (now using core MediaPlaceholder)

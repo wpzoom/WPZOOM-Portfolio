@@ -4,6 +4,7 @@ import {
     InspectorControls,
     MediaUpload, 
     MediaUploadCheck,
+    MediaPlaceholder,
     PanelColorSettings,
     useBlockProps
 } from '@wordpress/block-editor';
@@ -272,31 +273,17 @@ const Edit = ({ attributes, setAttributes }) => {
 
             <div {...blockProps}>
                 {images.length === 0 ? (
-                    <div className="wpzoom-gallery-empty-state">
-                        <div className="wpzoom-gallery-empty-header">
-                            <span className="dashicons dashicons-format-gallery"></span>
-                            <h3 className="wpzoom-gallery-empty-title">
-                                {__('Image Gallery', 'wpzoom-portfolio')}
-                            </h3>
-                        </div>
-                        <p className="wpzoom-gallery-empty-description">
-                            {__('Add images to create a gallery', 'wpzoom-portfolio')}
-                        </p>
-                        <MediaUploadCheck>
-                            <MediaUpload
-                                onSelect={onSelectImages}
-                                allowedTypes={['image']}
-                                multiple={true}
-                                gallery={true}
-                                value={images.map(img => img.id)}
-                                render={({ open }) => (
-                                    <Button onClick={open} variant="primary">
-                                        {__('Add Images', 'wpzoom-portfolio')}
-                                    </Button>
-                                )}
-                            />
-                        </MediaUploadCheck>
-                    </div>
+                    <MediaPlaceholder
+                        icon="format-gallery"
+                        labels={{
+                            title: __('Image Gallery', 'wpzoom-portfolio'),
+                            instructions: __('Add images to create a gallery.', 'wpzoom-portfolio')
+                        }}
+                        onSelect={onSelectImages}
+                        allowedTypes={['image']}
+                        multiple={true}
+                        gallery={true}
+                    />
                 ) : (
                         <div
                             className={`wpzoom-gallery-grid wpzoom-gallery-${layout} columns-${columns}`}
