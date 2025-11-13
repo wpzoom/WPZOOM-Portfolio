@@ -6,6 +6,7 @@ import {
     MediaUpload,
     MediaUploadCheck,
     MediaPlaceholder,
+    PanelColorSettings,
     useBlockProps
 } from '@wordpress/block-editor';
 import {
@@ -337,7 +338,7 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                         value={transitionSpeed}
                         onChange={(value) => setAttributes({ transitionSpeed: value })}
                         min={200}
-                        max={2000}
+                        max={10000}
                         step={100}
                         help={__('Speed of slide transitions.', 'wpzoom-portfolio')}
                     />
@@ -539,9 +540,40 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
             </InspectorControls>
 
             <InspectorControls group="styles">
+                <PanelColorSettings
+                    title={__('Arrows Colors', 'wpzoom-portfolio')}
+                    colorSettings={[
+                        {
+                            label: __('Arrow Color', 'wpzoom-portfolio'),
+                            value: arrowColor,
+                            onChange: (value) => setAttributes({ arrowColor: value })
+                        },
+                        {
+                            label: __('Arrow Background', 'wpzoom-portfolio'),
+                            value: arrowBackground,
+                            onChange: (value) => setAttributes({ arrowBackground: value })
+                        }
+                    ]}
+                />
+                <PanelColorSettings
+                    title={__('Dots Colors', 'wpzoom-portfolio')}
+                    colorSettings={[
+                        {
+                            label: __('Dot Color', 'wpzoom-portfolio'),
+                            value: dotColor,
+                            onChange: (value) => setAttributes({ dotColor: value })
+                        },
+                        {
+                            label: __('Active Dot Color', 'wpzoom-portfolio'),
+                            value: dotActiveColor,
+                            onChange: (value) => setAttributes({ dotActiveColor: value })
+                        }
+                    ]}
+                />
+
                 <PanelBody
-                    title={__('Slide Styling', 'wpzoom-portfolio')}
-                    initialOpen={true}
+                    title={__('Slides', 'wpzoom-portfolio')}
+                    initialOpen={false}
                     className="wpzb-settings-panel"
                 >
                     <div style={{
@@ -573,62 +605,6 @@ const Edit = ({ attributes, setAttributes, clientId }) => {
                         </div>
                     </div>
                 </PanelBody>
-
-                {showArrows && (
-                    <PanelBody
-                        title={__('Arrow Styling', 'wpzoom-portfolio')}
-                        initialOpen={false}
-                        className="wpzb-settings-panel"
-                    >
-                        <p style={{ marginBottom: '8px', fontSize: '12px', color: '#757575' }}>
-                            {__('Arrow Color', 'wpzoom-portfolio')}
-                        </p>
-                        <input
-                            type="color"
-                            value={arrowColor}
-                            onChange={(e) => setAttributes({ arrowColor: e.target.value })}
-                            style={{ width: '100%', height: '40px', cursor: 'pointer', marginBottom: '16px' }}
-                        />
-
-                        <p style={{ marginBottom: '8px', fontSize: '12px', color: '#757575' }}>
-                            {__('Arrow Background', 'wpzoom-portfolio')}
-                        </p>
-                        <input
-                            type="color"
-                            value={arrowBackground}
-                            onChange={(e) => setAttributes({ arrowBackground: e.target.value })}
-                            style={{ width: '100%', height: '40px', cursor: 'pointer' }}
-                        />
-                    </PanelBody>
-                )}
-
-                {showDots && (
-                    <PanelBody
-                        title={__('Dot Styling', 'wpzoom-portfolio')}
-                        initialOpen={false}
-                        className="wpzb-settings-panel"
-                    >
-                        <p style={{ marginBottom: '8px', fontSize: '12px', color: '#757575' }}>
-                            {__('Dot Color', 'wpzoom-portfolio')}
-                        </p>
-                        <input
-                            type="color"
-                            value={dotColor}
-                            onChange={(e) => setAttributes({ dotColor: e.target.value })}
-                            style={{ width: '100%', height: '40px', cursor: 'pointer', marginBottom: '16px' }}
-                        />
-
-                        <p style={{ marginBottom: '8px', fontSize: '12px', color: '#757575' }}>
-                            {__('Active Dot Color', 'wpzoom-portfolio')}
-                        </p>
-                        <input
-                            type="color"
-                            value={dotActiveColor}
-                            onChange={(e) => setAttributes({ dotActiveColor: e.target.value })}
-                            style={{ width: '100%', height: '40px', cursor: 'pointer' }}
-                        />
-                    </PanelBody>
-                )}
             </InspectorControls>
 
             <div {...blockProps}>

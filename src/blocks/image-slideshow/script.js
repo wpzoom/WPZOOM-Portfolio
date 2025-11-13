@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
             pagination: settings.showDots ? {
                 el: block.querySelector('.swiper-pagination'),
                 clickable: true,
-                dynamicBullets: settings.slidesToShow > 1 ? true : false
+                dynamicBullets: false
             } : false,
 
             // Responsive breakpoints
