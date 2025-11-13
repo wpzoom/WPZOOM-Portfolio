@@ -128,6 +128,13 @@
     filter: blur(0px);
 }
 
+.wpzoom-gallery-item-inner.hover-sharp-to-blur img {
+    transition: filter 0.3s ease;
+}
+
+.wpzoom-gallery-item-inner.hover-sharp-to-blur:hover img {
+    filter: blur(2px);
+}
 /* Shadow Effect */
 .wpzoom-gallery-item-inner.hover-shadow {
     transition: box-shadow 0.3s ease;
@@ -175,7 +182,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: var(--wpzb-overlay-color, rgba(0, 0, 0, 0.3));
     opacity: 0;
     transform: scale(1);
     transform-origin: center center;
@@ -201,14 +208,15 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-    color: white;
+    background: linear-gradient(transparent, var(--wpzb-caption-overlay-color, rgba(0, 0, 0, 0.8)));
+        color: var(--wpzb-caption-text-color, #ffffff);
     padding: 20px 15px 15px;
     font-size: 14px;
     font-weight: 500;
     text-align: center;
     transform: translateY(100%);
     transition: transform 0.3s ease;
+    z-index: 3;
     /* Border-radius will be set via inline styles to match images */
 }
 

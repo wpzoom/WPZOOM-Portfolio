@@ -19,10 +19,6 @@ import {
 } from '@wordpress/components';
 
 import {
-    blockColors,
-    secondaryColors
-} from '../portfolio/colors-palette';
-import {
     colorIcon,
     fieldsIcon,
     layoutIcon,
@@ -41,7 +37,11 @@ const Edit = ({ attributes, setAttributes }) => {
         borderRadiusUnit,
         hoverEffect,
         enableLightbox,
-        showCaptions 
+        showCaptions,
+        overlayEnabled,
+        overlayColor,
+        overlayCaptionColor,
+        captionTextColor
     } = attributes;
 
     const onSelectImages = (selectedImages) => {
@@ -74,7 +74,14 @@ const Edit = ({ attributes, setAttributes }) => {
         return baseStyles;
     };
 
-    const blockProps = useBlockProps({ className: 'wpzoom-image-gallery-block' });
+    const blockProps = useBlockProps({
+        className: 'wpzoom-image-gallery-block',
+        style: {
+            '--wpzb-overlay-color': overlayColor,
+            '--wpzb-caption-overlay-color': overlayCaptionColor,
+            '--wpzb-caption-text-color': captionTextColor
+        }
+    });
 
     return (
         <>
@@ -227,6 +234,12 @@ const Edit = ({ attributes, setAttributes }) => {
                     initialOpen={false}
                     className="wpzb-settings-panel"
                 >
+                    <ToggleControl
+                        label={__('Enable Overlay on Hover', 'wpzoom-portfolio')}
+                        checked={overlayEnabled}
+                        onChange={(value) => setAttributes({ overlayEnabled: value })}
+                    />
+
                     <SelectControl
                         label={__('Hover Effect', 'wpzoom-portfolio')}
                         value={hoverEffect}
@@ -234,12 +247,13 @@ const Edit = ({ attributes, setAttributes }) => {
                         options={[
                             { label: __('Scale Up', 'wpzoom-portfolio'), value: 'scale-up' },
                             { label: __('Scale Down', 'wpzoom-portfolio'), value: 'scale-down' },
-                            { label: __('Grayscale to Color', 'wpzoom-portfolio'), value: 'grayscale' },
                             { label: __('Color to Grayscale', 'wpzoom-portfolio'), value: 'color-to-grayscale' },
+                            { label: __('Grayscale to Color', 'wpzoom-portfolio'), value: 'grayscale' },
+                            { label: __('Sharp to Blur', 'wpzoom-portfolio'), value: 'sharp-to-blur' },
                             { label: __('Blur to Sharp', 'wpzoom-portfolio'), value: 'blur' },
                             { label: __('Shadow', 'wpzoom-portfolio'), value: 'shadow' },
                             { label: __('Scale Up + Shadow', 'wpzoom-portfolio'), value: 'scale-shadow' },
-                            { label: __('Overlay + Caption', 'wpzoom-portfolio'), value: 'overlay-caption' }
+                            { label: __('Caption', 'wpzoom-portfolio'), value: 'overlay-caption' }
                         ]}
                         help={__('Choose the hover animation effect for gallery images.', 'wpzoom-portfolio')}
                     />
@@ -263,13 +277,21 @@ const Edit = ({ attributes, setAttributes }) => {
             </InspectorControls>
 
             <InspectorControls group="styles">
-                <PanelBody
-                    title={__('Colors', 'wpzoom-portfolio')}
-                    initialOpen={false}
-                    className="wpzb-settings-panel"
-                >
-                    <p>{__('Color customizations will be available in a future version.', 'wpzoom-portfolio')}</p>
-                </PanelBody>
+                <PanelColorSettings
+                    title={__('Caption', 'wpzoom-portfolio')}
+                    colorSettings={[
+                        {
+                            label: __('Caption Text Color', 'wpzoom-portfolio'),
+                            value: captionTextColor,
+                            onChange: (value) => setAttributes({ captionTextColor: value })
+                        },
+                        {
+                            label: __('Caption Overlay Color', 'wpzoom-portfolio'),
+                            value: overlayCaptionColor,
+                            onChange: (value) => setAttributes({ overlayCaptionColor: value })
+                        }
+                    ]}
+                />
             </InspectorControls>
 
             <div {...blockProps}>
@@ -305,17 +327,21 @@ const Edit = ({ attributes, setAttributes }) => {
                             >
                                 <div className={`wpzoom-gallery-item-inner hover-${hoverEffect}${enableLightbox ? ' lightbox-enabled' : ''}`}>
                                     <img src={image.url} alt={image.alt} style={getImageStyles()} draggable={false} onDragStart={(e) => e.preventDefault()} />
-                                    {enableLightbox && (
+                                    {overlayEnabled && (
                                         <div
                                             className="wpzoom-lightbox-overlay"
-                                            style={{ borderRadius: borderRadius + borderRadiusUnit }}
+                                            style={{
+                                                borderRadius: borderRadius + borderRadiusUnit
+                                            }}
                                         >
                                         </div>
                                     )}
                                     {hoverEffect === 'overlay-caption' && (
                                         <div
                                             className="wpzoom-caption-overlay"
-                                            style={{ borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}` }}
+                                            style={{
+                                                borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}`
+                                            }}
                                         >
                                             {image.caption || image.alt || __('Image', 'wpzoom-portfolio')}
                                         </div>
@@ -342,7 +368,11 @@ const Save = ({ attributes }) => {
         borderRadiusUnit,
         hoverEffect,
         enableLightbox,
-        showCaptions 
+        showCaptions,
+        overlayEnabled,
+        overlayColor,
+        overlayCaptionColor,
+        captionTextColor
     } = attributes;
 
     if (images.length === 0) {
@@ -369,7 +399,14 @@ const Save = ({ attributes }) => {
         return baseStyles;
     };
 
-    const blockProps = useBlockProps.save({ className: `wpzoom-image-gallery-block${enableLightbox ? ' use-lightbox' : ''}` });
+    const blockProps = useBlockProps.save({
+        className: `wpzoom-image-gallery-block${enableLightbox ? ' use-lightbox' : ''}`,
+        style: {
+            '--wpzb-overlay-color': overlayColor,
+            '--wpzb-caption-overlay-color': overlayCaptionColor,
+            '--wpzb-caption-text-color': captionTextColor
+        }
+    });
 
     return (
         <div {...blockProps}>
@@ -404,10 +441,20 @@ const Save = ({ attributes }) => {
                                     >
                                         {imageElement}
                                     </a>
+                                    {overlayEnabled && (
+                                        <div
+                                            className="wpzoom-lightbox-overlay"
+                                            style={{
+                                                borderRadius: borderRadius + borderRadiusUnit
+                                            }}
+                                        />
+                                    )}
                                     {hoverEffect === 'overlay-caption' && (
                                         <div
                                             className="wpzoom-caption-overlay"
-                                            style={{ borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}` }}
+                                            style={{
+                                                borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}`
+                                            }}
                                         >
                                             {image.caption || image.alt || 'Image'}
                                         </div>
@@ -424,10 +471,20 @@ const Save = ({ attributes }) => {
                             >
                                 <div className={`wpzoom-gallery-item-inner hover-${hoverEffect}`}>
                                     {imageElement}
+                                    {overlayEnabled && (
+                                        <div
+                                            className="wpzoom-lightbox-overlay"
+                                            style={{
+                                                borderRadius: borderRadius + borderRadiusUnit
+                                            }}
+                                        />
+                                    )}
                                     {hoverEffect === 'overlay-caption' && (
                                         <div
                                             className="wpzoom-caption-overlay"
-                                            style={{ borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}` }}
+                                            style={{
+                                                borderRadius: `0 0 ${borderRadius}${borderRadiusUnit} ${borderRadius}${borderRadiusUnit}`
+                                            }}
                                         >
                                             {image.caption || image.alt || 'Image'}
                                         </div>
@@ -495,6 +552,22 @@ registerBlockType('wpzoom-blocks/image-gallery', {
         showCaptions: {
             type: 'boolean',
             default: true
+        },
+        overlayEnabled: {
+            type: 'boolean',
+            default: false
+        },
+        overlayColor: {
+            type: 'string',
+            default: 'rgba(0, 0, 0, 0.3)'
+        },
+        overlayCaptionColor: {
+            type: 'string',
+            default: 'rgba(0, 0, 0, 0.8)'
+        },
+        captionTextColor: {
+            type: 'string',
+            default: '#ffffff'
         }
     },
     edit: Edit,
