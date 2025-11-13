@@ -235,6 +235,7 @@ const Edit = ({ attributes, setAttributes }) => {
                             { label: __('Scale Up', 'wpzoom-portfolio'), value: 'scale-up' },
                             { label: __('Scale Down', 'wpzoom-portfolio'), value: 'scale-down' },
                             { label: __('Grayscale to Color', 'wpzoom-portfolio'), value: 'grayscale' },
+                            { label: __('Color to Grayscale', 'wpzoom-portfolio'), value: 'color-to-grayscale' },
                             { label: __('Blur to Sharp', 'wpzoom-portfolio'), value: 'blur' },
                             { label: __('Shadow', 'wpzoom-portfolio'), value: 'shadow' },
                             { label: __('Scale Up + Shadow', 'wpzoom-portfolio'), value: 'scale-shadow' },
