@@ -538,7 +538,7 @@ msgid "Show excerpt of the portfolio item"
 msgstr ""
 
 #: classes/class-wpzoom-portfolio-settings-page.php:441
-msgid "Show Featured Image of the porfolio item"
+msgid "Show Featured Image of the portfolio item"
 msgstr ""
 
 #: classes/class-wpzoom-portfolio-settings-page.php:540
