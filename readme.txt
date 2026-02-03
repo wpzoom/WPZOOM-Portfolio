@@ -10,16 +10,17 @@ License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Tags:              portfolio, image gallery, post grid, gallery, video portfolio
 
-The Ultimate WordPress Portfolio Plugin to Showcase Your Work in Style
+Portfolio plugin for WordPress - Create stunning portfolio galleries with filterable grid layouts, masonry design, and lightbox. Perfect for photographers, designers & agencies.
 
 == Description ==
 
+= Portfolio Plugin for WordPress - Easy & Powerful =
+
+**The best portfolio gallery plugin for WordPress.** Create beautiful, filterable portfolio grids to showcase your work. Perfect for photographers, designers, artists, and agencies.
+
+WPZOOM Portfolio makes it easy to display your projects in stunning grid layouts with category filtering, masonry design, and lightbox support.
+
 ⭐️ **[WPZOOM Portfolio PRO](https://www.wpzoom.com/plugins/portfolio-pro/?utm_source=wporg&utm_medium=portfolio-free-wporg&utm_campaign=portfolio-desc-wporg)** **with 🎬 Video Integration NOW AVAILABLE!** ⭐️
-
-**Showcase your work in a sleek and elegant portfolio layout!**
-
-
-WPZOOM Portfolio is the perfect tool for showcasing your work and creating beautiful, responsive, and highly customizable portfolio layouts. Whether you prefer a grid, masonry, or a simple gallery, WPZOOM Portfolio has got you covered.
 
 > Did you find this plugin helpful? Please consider [leaving a 5-star review](https://wordpress.org/support/view/plugin-reviews/wpzoom-portfolio).
 
