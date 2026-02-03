@@ -185,7 +185,7 @@ class WPZOOM_Blocks {
         wp_enqueue_script(
             'portfolio-masonry-editor',
             WPZOOM_PORTFOLIO_URL . 'assets/js/editor-init-masonry.js',
-            array('wp-edit-post', 'wp-dom-ready', 'masonry', 'imagesloaded'),
+            array('wp-data', 'wp-dom-ready', 'masonry', 'imagesloaded'),
             WPZOOM_PORTFOLIO_VERSION,
             true
         );
