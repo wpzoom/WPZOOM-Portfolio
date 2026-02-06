@@ -2,15 +2,15 @@
 Contributors:      WPZOOM, alexus450, ciorici
 Donate link:       http://paypal.me/wpzm/10usd
 Author URI:        https://www.wpzoom.com/
-Requires at least: 5.8
+Requires at least: 6.4
 Requires PHP:      7.4
-Tested up to:      6.8
-Stable tag:        1.4.16
+Tested up to:      6.9
+Stable tag:        1.4.17
 License:           GNU General Public License v2
 License URI:       http://www.gnu.org/licenses/gpl-2.0.html
 Tags:              portfolio, image gallery, post grid, gallery, video portfolio
 
-Portfolio plugin for WordPress - Create stunning portfolio galleries with filterable grid layouts, masonry design, and lightbox. Perfect for photographers, designers & agencies.
+Portfolio plugin for WordPress. Create filterable portfolio grids with masonry layouts and lightbox. Ideal for photographers, designers, agencies.
 
 == Description ==
 
@@ -134,6 +134,9 @@ Yes, you can find the documentation for this plugin with more instructions on ou
 
 
 == Changelog ==
+
+= 1.4.17 =
+* Minor bug fixes
 
 = 1.4.16 =
 * Minor bug fix affecting Load More button styling
