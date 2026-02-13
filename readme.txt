@@ -101,8 +101,10 @@ Get priority support from our team when you need help with your portfolio.
 ### Recommended Themes
 
 Works great with any theme! For the best portfolio experience, check out:
-- [**Inspiro PRO**](https://www.wpzoom.com/themes/inspiro-pro/) - Professional portfolio theme
-- [**Inspiro Blocks**](https://wordpress.org/themes/inspiro-blocks/) - Free FSE theme
+[**Inspiro Premium**](https://www.wpzoom.com/themes/inspiro/)
+[**Inspiro Lite**](https://wordpress.org/themes/inspiro/)
+[**Inspiro Blocks**](https://wordpress.org/themes/inspiro-blocks/) 🆕
+[**Inspiro Blocks PRO**](https://www.wpzoom.com/themes/inspiro-blocks-pro/) 🆕
 
 ### Additional Resources
 

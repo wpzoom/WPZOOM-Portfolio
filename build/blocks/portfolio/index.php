@@ -837,6 +837,7 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Build a parameters array to use for the posts query
 		$params = array(
+			'post_status'    => 'publish',
 			'order'          => $args[ 'order' ],
 			'orderby'        => $args[ 'order_by' ],
 			'posts_per_page' => $args[ 'per_page' ],
