@@ -623,7 +623,7 @@ class WPZOOM_Blocks_Portfolio {
 		'}';
 
 		if( isset( $attr['postHoverTitleColor'] ) ) {
-			$post_title_hover = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_item-details .wpzoom-blocks_portfolio-block_item-title:hover a { color:' . $attr['postHoverTitleColor'] . ' !important};';
+			$post_title_hover = '.wpzoom-blocks_portfolio-block.' . $class_unique . ' .wpzoom-blocks_portfolio-block_item-details .wpzoom-blocks_portfolio-block_item-title:hover a { color:' . $attr['postHoverTitleColor'] . ' !important;}';
 		}
 
 		//Layout styling
@@ -846,6 +846,7 @@ class WPZOOM_Blocks_Portfolio {
 
 		// Build a parameters array to use for the posts query
 		$params = array(
+			'post_status'    => 'publish',
 			'order'          => $args[ 'order' ],
 			'orderby'        => $args[ 'order_by' ],
 			'posts_per_page' => $args[ 'per_page' ],
