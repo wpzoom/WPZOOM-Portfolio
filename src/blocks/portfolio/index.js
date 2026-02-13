@@ -223,7 +223,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 					lightboxCaption, order, orderBy, readMoreLabel, showAuthor, showCategoryFilter, enableAjaxLoading, showDate,
 					showExcerpt, showReadMore, showThumbnail, showViewAll, source, thumbnailSize, viewAllLabel, viewAllLink, primaryColor, secondaryColor, filterActiveColor, filterAlignment, filterFontSize, filterFontFamily, filterTextTransform, filterLetterSpacing, filterFontWeight, postTitleFontSize, postTitleFontSizeMobile, 
 					postTitleTextTransform, postTitleLetterSpacing, postTitleFontFamily, postTitleFontWeight, postTitleLineHeight, postTitleColor, postHoverTitleColor,  btnTextColor, btnHoverTextColor, btnBgColor, btnHoverBgColor, btnFontFamily, btnFontSize, btnTextTransform, btnLetterSpacing, btnBorder, btnBorderStyle, btnBorderWidth,
-					btnBorderColor, btnHoverBorderColor, showTitle, layoutBgOpacity, layoutBgOpacityHover, showCategory } = attributes;
+					btnBorderColor, btnHoverBorderColor, showTitle, layoutBgOpacity, layoutBgOpacityHover, showCategory, eccentricDarkMode } = attributes;
 			const { imageSizes } = this.state;
 
 			const post_type = wp.data.select( 'core/editor' ).getCurrentPostType();
@@ -490,6 +490,15 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 										selected={ layout }
 									/>
 								</div>
+
+								{ layout == 'eccentric' &&
+									<ToggleControl
+										label={ __( 'Dark Mode', 'wpzoom-portfolio' ) }
+										help={ __( 'Invert colors for dark backgrounds.', 'wpzoom-portfolio' ) }
+										checked={ eccentricDarkMode }
+										onChange={ ( value ) => setAttributes( { eccentricDarkMode: value } ) }
+									/>
+								}
 
                                 { ( layout == 'list' ) &&
 									<RangeControl
