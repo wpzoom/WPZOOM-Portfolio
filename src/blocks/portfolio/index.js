@@ -302,7 +302,7 @@ registerBlockType( 'wpzoom-blocks/portfolio', {
 				fields = <Disabled>{ fields }</Disabled>;
 			}
 
-			const sectionOpen = ( '1' === setting_options.wpzoom_portfolio_settings_sections_expanded ? true : false );
+			const sectionOpen = true;
 
 			let customPosts = [
 				{
