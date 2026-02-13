@@ -225,8 +225,7 @@ class WPZOOM_Blocks {
 
 		wp_enqueue_script( 'masonry' );
 
-		wp_enqueue_script( 'wpzoom-blocks-js-script-main' ); 
-		wp_enqueue_style( 'wpzoom-blocks-css-style-main' );
+		wp_enqueue_style( 'wpzoom-blocks-css-style-portfolio' );
 
 
 	}
